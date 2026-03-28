@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { Camera, Activity, Glasses, ExternalLink, Github, Cpu } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import simulationImg from '../assets/simulation.jpeg';
 
 export default function Projects() {
   const { t } = useLanguage();
@@ -11,7 +12,7 @@ export default function Projects() {
       icon: <Glasses size={32} className="text-tech-blue" />,
       tags: ["Unity 3D", "C#", "Simulación", "Digital Twin"],
       type: t('projects.p1.type'),
-      image: "/simulation.jpeg"
+      image: simulationImg
     },
     {
       title: t('projects.p2.title'),

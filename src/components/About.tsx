@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { Code2, HardHat, Cpu, Cloud, Database } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import meImg from '../assets/me.jpeg';
 
 export default function About() {
   const { t } = useLanguage();
@@ -57,7 +58,7 @@ export default function About() {
               
               <div className="aspect-[4/5] md:aspect-square lg:aspect-[4/5] rounded-2xl overflow-hidden border border-white/10 shadow-2xl relative z-10 bg-dark-bg transition-transform duration-500 group-hover:scale-[1.02]">
                 <img 
-                  src="/me.jpeg" 
+                  src={meImg} 
                   alt="Luis Carlos Galvan" 
                   className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-700"
                   onError={(e) => {
