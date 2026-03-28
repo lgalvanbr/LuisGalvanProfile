@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { Menu, X, Globe, ArrowLeft, Building2, Cpu, Activity, Code2, ChevronDown, Layers, Map } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import WhatsAppButton from '../components/WhatsAppButton';
-import logoLGI from '../assets/logo_LGI.jpeg';
 
 export default function LGI() {
   const { t, language, toggleLanguage } = useLanguage();
@@ -92,7 +91,7 @@ export default function LGI() {
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           <div className="flex items-center gap-6">
             <a href="#lgi-hero" className="text-2xl font-bold font-sans text-white tracking-tight flex items-center gap-3">
-              <img src={logoLGI} alt="LGI Ingeniería Logo" className="h-10 w-auto rounded-md" />
+              <img src="/logo.jpeg" alt="LGI Ingeniería Logo" className="h-10 w-auto rounded-md" />
               <span className="hidden sm:inline-block">LGI <span className="text-tech-blue font-light">Ingeniería</span></span>
             </a>
           </div>
@@ -193,7 +192,7 @@ export default function LGI() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
-              <img src={logoLGI} alt="LGI Ingeniería Logo" className="h-32 md:h-40 w-auto mx-auto rounded-2xl mb-8 shadow-[0_0_40px_rgba(0,123,255,0.2)] object-contain" />
+              <img src="/logo.jpeg" alt="LGI Ingeniería Logo" className="h-32 md:h-40 w-auto mx-auto rounded-2xl mb-8 shadow-[0_0_40px_rgba(0,123,255,0.2)] object-contain" />
               <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6 text-white">
                 {t('lgi.hero.title')}
               </h1>
@@ -360,7 +359,7 @@ export default function LGI() {
       <footer className="bg-slate-950 py-12 border-t border-white/5 text-center text-slate-500">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between">
           <div className="flex items-center gap-3 mb-4 md:mb-0">
-            <img src={logoLGI} alt="LGI Logo" className="h-8 w-auto rounded-sm grayscale hover:grayscale-0 transition-all" />
+            <img src="/logo.jpeg" alt="LGI Logo" className="h-8 w-auto rounded-sm grayscale hover:grayscale-0 transition-all" />
             <span className="font-bold text-white">LGI Ingeniería</span>
           </div>
           <p>&copy; {new Date().getFullYear()} LGI Ingeniería. Todos los derechos reservados.</p>

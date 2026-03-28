@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { Menu, X, Globe, Building2 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { Link } from 'react-router-dom';
-import logoLGI from '../assets/logo_LGI.jpeg';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -58,7 +57,7 @@ export default function Navbar() {
             to="/lgi"
             className="flex items-center gap-2 text-sm font-medium text-tech-blue hover:text-blue-400 transition-colors"
           >
-            <img src={logoLGI} alt="LGI Logo" className="h-5 w-auto rounded-sm" />
+            <img src="/logo.jpeg" alt="LGI Logo" className="h-5 w-auto rounded-sm" />
             LGI Ingeniería
           </Link>
 
@@ -104,7 +103,7 @@ export default function Navbar() {
               to="/lgi"
               className="flex items-center gap-2 text-sm font-medium text-tech-blue hover:text-blue-400 transition-colors mt-4"
             >
-              <img src={logoLGI} alt="LGI Logo" className="h-5 w-auto rounded-sm" />
+              <img src="/logo.jpeg" alt="LGI Logo" className="h-5 w-auto rounded-sm" />
               LGI Ingeniería
             </Link>
 
