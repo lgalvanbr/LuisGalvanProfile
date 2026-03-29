@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { Code2, HardHat, Cpu, Cloud, Database } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import profileImg from '../assets/profile.jpeg';
 
 export default function About() {
   const { t } = useLanguage();
@@ -57,12 +58,9 @@ export default function About() {
               
               <div className="aspect-[4/5] md:aspect-square lg:aspect-[4/5] rounded-2xl overflow-hidden border border-white/10 shadow-2xl relative z-10 bg-dark-bg transition-transform duration-500 group-hover:scale-[1.02]">
                 <img 
-                  src="/profile.jpeg" 
+                  src={profileImg} 
                   alt="Luis Carlos Galvan" 
                   className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-700"
-                  onError={(e) => {
-                    e.currentTarget.src = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop";
-                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-dark-bg via-dark-bg/40 to-transparent opacity-90 group-hover:opacity-20 transition-opacity duration-700"></div>
                 
