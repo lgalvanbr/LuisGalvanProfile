@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import { Code2, HardHat, Cpu, Cloud, Database } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
-import profileImg from '../assets/profile.jpeg';
+import profileImg from '../assets/Foto1.jpeg';
 
 export default function About() {
   const { t } = useLanguage();

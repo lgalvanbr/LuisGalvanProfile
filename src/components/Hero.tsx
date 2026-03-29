@@ -2,10 +2,12 @@ import { motion } from 'motion/react';
 import { ChevronDown, Download, Briefcase } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { useLanguage } from '../context/LanguageContext';
+import logoImg from '../assets/LGI_Logo.jpeg';
 
 export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { t } = useLanguage();
+  const universityLogo = 'https://decanaturadeestudiantes.uniandes.edu.co/sites/default/files/logouniandes_0.png';
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -125,7 +127,15 @@ export default function Hero() {
             transition={{ delay: 0.8, duration: 1 }}
             className="flex items-center justify-center gap-4 opacity-60 hover:opacity-100 transition-opacity duration-300"
           >
-            <img src="/uniandes.png" alt="Universidad de los Andes" className="h-12 object-contain filter grayscale hover:grayscale-0 transition-all duration-500" onError={(e) => e.currentTarget.style.display = 'none'} />
+            <img
+              src={universityLogo}
+              alt="Universidad de los Andes"
+              className="h-12 object-contain filter grayscale hover:grayscale-0 transition-all duration-500"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = logoImg;
+              }}
+            />
             <div className="text-left border-l border-white/20 pl-4">
               <p className="text-sm font-mono text-text-light">{t('hero.doubleDegree').split(' - ')[0]}</p>
               <p className="text-xs font-mono text-tech-blue">{t('hero.doubleDegree').split(' - ')[1]}</p>

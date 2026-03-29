@@ -4,12 +4,13 @@ import { Link } from 'react-router-dom';
 import { Menu, X, Globe, ArrowLeft, Building2, Cpu, Activity, Code2, ChevronDown, Layers, Map } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import WhatsAppButton from '../components/WhatsAppButton';
-import logoImg from '../assets/logo.jpeg';
+import logoImg from '../assets/LGI_Logo.jpeg';
 
 export default function LGI() {
   const { t, language, toggleLanguage } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const logoFallback = 'https://decanaturadeestudiantes.uniandes.edu.co/sites/default/files/logouniandes_0.png';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -92,7 +93,17 @@ export default function LGI() {
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           <div className="flex items-center gap-6">
             <a href="#lgi-hero" className="text-2xl font-bold font-sans text-white tracking-tight flex items-center gap-3">
-              <img src={logoImg} alt="LGI Ingeniería Logo" className="h-10 w-auto rounded-md" />
+              <span className="h-11 w-11 overflow-hidden rounded-md bg-white">
+                <img
+                  src={logoImg}
+                  alt="LGI Ingeniería Logo"
+                  className="h-full w-full object-cover scale-125"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = logoFallback;
+                  }}
+                />
+              </span>
               <span className="hidden sm:inline-block">LGI <span className="text-tech-blue font-light">Ingeniería</span></span>
             </a>
           </div>
@@ -193,7 +204,17 @@ export default function LGI() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
-              <img src={logoImg} alt="LGI Ingeniería Logo" className="h-32 md:h-40 w-auto mx-auto rounded-2xl mb-8 shadow-[0_0_40px_rgba(0,123,255,0.2)] object-contain" />
+              <div className="h-32 md:h-40 w-32 md:w-40 mx-auto rounded-2xl mb-8 shadow-[0_0_40px_rgba(0,123,255,0.2)] overflow-hidden bg-white">
+                <img
+                  src={logoImg}
+                  alt="LGI Ingeniería Logo"
+                  className="h-full w-full object-cover scale-125"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = logoFallback;
+                  }}
+                />
+              </div>
               <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6 text-white">
                 {t('lgi.hero.title')}
               </h1>

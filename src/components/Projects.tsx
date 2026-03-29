@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import { Camera, Activity, Glasses, ExternalLink, Github, Cpu } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
-import simulationImg from '../assets/simulation.jpeg';
+import simulationImg from '../assets/AFM1.jpeg';
 
 export default function Projects() {
   const { t } = useLanguage();
