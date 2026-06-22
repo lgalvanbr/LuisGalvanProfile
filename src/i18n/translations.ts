@@ -10,25 +10,26 @@ export const translations = {
     },
     hero: {
       greeting: 'Hola, soy',
-      role: 'Ingeniero de Sistemas y Civil',
-      subtitle: 'Construyendo el futuro a través de código e infraestructura.',
+      role: 'Ingeniero Civil & Estudiante de Ing. de Sistemas',
+      subtitle: 'Uniendo la lógica de datos con la física de la infraestructura.',
       viewProjects: 'Ver Proyectos',
+      viewCv: 'Hoja de Vida',
       contactMe: 'Contactar',
-      doubleDegree: 'Doble Titulación - Universidad de los Andes'
+      doubleDegree: 'Universidad de los Andes'
     },
     about: {
       title: 'Sobre Mí',
       p1_1: 'Soy un profesional con un perfil híbrido único: ',
-      p1_2: 'Ingeniero de Sistemas y Civil',
-      p1_3: ' en la Universidad de los Andes. Mi pasión radica en unir la lógica abstracta del software con la realidad tangible de la construcción y la infraestructura.',
-      p2_1: 'Actualmente me desempeño como ',
-      p2_2: 'Asistente de Investigación',
-      p2_3: ' en el grupo INGECO (Gemelos Digitales y Simulación) y en el grupo CIIA (Análisis de Datos y Machine Learning). Además, soy ',
-      p2_4: 'Fundador y Project Engineer',
-      p2_5: ' en LGI Ingeniería.',
-      p3: 'Me especializo en diseñar arquitecturas robustas, aplicar Inteligencia Artificial para resolver problemas complejos, y desarrollar soluciones IoT que conectan el mundo físico con el digital.',
+      p1_2: 'Ingeniero Civil y Estudiante de Ingeniería de Sistemas',
+      p1_3: ' de la Universidad de los Andes. Mi pasión radica en unir la lógica abstracta del software y el análisis de datos con el mundo físico de la infraestructura.',
+      p2_1: 'Actualmente curso la ',
+      p2_2: 'Maestría en Ingeniería Civil con profundización en IA & Analítica de Datos aplicados a sistemas de infraestructura',
+      p2_3: ', y me desempeño como ',
+      p2_4: 'Asistente Graduado de Investigación',
+      p2_5: ' trabajando en visión artificial para proyectos del Metro de Bogotá y la Universidad de los Andes. Fundador de LGI Ingeniería.',
+      p3: 'Me especializo en diseñar arquitecturas de software, aplicar Inteligencia Artificial para resolver problemas en obras, y desarrollar soluciones IoT de telemetría de alta confiabilidad.',
       stack: 'Stack Principal',
-      status: 'Investigador & Desarrollador'
+      status: 'Asistente de Investigación & Desarrollador'
     },
     projects: {
       title: 'Proyectos Destacados',
@@ -139,25 +140,26 @@ export const translations = {
     },
     hero: {
       greeting: "Hi, I'm",
-      role: 'Systems & Civil Engineer',
-      subtitle: 'Building the future through code and infrastructure.',
+      role: 'Civil Engineer & Systems Engineering Student',
+      subtitle: 'Unifying data-driven logic with infrastructure physical assets.',
       viewProjects: 'View Projects',
+      viewCv: 'Resume',
       contactMe: 'Contact Me',
-      doubleDegree: 'Double Degree - Universidad de los Andes'
+      doubleDegree: 'Universidad de los Andes'
     },
     about: {
       title: 'About Me',
-      p1_1: 'I am a professional with a unique hybrid profile: ',
-      p1_2: 'Systems and Civil Engineer',
-      p1_3: ' from Universidad de los Andes. My passion lies in bridging the abstract logic of software with the tangible reality of construction and infrastructure.',
-      p2_1: 'I currently work as a ',
-      p2_2: 'Research Assistant',
-      p2_3: ' in the INGECO group (Digital Twins and Simulation) and the CIIA group (Data Analysis and Machine Learning). Additionally, I am the ',
-      p2_4: 'Founder and Project Engineer',
-      p2_5: ' at LGI Ingeniería.',
-      p3: 'I specialize in designing robust architectures, applying Artificial Intelligence to solve complex problems, and developing IoT solutions that connect the physical world with the digital one.',
+      p1_1: 'I am a highly specialized professional with a hybrid profile: ',
+      p1_2: 'Civil Engineer & Systems Engineering Student',
+      p1_3: ' from Universidad de los Andes. I integrate advanced software architecture and telemetry with structural assets.',
+      p2_1: 'I am currently pursuing a ',
+      p2_2: 'Master\'s in Civil Engineering specializing in AI & Data Analytics applied to Infrastructure Systems',
+      p2_3: ', and work as a ',
+      p2_4: 'Graduate Research Assistant',
+      p2_5: ' developing advanced computer vision applications for major Bogotá Metro projects and Universidad de los Andes. Founder of LGI Engineering.',
+      p3: 'My expertise resides in developing robust data pipelines, applying Machine Learning to critical works, and deploying industrial IoT sensing solutions.',
       stack: 'Main Stack',
-      status: 'Researcher & Developer'
+      status: 'Research Assistant & Developer'
     },
     projects: {
       title: 'Featured Projects',

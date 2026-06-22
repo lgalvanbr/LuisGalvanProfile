@@ -1,11 +1,13 @@
 import { motion } from 'motion/react';
-import { ChevronDown, Download, Briefcase } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { ChevronDown, Download, Briefcase, FileText } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
+import VirtualCV from './VirtualCV';
 
 export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { t } = useLanguage();
+  const [isCVOpen, setIsCVOpen] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -103,21 +105,30 @@ export default function Hero() {
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+            <button
+              onClick={() => setIsCVOpen(true)}
+              className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3 bg-gradient-to-r from-neon-blue to-tech-blue hover:from-tech-blue hover:to-blue-600 text-white rounded-md font-medium transition-all duration-300 hover:shadow-[0_0_20px_rgba(0,123,255,0.4)]"
+            >
+              <FileText size={20} />
+              {t('hero.viewCv')}
+            </button>
             <a
               href="#proyectos"
-              className="flex items-center gap-2 px-8 py-3 bg-tech-blue hover:bg-blue-600 text-white rounded-md font-medium transition-all duration-300 hover:shadow-[0_0_20px_rgba(0,123,255,0.4)]"
+              className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3 bg-white/5 border border-white/10 hover:border-tech-blue hover:bg-tech-blue/10 text-white rounded-md font-medium transition-all duration-300"
             >
               <Briefcase size={20} />
               {t('hero.viewProjects')}
             </a>
             <a
               href="#contacto"
-              className="flex items-center gap-2 px-8 py-3 bg-transparent border border-white/20 hover:border-tech-blue hover:text-tech-blue text-white rounded-md font-medium transition-all duration-300"
+              className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3 bg-transparent border border-white/10 hover:border-tech-blue hover:text-tech-blue text-white rounded-md font-medium transition-all duration-300"
             >
               <Download size={20} />
               {t('hero.contactMe')}
             </a>
           </div>
+
+          <VirtualCV isOpen={isCVOpen} onClose={() => setIsCVOpen(false)} />
 
           <motion.div 
             initial={{ opacity: 0 }}

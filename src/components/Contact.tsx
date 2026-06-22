@@ -8,8 +8,8 @@ export default function Contact() {
     {
       icon: <Linkedin size={24} />,
       label: "LinkedIn",
-      value: "linkedin.com/in/luiscarlosgalvan",
-      href: "https://linkedin.com/in/luiscarlosgalvan",
+      value: "linkedin.com/in/luis-carlos-galvan-vergel-15696230a",
+      href: "https://www.linkedin.com/in/luis-carlos-galvan-vergel-15696230a/",
       color: "hover:text-blue-500 hover:border-blue-500"
     },
     {

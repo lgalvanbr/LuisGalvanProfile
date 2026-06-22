@@ -56,11 +56,21 @@ export default function Navbar() {
           
           <Link 
             to="/lgi"
-            className="flex items-center gap-2 text-sm font-medium text-tech-blue hover:text-blue-400 transition-colors"
+            className="flex items-center gap-2 text-sm font-medium text-text-muted hover:text-white transition-colors"
           >
             <img src={logoImg} alt="LGI Logo" className="h-5 w-auto rounded-sm" />
             LGI Ingeniería
           </Link>
+
+          <a 
+            href="https://eds-roble-caribe-jij7.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 text-sm font-medium text-tech-blue hover:text-blue-400 transition-colors"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
+            {language === 'es' ? 'Contabilidad IA' : 'AI Accounting'}
+          </a>
 
           <button 
             onClick={toggleLanguage}
@@ -102,11 +112,23 @@ export default function Navbar() {
             
             <Link 
               to="/lgi"
-              className="flex items-center gap-2 text-sm font-medium text-tech-blue hover:text-blue-400 transition-colors mt-4"
+              className="flex items-center gap-2 text-sm font-medium text-text-muted hover:text-white transition-colors mt-4"
+              onClick={() => setIsMobileMenuOpen(false)}
             >
               <img src={logoImg} alt="LGI Logo" className="h-5 w-auto rounded-sm" />
               LGI Ingeniería
             </Link>
+
+            <a 
+              href="https://eds-roble-caribe-jij7.vercel.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-sm font-medium text-tech-blue hover:text-blue-400 transition-colors mt-2"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
+              {language === 'es' ? 'Contabilidad IA' : 'AI Accounting'}
+            </a>
 
             <button 
               onClick={() => {
