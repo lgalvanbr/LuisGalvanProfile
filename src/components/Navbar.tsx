@@ -3,13 +3,12 @@ import { useState, useEffect } from 'react';
 import { Menu, X, Globe, Building2 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { Link } from 'react-router-dom';
-import logoImg from '../assets/LGI_Logo.jpeg';
+import logoImg from '../assets/logo.jpeg';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { language, toggleLanguage, t } = useLanguage();
-  const logoFallback = 'https://decanaturadeestudiantes.uniandes.edu.co/sites/default/files/logouniandes_0.png';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -59,17 +58,7 @@ export default function Navbar() {
             to="/lgi"
             className="flex items-center gap-2 text-sm font-medium text-tech-blue hover:text-blue-400 transition-colors"
           >
-            <span className="h-7 w-7 overflow-hidden rounded-sm bg-white/90">
-              <img
-                src={logoImg}
-                alt="LGI Logo"
-                className="h-full w-full object-cover scale-125"
-                onError={(e) => {
-                  e.currentTarget.onerror = null;
-                  e.currentTarget.src = logoFallback;
-                }}
-              />
-            </span>
+            <img src={logoImg} alt="LGI Logo" className="h-5 w-auto rounded-sm" />
             LGI Ingeniería
           </Link>
 
@@ -115,17 +104,7 @@ export default function Navbar() {
               to="/lgi"
               className="flex items-center gap-2 text-sm font-medium text-tech-blue hover:text-blue-400 transition-colors mt-4"
             >
-              <span className="h-7 w-7 overflow-hidden rounded-sm bg-white/90">
-                <img
-                  src={logoImg}
-                  alt="LGI Logo"
-                  className="h-full w-full object-cover scale-125"
-                  onError={(e) => {
-                    e.currentTarget.onerror = null;
-                    e.currentTarget.src = logoFallback;
-                  }}
-                />
-              </span>
+              <img src={logoImg} alt="LGI Logo" className="h-5 w-auto rounded-sm" />
               LGI Ingeniería
             </Link>
 
