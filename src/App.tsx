@@ -1,12 +1,13 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { LanguageProvider } from './context/LanguageContext';
+import { lazyWithRetry } from './utils/lazyWithRetry';
 
-// Dynamic route-level code-splitting (Loads pages only when requested)
-const Portfolio = lazy(() => import('./pages/Portfolio'));
-const LGI = lazy(() => import('./pages/LGI'));
-const LgiAI = lazy(() => import('./pages/LgiAI'));
-const LgiSolar = lazy(() => import('./pages/LgiSolar'));
+// Dynamic route-level code-splitting with stale-chunk auto-recovery
+const Portfolio = lazyWithRetry(() => import('./pages/Portfolio'));
+const LGI = lazyWithRetry(() => import('./pages/LGI'));
+const LgiAI = lazyWithRetry(() => import('./pages/LgiAI'));
+const LgiSolar = lazyWithRetry(() => import('./pages/LgiSolar'));
 
 function RouteFallback() {
   return (
