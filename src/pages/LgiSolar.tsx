@@ -43,7 +43,7 @@ export default function LgiSolar() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050508] text-white selection:bg-[#ff1e42]/30 selection:text-white font-sans overflow-x-hidden">
+    <div className="min-h-screen bg-[#050508] text-white selection:bg-[#ff1e42]/30 selection:text-white font-sans overflow-x-clip">
       
       {/* Navigation Hub */}
       <HubNavbar />

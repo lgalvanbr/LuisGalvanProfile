@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { motion, useScroll, useSpring, useReducedMotion } from 'motion/react';
 import { 
   Building2, 
@@ -16,6 +16,8 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 
+const TOTAL_FRAMES = 120;
+
 interface EngineeringChapterProps {
   id: string;
   badge: string;
@@ -23,6 +25,7 @@ interface EngineeringChapterProps {
   title: string;
   desc: string;
   videoSrc: string;
+  sequenceFolder: string;
   hudTitle: string;
   hudMetrics: { label: string; value: string; highlight?: boolean }[];
   specLabel1: string;
@@ -38,6 +41,7 @@ function EngineeringChapter({
   title,
   desc,
   videoSrc,
+  sequenceFolder,
   hudTitle,
   hudMetrics,
   specLabel1,
@@ -49,65 +53,147 @@ function EngineeringChapter({
   const shouldReduceMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  // Default to 'scroll' for buttery smooth mobile touch-scrubbing
+  const [playbackMode, setPlaybackMode] = useState<'scroll' | 'play'>('scroll');
   const [isPlaying, setIsPlaying] = useState(false);
-  const [playbackMode, setPlaybackMode] = useState<'play' | 'scroll'>('play');
+  const [images, setImages] = useState<HTMLImageElement[]>([]);
+  const [isImagesLoaded, setIsImagesLoaded] = useState(false);
 
+  // Smooth scroll tracking across 240vh
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   });
 
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 220,
-    damping: 32,
-    mass: 0.4,
+    stiffness: 240,
+    damping: 34,
+    mass: 0.35,
   });
 
-  // Handle scroll scrubbing
+  // Preload sequence frames
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video || playbackMode !== 'scroll') return;
+    let count = 0;
+    const loadedImages: HTMLImageElement[] = [];
+
+    for (let i = 0; i < TOTAL_FRAMES; i++) {
+      const img = new Image();
+      const padded = String(i).padStart(4, '0');
+      img.src = `/sequences/${sequenceFolder}/frame_${padded}.webp`;
+
+      img.onload = () => {
+        count++;
+        // Render initial frame as soon as frame 0 loads
+        if (i === 0 && canvasRef.current) {
+          drawFrameToCanvas(img);
+        }
+        if (count >= 20) {
+          setIsImagesLoaded(true);
+        }
+      };
+
+      loadedImages.push(img);
+    }
+    setImages(loadedImages);
+  }, [sequenceFolder]);
+
+  // Render a specific frame onto the 2D canvas with proper DPR and cover scaling
+  const drawFrameToCanvas = useCallback((img: HTMLImageElement) => {
+    const canvas = canvasRef.current;
+    if (!canvas || !img || !img.complete) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const targetWidth = Math.round(rect.width * dpr);
+    const targetHeight = Math.round(rect.height * dpr);
+
+    if (canvas.width !== targetWidth || canvas.height !== targetHeight) {
+      canvas.width = targetWidth;
+      canvas.height = targetHeight;
+    }
+
+    ctx.save();
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, rect.width, rect.height);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+
+    // Object-fit: cover positioning
+    const hRatio = rect.width / img.width;
+    const vRatio = rect.height / img.height;
+    const ratio = Math.max(hRatio, vRatio);
+    const centerShiftX = (rect.width - img.width * ratio) / 2;
+    const centerShiftY = (rect.height - img.height * ratio) / 2;
+
+    ctx.drawImage(
+      img,
+      0,
+      0,
+      img.width,
+      img.height,
+      centerShiftX,
+      centerShiftY,
+      img.width * ratio,
+      img.height * ratio
+    );
+    ctx.restore();
+  }, []);
+
+  // Sync scroll progress with canvas frame
+  useEffect(() => {
+    if (playbackMode !== 'scroll' || images.length === 0) return;
 
     const unsubscribe = smoothProgress.on('change', (progress) => {
-      if (video.duration && !isNaN(video.duration)) {
-        video.currentTime = Math.min(video.duration - 0.05, Math.max(0, progress * video.duration));
+      const frameIdx = Math.min(TOTAL_FRAMES - 1, Math.max(0, Math.floor(progress * (TOTAL_FRAMES - 1))));
+      const img = images[frameIdx];
+      if (img && img.complete) {
+        drawFrameToCanvas(img);
       }
     });
 
     return () => unsubscribe();
-  }, [smoothProgress, playbackMode]);
+  }, [smoothProgress, playbackMode, images, drawFrameToCanvas]);
 
-  const setMode = (mode: 'play' | 'scroll') => {
+  // Handle mode switches
+  const handleSetMode = (mode: 'scroll' | 'play') => {
     setPlaybackMode(mode);
     const video = videoRef.current;
     if (!video) return;
 
-    if (mode === 'scroll') {
+    if (mode === 'play') {
+      video.play().then(() => setIsPlaying(true)).catch(() => {});
+    } else {
       video.pause();
       setIsPlaying(false);
-      if (video.duration) {
-        video.currentTime = scrollYProgress.get() * video.duration;
-      }
-    } else {
-      video.play().then(() => setIsPlaying(true)).catch(() => {});
+      // Immediately draw the frame corresponding to current scroll position
+      const progress = scrollYProgress.get();
+      const frameIdx = Math.min(TOTAL_FRAMES - 1, Math.max(0, Math.floor(progress * (TOTAL_FRAMES - 1))));
+      const img = images[frameIdx];
+      if (img) drawFrameToCanvas(img);
     }
   };
 
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    video.onloadeddata = () => {
-      video.play().then(() => setIsPlaying(true)).catch(() => {});
-    };
-  }, []);
-
   return (
-    <div id={id} ref={containerRef} className="relative h-[220vh] sm:h-[240vh] bg-[#050508] text-white">
+    <div id={id} ref={containerRef} className="relative h-[220vh] sm:h-[260vh] bg-[#050508] text-white" style={{ touchAction: 'pan-y' }}>
       {/* Sticky High-Definition Fullscreen Viewport */}
-      <div className="sticky top-0 h-[100dvh] w-full flex items-center justify-center overflow-hidden">
+      <div className="sticky top-0 h-[100dvh] w-full flex items-center justify-center overflow-hidden" style={{ touchAction: 'pan-y' }}>
         
-        {/* GPU Hardware-Accelerated Native Video */}
+        {/* Layer 1: Canvas for Zero-Latency 60FPS Touch & Scroll Scrubbing */}
+        <canvas
+          ref={canvasRef}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
+            playbackMode === 'scroll' ? 'opacity-100 z-10' : 'opacity-0 pointer-events-none'
+          }`}
+          style={{ touchAction: 'pan-y' }}
+        />
+
+        {/* Layer 2: GPU Hardware-Accelerated Native Video for Continuous Auto-Play Stream */}
         <video
           ref={videoRef}
           src={videoSrc}
@@ -115,20 +201,34 @@ function EngineeringChapter({
           muted
           loop
           preload="auto"
-          className="w-full h-full object-cover"
-          style={{ filter: 'contrast(1.04) brightness(0.97)' }}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
+            playbackMode === 'play' ? 'opacity-100 z-10' : 'opacity-0 pointer-events-none'
+          }`}
+          style={{ filter: 'contrast(1.04) brightness(0.97)', touchAction: 'pan-y' }}
         />
 
         {/* Ambient Dark Tech Gradients */}
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-[#050508] via-transparent to-[#050508]/80" />
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-[#050508]/70 via-transparent to-[#050508]/70" />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-[#050508] via-transparent to-[#050508]/80 z-15" />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-[#050508]/70 via-transparent to-[#050508]/70 z-15" />
 
         {/* Top Controls: Mode Switcher & Quality Tag */}
         <div className="absolute top-20 sm:top-24 left-3 right-3 sm:left-6 sm:right-6 flex items-center justify-between z-30 pointer-events-auto">
-          <div className="inline-flex p-1 rounded-2xl bg-black/80 backdrop-blur-xl border border-white/15 shadow-2xl">
+          <div className="inline-flex p-1 rounded-2xl bg-black/85 backdrop-blur-xl border border-white/15 shadow-2xl">
             <button
-              onClick={() => setMode('play')}
-              className={`min-h-[44px] px-3 sm:px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer ${
+              onClick={() => handleSetMode('scroll')}
+              className={`min-h-[44px] px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer ${
+                playbackMode === 'scroll'
+                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-950/60'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <Sliders className="w-3.5 h-3.5" />
+              <span>{language === 'es' ? 'Scroll 3D' : 'Scroll 3D'}</span>
+            </button>
+
+            <button
+              onClick={() => handleSetMode('play')}
+              className={`min-h-[44px] px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer ${
                 playbackMode === 'play'
                   ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-950/60'
                   : 'text-slate-400 hover:text-white'
@@ -137,18 +237,6 @@ function EngineeringChapter({
               {isPlaying ? <Pause className="w-3.5 h-3.5 text-amber-300" /> : <Play className="w-3.5 h-3.5 text-emerald-300" />}
               <span>{language === 'es' ? 'Auto-Play' : 'Auto-Play'}</span>
               <span className="hidden sm:inline">60FPS</span>
-            </button>
-
-            <button
-              onClick={() => setMode('scroll')}
-              className={`min-h-[44px] px-3 sm:px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer ${
-                playbackMode === 'scroll'
-                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-950/60'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              <Sliders className="w-3.5 h-3.5" />
-              <span>{language === 'es' ? 'Scroll 3D' : 'Scroll Scrub'}</span>
             </button>
           </div>
 
@@ -162,7 +250,7 @@ function EngineeringChapter({
         <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-4 sm:p-12 z-20">
           
           {/* Mobile Compact HUD Bar */}
-          <div className="pt-36 sm:hidden flex justify-center w-full">
+          <div className="pt-36 sm:hidden flex justify-center w-full pointer-events-none">
             <div className="bg-black/85 backdrop-blur-xl border border-white/15 rounded-2xl px-3.5 py-1.5 flex items-center gap-3 text-[11px] font-mono shadow-xl">
               <span className="flex items-center gap-1 text-blue-400 font-bold">
                 <Activity className="w-3 h-3 text-blue-400" />
@@ -174,7 +262,7 @@ function EngineeringChapter({
           </div>
 
           {/* Desktop Top-Right HUD Telemetry Card */}
-          <div className="pt-24 sm:pt-20 hidden sm:flex justify-end">
+          <div className="pt-24 sm:pt-20 hidden sm:flex justify-end pointer-events-none">
             <div className="bg-black/80 backdrop-blur-2xl border border-white/15 rounded-3xl p-5 sm:p-6 max-w-xs w-full shadow-2xl space-y-4 font-mono">
               <div className="flex items-center justify-between text-xs text-slate-300 border-b border-white/10 pb-2.5">
                 <span className="flex items-center gap-1.5 text-blue-400 font-bold tracking-wider">
@@ -211,7 +299,7 @@ function EngineeringChapter({
           </div>
 
           {/* Bottom Narrative Card */}
-          <div className="pb-6 sm:pb-16 max-w-2xl space-y-2 sm:space-y-3">
+          <div className="pb-6 sm:pb-16 max-w-2xl space-y-2 sm:space-y-3 pointer-events-none">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-950/80 border border-blue-500/50 text-blue-300 text-[11px] sm:text-xs font-mono uppercase tracking-wider shadow-lg shadow-blue-950/50">
               {badgeIcon}
               <span>{badge}</span>
@@ -228,7 +316,7 @@ function EngineeringChapter({
             {playbackMode === 'scroll' && (
               <div className="pt-1 flex items-center gap-1.5 text-[11px] sm:text-xs font-mono text-blue-400 animate-pulse">
                 <ArrowDown className="w-3.5 h-3.5" />
-                <span>{language === 'es' ? 'Desliza para controlar el vuelo del dron' : 'Scroll down or up to scrub drone trajectory'}</span>
+                <span>{language === 'es' ? 'Desliza con tu dedo para controlar el vuelo' : 'Swipe up/down to scrub drone trajectory'}</span>
               </div>
             )}
           </div>
@@ -256,6 +344,7 @@ export default function EngineeringCinematicShowcase() {
           ? 'Digitalización milimétrica de puentes atirantados, viaductos y túneles. Drones cinemáticos equipados con sensores LiDAR y visión artificial para modelar gemelos digitales 3D y detectar patologías sin detener el tráfico vehicular.'
           : 'High-precision photogrammetric and LiDAR drone surveys across suspension bridges and viaducts. Generating millimeter-accurate 3D digital twins and finite element models with zero traffic disruption.'}
         videoSrc="/videos/engineering/lgi-viaduct-drone.mp4"
+        sequenceFolder="engineering-viaduct"
         hudTitle="LGI TELEMETRÍA CIVIL"
         hudMetrics={[
           { label: language === 'es' ? 'Nube de Puntos:' : 'LiDAR Point Cloud:', value: '18.4M pts/sec' },
@@ -300,6 +389,7 @@ export default function EngineeringCinematicShowcase() {
           ? 'Nodos sensores de titanio anodizado apernados a pilas de puentes y pilas de concreto. Acelerómetros triaxiales MEMS e inclinómetros que transmiten vibraciones, frecuencias modales y temperatura hacia la nube cada 50ms.'
           : 'Ruggedized IoT sensor nodes bolted directly to concrete piers. Triaxial MEMS accelerometers and laser inclinometers streaming modal frequencies and ambient vibration to the cloud at 200Hz.'}
         videoSrc="/videos/iot/lgi-iot-sensors.mp4"
+        sequenceFolder="iot-sensors"
         hudTitle="LGI RED MESH IOT"
         hudMetrics={[
           { label: language === 'es' ? 'Nodos Conectados:' : 'Connected Nodes:', value: '32 Sensores' },

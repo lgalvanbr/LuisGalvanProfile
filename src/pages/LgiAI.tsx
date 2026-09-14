@@ -79,7 +79,7 @@ export default function LgiAI() {
   ];
 
   return (
-    <div className="bg-[#050508] min-h-screen text-slate-100 font-sans selection:bg-rose-500/30 selection:text-white overflow-x-hidden relative">
+    <div className="bg-[#050508] min-h-screen text-slate-100 font-sans selection:bg-rose-500/30 selection:text-white overflow-x-clip relative">
       
       {/* Deep Cyber Atmospheric Background */}
       <CyberBackground />

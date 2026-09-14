@@ -1,21 +1,17 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { motion, useScroll, useTransform, useSpring, useReducedMotion } from 'motion/react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
+import { motion, useScroll, useSpring, useReducedMotion } from 'motion/react';
 import { 
   Sun, 
   BatteryCharging, 
   Zap, 
   Play, 
   Pause, 
-  Maximize2, 
-  RotateCcw, 
-  CheckCircle2, 
-  Building2, 
-  Home, 
-  Sliders,
-  ShieldAlert,
+  Sliders, 
   ArrowDown
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
+
+const TOTAL_FRAMES = 120;
 
 interface ChapterProps {
   id: string;
@@ -24,7 +20,7 @@ interface ChapterProps {
   subtitle: string;
   desc: string;
   videoSrc: string;
-  posterSrc?: string;
+  sequenceFolder: string;
   instantKw: string;
   gridDependency: string;
   savings: string;
@@ -39,9 +35,9 @@ function CinematicChapter({
   id,
   badge,
   title,
-  subtitle,
   desc,
   videoSrc,
+  sequenceFolder,
   instantKw,
   gridDependency,
   savings,
@@ -49,90 +45,152 @@ function CinematicChapter({
   metricVal1,
   metricLabel2,
   metricVal2,
-  accentColor,
 }: ChapterProps) {
   const { language } = useLanguage();
   const shouldReduceMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  // Default to 'scroll' so thumb scrolling on mobile immediately scrubs the 3D presentation
+  const [playbackMode, setPlaybackMode] = useState<'scroll' | 'play'>('scroll');
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isVideoReady, setIsVideoReady] = useState(false);
-  const [playbackMode, setPlaybackMode] = useState<'scroll' | 'play'>('play');
+  const [images, setImages] = useState<HTMLImageElement[]>([]);
+  const [isImagesLoaded, setIsImagesLoaded] = useState(false);
 
+  // Smooth scroll tracking across 250vh
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   });
 
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 220,
-    damping: 32,
-    mass: 0.4,
+    stiffness: 240,
+    damping: 34,
+    mass: 0.35,
   });
 
-  // Handle scroll-based scrubbing when in scroll mode
+  // Preload sequence frames
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video || playbackMode !== 'scroll') return;
+    let count = 0;
+    const loadedImages: HTMLImageElement[] = [];
+
+    for (let i = 0; i < TOTAL_FRAMES; i++) {
+      const img = new Image();
+      const padded = String(i).padStart(4, '0');
+      img.src = `/sequences/${sequenceFolder}/frame_${padded}.webp`;
+
+      img.onload = () => {
+        count++;
+        // Render initial frame as soon as frame 0 loads
+        if (i === 0 && canvasRef.current) {
+          drawFrameToCanvas(img);
+        }
+        if (count >= 20) {
+          setIsImagesLoaded(true);
+        }
+      };
+
+      loadedImages.push(img);
+    }
+    setImages(loadedImages);
+  }, [sequenceFolder]);
+
+  // Render a specific frame onto the 2D canvas with proper DPR and cover scaling
+  const drawFrameToCanvas = useCallback((img: HTMLImageElement) => {
+    const canvas = canvasRef.current;
+    if (!canvas || !img || !img.complete) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const targetWidth = Math.round(rect.width * dpr);
+    const targetHeight = Math.round(rect.height * dpr);
+
+    if (canvas.width !== targetWidth || canvas.height !== targetHeight) {
+      canvas.width = targetWidth;
+      canvas.height = targetHeight;
+    }
+
+    ctx.save();
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, rect.width, rect.height);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+
+    // Object-fit: cover positioning
+    const hRatio = rect.width / img.width;
+    const vRatio = rect.height / img.height;
+    const ratio = Math.max(hRatio, vRatio);
+    const centerShiftX = (rect.width - img.width * ratio) / 2;
+    const centerShiftY = (rect.height - img.height * ratio) / 2;
+
+    ctx.drawImage(
+      img,
+      0,
+      0,
+      img.width,
+      img.height,
+      centerShiftX,
+      centerShiftY,
+      img.width * ratio,
+      img.height * ratio
+    );
+    ctx.restore();
+  }, []);
+
+  // Sync scroll progress with canvas frame
+  useEffect(() => {
+    if (playbackMode !== 'scroll' || images.length === 0) return;
 
     const unsubscribe = smoothProgress.on('change', (progress) => {
-      if (video.duration && !isNaN(video.duration)) {
-        // Direct GPU scrubbing
-        video.currentTime = Math.min(video.duration - 0.05, Math.max(0, progress * video.duration));
+      const frameIdx = Math.min(TOTAL_FRAMES - 1, Math.max(0, Math.floor(progress * (TOTAL_FRAMES - 1))));
+      const img = images[frameIdx];
+      if (img && img.complete) {
+        drawFrameToCanvas(img);
       }
     });
 
     return () => unsubscribe();
-  }, [smoothProgress, playbackMode]);
+  }, [smoothProgress, playbackMode, images, drawFrameToCanvas]);
 
-  // Handle play/pause mode
-  const togglePlay = () => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    if (isPlaying) {
-      video.pause();
-      setIsPlaying(false);
-    } else {
-      setPlaybackMode('play');
-      video.play().then(() => setIsPlaying(true)).catch(() => {});
-    }
-  };
-
-  const setMode = (mode: 'scroll' | 'play') => {
+  // Handle mode switches
+  const handleSetMode = (mode: 'scroll' | 'play') => {
     setPlaybackMode(mode);
     const video = videoRef.current;
     if (!video) return;
 
-    if (mode === 'scroll') {
+    if (mode === 'play') {
+      video.play().then(() => setIsPlaying(true)).catch(() => {});
+    } else {
       video.pause();
       setIsPlaying(false);
-      if (video.duration) {
-        video.currentTime = scrollYProgress.get() * video.duration;
-      }
-    } else {
-      video.play().then(() => setIsPlaying(true)).catch(() => {});
+      // Immediately draw the frame corresponding to current scroll position
+      const progress = scrollYProgress.get();
+      const frameIdx = Math.min(TOTAL_FRAMES - 1, Math.max(0, Math.floor(progress * (TOTAL_FRAMES - 1))));
+      const img = images[frameIdx];
+      if (img) drawFrameToCanvas(img);
     }
   };
 
-  // Autoplay initially in loop for vivid Apple keynote feel
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    video.onloadeddata = () => {
-      setIsVideoReady(true);
-      video.play().then(() => setIsPlaying(true)).catch(() => {});
-    };
-  }, []);
-
   return (
-    <div id={id} ref={containerRef} className="relative h-[220vh] sm:h-[250vh] bg-[#050508] text-white">
+    <div id={id} ref={containerRef} className="relative h-[220vh] sm:h-[260vh] bg-[#050508] text-white" style={{ touchAction: 'pan-y' }}>
       {/* Sticky Fullscreen High-Definition Viewport */}
-      <div className="sticky top-0 h-[100dvh] w-full flex items-center justify-center overflow-hidden">
+      <div className="sticky top-0 h-[100dvh] w-full flex items-center justify-center overflow-hidden" style={{ touchAction: 'pan-y' }}>
         
-        {/* Native Hardware-Accelerated 1080p Video */}
+        {/* Layer 1: Canvas for Zero-Latency 60FPS Touch & Scroll Scrubbing */}
+        <canvas
+          ref={canvasRef}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
+            playbackMode === 'scroll' ? 'opacity-100 z-10' : 'opacity-0 pointer-events-none'
+          }`}
+          style={{ touchAction: 'pan-y' }}
+        />
+
+        {/* Layer 2: Native Hardware-Accelerated 1080p Video for Continuous Auto-Play Stream */}
         <video
           ref={videoRef}
           src={videoSrc}
@@ -140,22 +198,36 @@ function CinematicChapter({
           muted
           loop
           preload="auto"
-          className="w-full h-full object-cover"
-          style={{ filter: 'contrast(1.03) brightness(0.98)' }}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
+            playbackMode === 'play' ? 'opacity-100 z-10' : 'opacity-0 pointer-events-none'
+          }`}
+          style={{ filter: 'contrast(1.03) brightness(0.98)', touchAction: 'pan-y' }}
         />
 
         {/* Ambient Dark Tech Gradients */}
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-[#050508] via-transparent to-[#050508]/80" />
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-[#050508]/70 via-transparent to-[#050508]/70" />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-[#050508] via-transparent to-[#050508]/80 z-15" />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-[#050508]/70 via-transparent to-[#050508]/70 z-15" />
 
         {/* Floating Top Bar: Mode Switcher & Playback Control */}
         <div className="absolute top-20 sm:top-24 left-3 right-3 sm:left-6 sm:right-6 flex items-center justify-between z-30 pointer-events-auto">
           
           {/* Mode Switcher */}
-          <div className="inline-flex p-1 rounded-2xl bg-black/80 backdrop-blur-xl border border-white/15 shadow-2xl">
+          <div className="inline-flex p-1 rounded-2xl bg-black/85 backdrop-blur-xl border border-white/15 shadow-2xl">
             <button
-              onClick={() => setMode('play')}
-              className={`min-h-[44px] px-3 sm:px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer ${
+              onClick={() => handleSetMode('scroll')}
+              className={`min-h-[44px] px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer ${
+                playbackMode === 'scroll'
+                  ? 'bg-gradient-to-r from-[#ff1e42] to-rose-600 text-white shadow-lg shadow-rose-950/60'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <Sliders className="w-3.5 h-3.5" />
+              <span>{language === 'es' ? 'Scroll 3D' : 'Scroll 3D'}</span>
+            </button>
+
+            <button
+              onClick={() => handleSetMode('play')}
+              className={`min-h-[44px] px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer ${
                 playbackMode === 'play'
                   ? 'bg-gradient-to-r from-[#ff1e42] to-rose-600 text-white shadow-lg shadow-rose-950/60'
                   : 'text-slate-400 hover:text-white'
@@ -163,19 +235,7 @@ function CinematicChapter({
             >
               {isPlaying ? <Pause className="w-3.5 h-3.5 text-amber-300" /> : <Play className="w-3.5 h-3.5 text-emerald-300" />}
               <span>{language === 'es' ? 'Auto-Play' : 'Auto-Play'}</span>
-              <span className="hidden sm:inline">1080p</span>
-            </button>
-
-            <button
-              onClick={() => setMode('scroll')}
-              className={`min-h-[44px] px-3 sm:px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer ${
-                playbackMode === 'scroll'
-                  ? 'bg-gradient-to-r from-[#ff1e42] to-rose-600 text-white shadow-lg shadow-rose-950/60'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              <Sliders className="w-3.5 h-3.5" />
-              <span>{language === 'es' ? 'Scroll 3D' : 'Scroll Scrub'}</span>
+              <span className="hidden sm:inline">60FPS</span>
             </button>
           </div>
 
@@ -191,7 +251,7 @@ function CinematicChapter({
         <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-4 sm:p-12 z-20">
           
           {/* Mobile Compact HUD Bar */}
-          <div className="pt-36 sm:hidden flex justify-center w-full">
+          <div className="pt-36 sm:hidden flex justify-center w-full pointer-events-none">
             <div className="bg-black/85 backdrop-blur-xl border border-white/15 rounded-2xl px-3.5 py-1.5 flex items-center gap-3 text-[11px] font-mono shadow-xl">
               <span className="flex items-center gap-1 text-rose-400 font-bold">
                 <Zap className="w-3 h-3 text-[#ff1e42]" />
@@ -205,8 +265,8 @@ function CinematicChapter({
           </div>
 
           {/* Desktop Top-Right Telemetry Card */}
-          <div className="pt-24 sm:pt-20 hidden sm:flex justify-end">
-            <div className="bg-black/75 backdrop-blur-2xl border border-white/15 rounded-3xl p-5 sm:p-6 max-w-xs w-full shadow-2xl space-y-4 font-mono">
+          <div className="pt-24 sm:pt-20 hidden sm:flex justify-end pointer-events-none">
+            <div className="bg-black/80 backdrop-blur-2xl border border-white/15 rounded-3xl p-5 sm:p-6 max-w-xs w-full shadow-2xl space-y-4 font-mono">
               <div className="flex items-center justify-between text-xs text-slate-300 border-b border-white/10 pb-2.5">
                 <span className="flex items-center gap-1.5 text-rose-400 font-bold tracking-wider">
                   <Zap className="w-4 h-4 text-[#ff1e42]" />
@@ -248,7 +308,7 @@ function CinematicChapter({
           </div>
 
           {/* Bottom Narrative Card */}
-          <div className="pb-6 sm:pb-16 max-w-2xl space-y-2 sm:space-y-3">
+          <div className="pb-6 sm:pb-16 max-w-2xl space-y-2 sm:space-y-3 pointer-events-none">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-950/80 border border-rose-500/50 text-rose-300 text-[11px] sm:text-xs font-mono uppercase tracking-wider shadow-lg shadow-rose-950/50">
               <Sun className="w-3.5 h-3.5 text-[#ff1e42]" />
               <span>{badge}</span>
@@ -265,7 +325,7 @@ function CinematicChapter({
             {playbackMode === 'scroll' && (
               <div className="pt-1 flex items-center gap-1.5 text-[11px] sm:text-xs font-mono text-rose-400 animate-pulse">
                 <ArrowDown className="w-3.5 h-3.5" />
-                <span>{language === 'es' ? 'Desliza para avanzar o retroceder el video' : 'Scroll down or up to scrub the 1080p frame'}</span>
+                <span>{language === 'es' ? 'Desliza con tu dedo para controlar el video' : 'Swipe up/down to scrub the video'}</span>
               </div>
             )}
           </div>
@@ -293,6 +353,7 @@ export default function CinematicShowcase() {
           ? 'Arquitectura fotovoltaica con silicio monocristalino bifacial de alta eficiencia. Diseñada para mantener aires acondicionados, sistemas de bombeo y domótica encendidos las 24 horas del día con costo de energía en cero.'
           : 'Engineered rooftop solar array with bifacial monocrystalline silicon. Keeps multi-zone HVAC, water pumps, and smart home automation operating 24/7 with zero utility bills.'}
         videoSrc="/videos/solar/solar-villa.mp4"
+        sequenceFolder="solar-villa"
         instantKw="12.8 kW"
         gridDependency="0.0 kW (Autónomo)"
         savings="92% Tarifa"
@@ -304,7 +365,7 @@ export default function CinematicShowcase() {
       />
 
       {/* TRANSICIÓN EDITORIAL ENTRE CAPÍTULOS */}
-      <div className="py-20 px-6 bg-gradient-to-b from-[#050508] via-[#090a10] to-[#050508] border-y border-white/5 text-center relative z-10">
+      <div className="py-16 sm:py-20 px-6 bg-gradient-to-b from-[#050508] via-[#090a10] to-[#050508] border-y border-white/5 text-center relative z-10">
         <div className="max-w-4xl mx-auto space-y-4">
           <span className="text-xs font-mono uppercase tracking-widest text-[#ff1e42]">
             {language === 'es' ? 'Capítulo 02 a Continuación' : 'Chapter 02 Below'}
@@ -335,6 +396,7 @@ export default function CinematicShowcase() {
           ? 'Transferencia automática de potencia en menos de 10 milisegundos ante caídas de la red pública. Proteja maquinaria de manufactura, cuartos fríos, centros de cómputo y logística sin pérdidas financieras por corte eléctrico.'
           : 'Industrial-grade rooftop solar arrays featuring <10ms microgrid transfer. Protect assembly lines, cold storage, and compute nodes against municipal blackouts with guaranteed business continuity.'}
         videoSrc="/videos/solar/solar-warehouse.mp4"
+        sequenceFolder="solar-warehouse"
         instantKw="148.6 kW"
         gridDependency="0.0 kW (Autónomo)"
         savings="88% Tarifa"

@@ -15,7 +15,7 @@ export default function Portfolio() {
   const { language } = useLanguage();
 
   return (
-    <div className="min-h-screen text-text-light font-sans selection:bg-white/20 selection:text-white relative bg-[#0d0d11] overflow-x-hidden">
+    <div className="min-h-screen text-text-light font-sans selection:bg-white/20 selection:text-white relative bg-[#0d0d11] overflow-x-clip">
       {/* Deep Atmospheric Cyber Background */}
       <CyberBackground />
 

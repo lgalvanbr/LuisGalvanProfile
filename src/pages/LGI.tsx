@@ -65,7 +65,7 @@ export default function LGI() {
   };
 
   return (
-    <div className="bg-[#0a0a0e] min-h-screen text-slate-300 font-sans selection:bg-white/20 selection:text-white overflow-x-hidden">
+    <div className="bg-[#0a0a0e] min-h-screen text-slate-300 font-sans selection:bg-white/20 selection:text-white overflow-x-clip">
       {/* Universal LGI Hub Navbar */}
       <HubNavbar />
 
