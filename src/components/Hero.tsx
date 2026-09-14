@@ -1,14 +1,13 @@
-import { motion } from 'motion/react';
-import { ChevronDown, Briefcase, FileText, Bot, ArrowRight, Mail } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { motion, useReducedMotion } from 'motion/react';
+import { ChevronDown, Briefcase, Bot, ArrowRight, Mail, HardHat, Sun } from 'lucide-react';
+import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-import VirtualCV from './VirtualCV';
 
 export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { t, language } = useLanguage();
-  const [isCVOpen, setIsCVOpen] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
   const mouseRef = useRef<{ x: number | null; y: number | null }>({ x: null, y: null });
 
   useEffect(() => {
@@ -145,10 +144,10 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          {/* Badge sobrio institucional */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/10 text-xs font-mono text-zinc-300 mb-8 backdrop-blur-sm">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-            <span>{language === 'es' ? 'Ingeniería Civil & de Sistemas · UniAndes' : 'Civil & Systems Engineering · UniAndes'}</span>
+          {/* Badge dinámico de estatus profesional (sin repetición de UniAndes) */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/10 text-xs font-mono text-zinc-300 mb-8 backdrop-blur-sm shadow-xs">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>{language === 'es' ? 'Consultor Tecnológico · Fundador de LGI' : 'Technology Consultant · Founder of LGI'}</span>
           </div>
 
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight mb-4 text-white">
@@ -163,49 +162,124 @@ export default function Hero() {
             {t('hero.subtitle')}
           </p>
           
-          {/* Botonera sobria y ejecutiva sin degradados azules chillones */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 mb-14">
+          {/* Unidades de Negocio LGI con colores diferenciados e iconos amigables */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 max-w-3xl mx-auto mb-10 text-left">
             
-            {/* Botón primario: blanco de alto contraste */}
-            <button
-              onClick={() => setIsCVOpen(true)}
-              className="w-full sm:w-auto min-h-[44px] flex items-center justify-center gap-2 px-7 py-3 bg-white text-zinc-950 hover:bg-zinc-200 rounded-lg font-semibold text-sm transition-all duration-200 shadow-[0_2px_15px_rgba(255,255,255,0.12)] cursor-pointer"
+            {/* LGI AI & Labs - Violeta / Púrpura */}
+            <motion.div
+              whileHover={shouldReduceMotion ? {} : { y: -4, scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 350, damping: 22 }}
             >
-              <FileText size={18} />
-              <span>{t('hero.viewCv')}</span>
-            </button>
+              <Link
+                to="/ia"
+                className="group relative p-4 rounded-xl border border-purple-500/30 hover:border-purple-400/70 bg-gradient-to-br from-purple-950/40 via-[#130f1e] to-[#0e0d14] transition-all duration-300 shadow-[0_4px_20px_rgba(168,85,247,0.12)] hover:shadow-[0_4px_28px_rgba(168,85,247,0.28)] flex flex-col justify-between min-h-[118px] block"
+              >
+                <div className="flex items-center justify-between mb-2.5">
+                  <div className="w-9 h-9 rounded-lg bg-purple-500/20 border border-purple-500/35 flex items-center justify-center text-purple-300 group-hover:scale-110 transition-transform">
+                    <Bot size={20} />
+                  </div>
+                  <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/25">
+                    {language === 'es' ? 'IA & Automatización' : 'AI & Automation'}
+                  </span>
+                </div>
+                <div>
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-sm font-bold text-white group-hover:text-purple-200 transition-colors">
+                      LGI AI & Labs
+                    </h3>
+                    <ArrowRight size={14} className="text-purple-400 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all" />
+                  </div>
+                  <p className="text-xs text-zinc-400 mt-0.5 line-clamp-1">
+                    {language === 'es' ? 'Agentes autónomos & workflows' : 'Autonomous agents & workflows'}
+                  </p>
+                </div>
+              </Link>
+            </motion.div>
 
-            {/* Botón secundario: acceso a la nueva división de IA */}
-            <Link
-              to="/ia"
-              className="w-full sm:w-auto min-h-[44px] flex items-center justify-center gap-2 px-6 py-3 bg-white/[0.06] hover:bg-white/[0.12] border border-white/15 hover:border-white/30 text-white rounded-lg font-medium text-sm transition-all duration-200"
+            {/* LGI Ingeniería - Cyan / Celeste */}
+            <motion.div
+              whileHover={shouldReduceMotion ? {} : { y: -4, scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 350, damping: 22 }}
             >
-              <Bot size={18} className="text-zinc-300" />
-              <span>{language === 'es' ? 'LGI AI & Automatización' : 'LGI AI & Automation'}</span>
-              <ArrowRight size={15} className="text-zinc-400" />
-            </Link>
+              <Link
+                to="/lgi"
+                className="group relative p-4 rounded-xl border border-cyan-500/30 hover:border-cyan-400/70 bg-gradient-to-br from-cyan-950/40 via-[#0d161e] to-[#0d0f14] transition-all duration-300 shadow-[0_4px_20px_rgba(6,182,212,0.12)] hover:shadow-[0_4px_28px_rgba(6,182,212,0.28)] flex flex-col justify-between min-h-[118px] block"
+              >
+                <div className="flex items-center justify-between mb-2.5">
+                  <div className="w-9 h-9 rounded-lg bg-cyan-500/20 border border-cyan-500/35 flex items-center justify-center text-cyan-300 group-hover:scale-110 transition-transform">
+                    <HardHat size={20} />
+                  </div>
+                  <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/25">
+                    {language === 'es' ? 'Infraestructura' : 'Infrastructure'}
+                  </span>
+                </div>
+                <div>
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-sm font-bold text-white group-hover:text-cyan-200 transition-colors">
+                      LGI Ingeniería
+                    </h3>
+                    <ArrowRight size={14} className="text-cyan-400 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all" />
+                  </div>
+                  <p className="text-xs text-zinc-400 mt-0.5 line-clamp-1">
+                    {language === 'es' ? 'Gemelos 3D & telemetría' : '3D digital twins & telemetry'}
+                  </p>
+                </div>
+              </Link>
+            </motion.div>
 
-            {/* Botón terciario: ver proyectos */}
+            {/* LGI Solar - Ámbar / Dorado Solar */}
+            <motion.div
+              whileHover={shouldReduceMotion ? {} : { y: -4, scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 350, damping: 22 }}
+            >
+              <Link
+                to="/solar"
+                className="group relative p-4 rounded-xl border border-amber-500/30 hover:border-amber-400/70 bg-gradient-to-br from-amber-950/40 via-[#19140c] to-[#0e0e12] transition-all duration-300 shadow-[0_4px_20px_rgba(245,158,11,0.12)] hover:shadow-[0_4px_28px_rgba(245,158,11,0.28)] flex flex-col justify-between min-h-[118px] block"
+              >
+                <div className="flex items-center justify-between mb-2.5">
+                  <div className="w-9 h-9 rounded-lg bg-amber-500/20 border border-amber-500/35 flex items-center justify-center text-amber-300 group-hover:rotate-45 transition-transform duration-500">
+                    <Sun size={20} />
+                  </div>
+                  <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/25">
+                    {language === 'es' ? 'Energía Solar' : 'Solar Energy'}
+                  </span>
+                </div>
+                <div>
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-sm font-bold text-white group-hover:text-amber-200 transition-colors">
+                      LGI Solar
+                    </h3>
+                    <ArrowRight size={14} className="text-amber-400 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all" />
+                  </div>
+                  <p className="text-xs text-zinc-400 mt-0.5 line-clamp-1">
+                    {language === 'es' ? 'Fotovoltaica & descarbonización' : 'Photovoltaics & clean energy'}
+                  </p>
+                </div>
+              </Link>
+            </motion.div>
+
+          </div>
+
+          {/* Botonera de acción principal y contacto */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 mb-14">
+            {/* Botón primario: Ver Proyectos / Casos de Éxito */}
             <a
               href="#proyectos"
-              className="w-full sm:w-auto min-h-[44px] flex items-center justify-center gap-2 px-6 py-3 bg-transparent border border-white/10 hover:border-white/25 hover:bg-white/[0.03] text-zinc-300 hover:text-white rounded-lg font-medium text-sm transition-all duration-200"
+              className="w-full sm:w-auto min-h-[44px] flex items-center justify-center gap-2 px-7 py-3 bg-white text-zinc-950 hover:bg-zinc-200 rounded-lg font-semibold text-sm transition-all duration-200 shadow-[0_2px_15px_rgba(255,255,255,0.12)] cursor-pointer"
             >
               <Briefcase size={18} />
               <span>{t('hero.viewProjects')}</span>
             </a>
 
-            {/* Botón de contacto */}
+            {/* Botón secundario: Contacto Directo */}
             <a
               href="#contacto"
-              className="w-full sm:w-auto min-h-[44px] flex items-center justify-center gap-2 px-6 py-3 bg-transparent border border-white/10 hover:border-white/25 hover:bg-white/[0.03] text-zinc-400 hover:text-zinc-200 rounded-lg font-medium text-sm transition-all duration-200"
+              className="w-full sm:w-auto min-h-[44px] flex items-center justify-center gap-2 px-6 py-3 bg-white/[0.05] border border-white/10 hover:border-white/25 hover:bg-white/[0.08] text-zinc-300 hover:text-white rounded-lg font-medium text-sm transition-all duration-200"
             >
               <Mail size={18} />
               <span>{t('hero.contactMe')}</span>
             </a>
-
           </div>
-
-          <VirtualCV isOpen={isCVOpen} onClose={() => setIsCVOpen(false)} />
 
           {/* Sello institucional UniAndes sobrio */}
           <motion.div 
