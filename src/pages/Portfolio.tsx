@@ -1,3 +1,4 @@
+import React, { Suspense, lazy } from 'react';
 import CyberBackground from '../components/ui/CyberBackground';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
@@ -5,11 +6,21 @@ import About from '../components/About';
 import EcosystemSection from '../components/EcosystemSection';
 import Projects from '../components/Projects';
 import Skills from '../components/Skills';
-import InteractiveSection from '../components/InteractiveSection';
 import Contact from '../components/Contact';
 import WhatsAppButton from '../components/WhatsAppButton';
-
 import { useLanguage } from '../context/LanguageContext';
+
+// Lazy-load the heavy 3D WebGL Three.js simulator so it doesn't block the initial portfolio render
+const InteractiveSection = lazy(() => import('../components/InteractiveSection'));
+
+function InteractiveSectionFallback() {
+  return (
+    <div className="py-24 px-6 md:px-12 lg:px-24 bg-[#0a0a0e] text-center flex flex-col items-center justify-center min-h-[400px]">
+      <div className="w-8 h-8 rounded-full border-2 border-white/20 border-t-white animate-spin mb-4" />
+      <p className="text-xs font-mono text-zinc-500 tracking-wider uppercase">Cargando Módulo 3D WebGL...</p>
+    </div>
+  );
+}
 
 export default function Portfolio() {
   const { language } = useLanguage();
@@ -27,7 +38,9 @@ export default function Portfolio() {
         <EcosystemSection />
         <Projects />
         <Skills />
-        <InteractiveSection />
+        <Suspense fallback={<InteractiveSectionFallback />}>
+          <InteractiveSection />
+        </Suspense>
         <Contact />
       </main>
       
