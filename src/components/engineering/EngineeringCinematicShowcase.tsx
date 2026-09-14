@@ -55,11 +55,13 @@ function EngineeringChapter({
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // Lazy chapter activation: Only stream frames when chapter approaches viewport
+  // In-memory ref cache: completely decoupled from React state to prevent re-render loops or network flooding
+  const imageCacheRef = useRef<Map<number, HTMLImageElement>>(new Map());
+  const pendingRequestsRef = useRef<Set<number>>(new Set());
+
   const [inView, setInView] = useState(false);
   const [playbackMode, setPlaybackMode] = useState<'scroll' | 'play'>('scroll');
   const [isPlaying, setIsPlaying] = useState(false);
-  const [images, setImages] = useState<(HTMLImageElement | null)[]>(() => new Array(TOTAL_FRAMES).fill(null));
 
   // Smooth scroll tracking across 240vh
   const { scrollYProgress } = useScroll({
@@ -144,112 +146,80 @@ function EngineeringChapter({
     ctx.restore();
   }, []);
 
-  // 2. High-Performance Progressive Frame Streaming:
-  // Phase 1 (Instant): Frame 0 paints immediately (Latency < 50ms)
-  // Phase 2 (Buffer): Frames 1-15 load for instant touch-scrubbing
-  // Phase 3 (Background): Remaining frames stream in small idle batches without choking network
-  useEffect(() => {
-    if (!inView) return;
+  // Safe On-Demand Request: Loads at most 1 instance per frame, never duplicates, never triggers re-renders
+  const requestFrame = useCallback((idx: number, onLoaded?: (img: HTMLImageElement) => void) => {
+    if (idx < 0 || idx >= TOTAL_FRAMES) return;
 
-    let isCancelled = false;
-    const frameCache: (HTMLImageElement | null)[] = new Array(TOTAL_FRAMES).fill(null);
-
-    const getFrameUrl = (idx: number) => {
-      const padded = String(idx).padStart(4, '0');
-      return `/sequences/${sequenceFolder}/frame_${padded}.webp`;
-    };
-
-    // Phase 1: Critical Keyframe 0
-    const frame0 = new Image();
-    frame0.src = getFrameUrl(0);
-    frame0.onload = () => {
-      if (isCancelled) return;
-      frameCache[0] = frame0;
-      setImages([...frameCache]);
-      drawFrameToCanvas(frame0);
-
-      // Phase 2: Immediate Buffer (Frames 1-15)
-      loadBatch(1, 15, () => {
-        // Phase 3: Progressive streaming in batches of 8
-        streamRemaining(16);
-      });
-    };
-
-    const loadBatch = (start: number, end: number, onDone?: () => void) => {
-      let pending = end - start + 1;
-      if (pending <= 0) {
-        onDone?.();
+    if (imageCacheRef.current.has(idx)) {
+      const cached = imageCacheRef.current.get(idx)!;
+      if (cached.complete && cached.naturalWidth > 0) {
+        onLoaded?.(cached);
         return;
       }
-
-      for (let i = start; i <= end && i < TOTAL_FRAMES; i++) {
-        const img = new Image();
-        img.src = getFrameUrl(i);
-        img.onload = () => {
-          if (isCancelled) return;
-          frameCache[i] = img;
-          pending--;
-          if (pending === 0) {
-            setImages([...frameCache]);
-            onDone?.();
-          }
-        };
-        img.onerror = () => {
-          pending--;
-          if (pending === 0) onDone?.();
-        };
-      }
-    };
-
-    const streamRemaining = (startIdx: number) => {
-      if (isCancelled || startIdx >= TOTAL_FRAMES) return;
-      const batchSize = 8;
-      const endIdx = Math.min(startIdx + batchSize - 1, TOTAL_FRAMES - 1);
-
-      loadBatch(startIdx, endIdx, () => {
-        if (isCancelled) return;
-        setImages([...frameCache]);
-
-        // Schedule next batch on idle
-        if ('requestIdleCallback' in window) {
-          (window as any).requestIdleCallback(() => streamRemaining(endIdx + 1), { timeout: 80 });
-        } else {
-          setTimeout(() => streamRemaining(endIdx + 1), 35);
-        }
-      });
-    };
-
-    return () => {
-      isCancelled = true;
-    };
-  }, [inView, sequenceFolder, drawFrameToCanvas]);
-
-  // Find the closest loaded image so the canvas never drops a frame or shows a blank flash
-  const getBestAvailableImage = useCallback((targetIdx: number) => {
-    if (images[targetIdx] && images[targetIdx]!.complete) return images[targetIdx]!;
-    for (let i = targetIdx - 1; i >= 0; i--) {
-      if (images[i] && images[i]!.complete) return images[i]!;
     }
-    for (let i = targetIdx + 1; i < TOTAL_FRAMES; i++) {
-      if (images[i] && images[i]!.complete) return images[i]!;
-    }
-    return null;
-  }, [images]);
 
-  // Sync scroll progress with canvas frame
+    if (pendingRequestsRef.current.has(idx)) return; // In-flight request
+
+    pendingRequestsRef.current.add(idx);
+    const img = new Image();
+    const padded = String(idx).padStart(4, '0');
+    img.src = `/sequences/${sequenceFolder}/frame_${padded}.webp`;
+
+    img.onload = () => {
+      pendingRequestsRef.current.delete(idx);
+      imageCacheRef.current.set(idx, img);
+      onLoaded?.(img);
+    };
+
+    img.onerror = () => {
+      pendingRequestsRef.current.delete(idx);
+    };
+  }, [sequenceFolder]);
+
+  // Initial Load: Request strictly Frame 0. Exactly 1 request on page load, 0 DDoS risk.
+  useEffect(() => {
+    if (!inView) return;
+    requestFrame(0, (img) => {
+      drawFrameToCanvas(img);
+    });
+  }, [inView, requestFrame, drawFrameToCanvas]);
+
+  // Scroll Scrubbing: Windowed On-Demand Streaming (Loads only 2-3 frames around active position)
   useEffect(() => {
     if (playbackMode !== 'scroll') return;
 
     const unsubscribe = smoothProgress.on('change', (progress) => {
-      const frameIdx = Math.min(TOTAL_FRAMES - 1, Math.max(0, Math.floor(progress * (TOTAL_FRAMES - 1))));
-      const img = getBestAvailableImage(frameIdx);
-      if (img) {
-        drawFrameToCanvas(img);
+      const targetIdx = Math.min(TOTAL_FRAMES - 1, Math.max(0, Math.floor(progress * (TOTAL_FRAMES - 1))));
+
+      // 1. Draw target or nearest cached frame immediately
+      let bestImg = imageCacheRef.current.get(targetIdx);
+      if (!bestImg || !bestImg.complete) {
+        for (let offset = 1; offset < TOTAL_FRAMES; offset++) {
+          const prev = imageCacheRef.current.get(targetIdx - offset);
+          if (prev && prev.complete) { bestImg = prev; break; }
+          const next = imageCacheRef.current.get(targetIdx + offset);
+          if (next && next.complete) { bestImg = next; break; }
+        }
+      }
+
+      if (bestImg) {
+        drawFrameToCanvas(bestImg);
+      }
+
+      // 2. Windowed prefetch: Request a tiny 3-frame window around current scroll target
+      for (let i = targetIdx; i <= targetIdx + 2 && i < TOTAL_FRAMES; i++) {
+        requestFrame(i, (loadedImg) => {
+          const currentProgress = smoothProgress.get();
+          const currentIdx = Math.min(TOTAL_FRAMES - 1, Math.max(0, Math.floor(currentProgress * (TOTAL_FRAMES - 1))));
+          if (i === currentIdx) {
+            drawFrameToCanvas(loadedImg);
+          }
+        });
       }
     });
 
     return () => unsubscribe();
-  }, [smoothProgress, playbackMode, getBestAvailableImage, drawFrameToCanvas]);
+  }, [smoothProgress, playbackMode, requestFrame, drawFrameToCanvas]);
 
   // Handle mode switches
   const handleSetMode = (mode: 'scroll' | 'play') => {
@@ -263,10 +233,9 @@ function EngineeringChapter({
     } else {
       video.pause();
       setIsPlaying(false);
-      // Immediately draw current scroll frame
       const progress = scrollYProgress.get();
-      const frameIdx = Math.min(TOTAL_FRAMES - 1, Math.max(0, Math.floor(progress * (TOTAL_FRAMES - 1))));
-      const img = getBestAvailableImage(frameIdx);
+      const targetIdx = Math.min(TOTAL_FRAMES - 1, Math.max(0, Math.floor(progress * (TOTAL_FRAMES - 1))));
+      const img = imageCacheRef.current.get(targetIdx) || imageCacheRef.current.get(0);
       if (img) drawFrameToCanvas(img);
     }
   };
