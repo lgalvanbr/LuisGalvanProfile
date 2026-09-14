@@ -70,9 +70,9 @@ function EngineeringChapter({
   });
 
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 240,
-    damping: 34,
-    mass: 0.35,
+    stiffness: 280,
+    damping: 30,
+    mass: 0.25,
   });
 
   // 1. Viewport Detection: Activate loading only when chapter is near (800px margin)
@@ -100,7 +100,7 @@ function EngineeringChapter({
     return () => observer.disconnect();
   }, []);
 
-  // Render a specific frame onto the 2D canvas with proper DPR and cover scaling
+  // Render a specific frame onto the 2D canvas with DPR awareness, zero-flicker buffer, and smart mobile framing
   const drawFrameToCanvas = useCallback((img: HTMLImageElement) => {
     const canvas = canvasRef.current;
     if (!canvas || !img || !img.complete || img.naturalWidth === 0) return;
@@ -114,23 +114,46 @@ function EngineeringChapter({
     const targetWidth = Math.round(rect.width * dpr);
     const targetHeight = Math.round(rect.height * dpr);
 
-    if (canvas.width !== targetWidth || canvas.height !== targetHeight) {
+    // Guard: Only resize buffer if uninitialized or dimension changes significantly (> 80px, e.g. orientation change).
+    // Prevents mobile address bar collapse/expand from wiping the canvas buffer and flashing black!
+    const widthDiff = Math.abs(canvas.width - targetWidth);
+    const heightDiff = Math.abs(canvas.height - targetHeight);
+    if (canvas.width === 0 || canvas.height === 0 || widthDiff > 80 || heightDiff > 80) {
       canvas.width = targetWidth;
       canvas.height = targetHeight;
     }
 
-    ctx.save();
-    ctx.scale(dpr, dpr);
-    ctx.clearRect(0, 0, rect.width, rect.height);
+    const canvasW = canvas.width;
+    const canvasH = canvas.height;
+
+    ctx.clearRect(0, 0, canvasW, canvasH);
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
 
-    // Object-fit: cover positioning
-    const hRatio = rect.width / img.width;
-    const vRatio = rect.height / img.height;
-    const ratio = Math.max(hRatio, vRatio);
-    const centerShiftX = (rect.width - img.width * ratio) / 2;
-    const centerShiftY = (rect.height - img.height * ratio) / 2;
+    const isMobilePortrait = rect.width < 768 && rect.height > rect.width;
+    let ratio: number;
+    let centerShiftX: number;
+    let centerShiftY: number;
+
+    if (isMobilePortrait) {
+      // Smart mobile portrait framing:
+      // A 16:9 render on a 9:19.5 phone will be 75% cropped if we use standard cover (Math.max).
+      // Instead, fit the width with a generous 1.15x scale factor so the 3D subject is prominently visible
+      // without chopping off the sides of the model.
+      const baseRatio = canvasW / img.width;
+      ratio = baseRatio * 1.15;
+      centerShiftX = (canvasW - img.width * ratio) / 2;
+      // Shift upward so it centers comfortably in the open space above the bottom narrative card
+      const upwardOffset = Math.min(canvasH * 0.08, 60 * dpr);
+      centerShiftY = (canvasH - img.height * ratio) / 2 - upwardOffset;
+    } else {
+      // Desktop / Landscape: standard cinematic object-cover
+      const hRatio = canvasW / img.width;
+      const vRatio = canvasH / img.height;
+      ratio = Math.max(hRatio, vRatio);
+      centerShiftX = (canvasW - img.width * ratio) / 2;
+      centerShiftY = (canvasH - img.height * ratio) / 2;
+    }
 
     ctx.drawImage(
       img,
@@ -138,12 +161,11 @@ function EngineeringChapter({
       0,
       img.width,
       img.height,
-      centerShiftX,
-      centerShiftY,
-      img.width * ratio,
-      img.height * ratio
+      Math.round(centerShiftX),
+      Math.round(centerShiftY),
+      Math.round(img.width * ratio),
+      Math.round(img.height * ratio)
     );
-    ctx.restore();
   }, []);
 
   // Safe On-Demand Request: Loads at most 1 instance per frame, never duplicates, never triggers re-renders
@@ -176,19 +198,39 @@ function EngineeringChapter({
     };
   }, [sequenceFolder]);
 
-  // Initial Load: Request strictly Frame 0. Exactly 1 request on page load, 0 DDoS risk.
+  // Initial Load: Request Frame 0 immediately, then progressively preload a low-bandwidth keyframe spine
   useEffect(() => {
     if (!inView) return;
+
+    // 1. First priority: Frame 0 for instant initial render
     requestFrame(0, (img) => {
       drawFrameToCanvas(img);
     });
+
+    // 2. Second priority: Progressive 8-keyframe spine spaced evenly across 120 frames
+    // Spaced out with setTimeout (80ms each) so it never floods the network, but gives instant 360 scrubbing on mobile
+    const keyframes = [15, 30, 45, 60, 75, 90, 105, 119];
+    const timeouts: NodeJS.Timeout[] = [];
+
+    keyframes.forEach((frameIdx, index) => {
+      const timer = setTimeout(() => {
+        requestFrame(frameIdx);
+      }, 150 + index * 80);
+      timeouts.push(timer);
+    });
+
+    return () => {
+      timeouts.forEach(clearTimeout);
+    };
   }, [inView, requestFrame, drawFrameToCanvas]);
 
-  // Scroll Scrubbing: Windowed On-Demand Streaming (Loads only 2-3 frames around active position)
+  // Scroll Scrubbing: Windowed On-Demand Streaming (Loads tight window around active position)
   useEffect(() => {
     if (playbackMode !== 'scroll') return;
 
-    const unsubscribe = smoothProgress.on('change', (progress) => {
+    const progressSource = shouldReduceMotion ? scrollYProgress : smoothProgress;
+
+    const unsubscribe = progressSource.on('change', (progress) => {
       const targetIdx = Math.min(TOTAL_FRAMES - 1, Math.max(0, Math.floor(progress * (TOTAL_FRAMES - 1))));
 
       // 1. Draw target or nearest cached frame immediately
@@ -206,10 +248,12 @@ function EngineeringChapter({
         drawFrameToCanvas(bestImg);
       }
 
-      // 2. Windowed prefetch: Request a tiny 3-frame window around current scroll target
-      for (let i = targetIdx; i <= targetIdx + 2 && i < TOTAL_FRAMES; i++) {
+      // 2. Windowed prefetch: Request a 4-frame window around current scroll target (both directions)
+      const startIdx = Math.max(0, targetIdx - 1);
+      const endIdx = Math.min(TOTAL_FRAMES - 1, targetIdx + 2);
+      for (let i = startIdx; i <= endIdx; i++) {
         requestFrame(i, (loadedImg) => {
-          const currentProgress = smoothProgress.get();
+          const currentProgress = progressSource.get();
           const currentIdx = Math.min(TOTAL_FRAMES - 1, Math.max(0, Math.floor(currentProgress * (TOTAL_FRAMES - 1))));
           if (i === currentIdx) {
             drawFrameToCanvas(loadedImg);
@@ -219,7 +263,7 @@ function EngineeringChapter({
     });
 
     return () => unsubscribe();
-  }, [smoothProgress, playbackMode, requestFrame, drawFrameToCanvas]);
+  }, [smoothProgress, scrollYProgress, shouldReduceMotion, playbackMode, requestFrame, drawFrameToCanvas]);
 
   // Handle mode switches
   const handleSetMode = (mode: 'scroll' | 'play') => {
@@ -248,10 +292,9 @@ function EngineeringChapter({
         {/* Layer 1: Canvas for Zero-Latency 60FPS Touch & Scroll Scrubbing */}
         <canvas
           ref={canvasRef}
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
-            playbackMode === 'scroll' ? 'opacity-100 z-10' : 'opacity-0 pointer-events-none'
+          className={`absolute inset-0 w-full h-full transition-opacity duration-300 pointer-events-none ${
+            playbackMode === 'scroll' ? 'opacity-100 z-10' : 'opacity-0'
           }`}
-          style={{ touchAction: 'pan-y' }}
         />
 
         {/* Layer 2: GPU Hardware-Accelerated Native Video (Zero initial bandwidth: preload="none") */}
@@ -262,10 +305,10 @@ function EngineeringChapter({
           muted
           loop
           preload="none"
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
-            playbackMode === 'play' ? 'opacity-100 z-10' : 'opacity-0 pointer-events-none'
+          className={`absolute inset-0 w-full h-full object-contain md:object-cover object-[center_38%] md:object-center transition-opacity duration-300 pointer-events-none ${
+            playbackMode === 'play' ? 'opacity-100 z-10' : 'opacity-0'
           }`}
-          style={{ filter: 'contrast(1.04) brightness(0.97)', touchAction: 'pan-y' }}
+          style={{ filter: 'contrast(1.04) brightness(0.97)' }}
         />
 
         {/* Ambient Dark Tech Gradients */}
@@ -273,7 +316,7 @@ function EngineeringChapter({
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-[#050508]/70 via-transparent to-[#050508]/70 z-15" />
 
         {/* Top Controls: Mode Switcher & Quality Tag */}
-        <div className="absolute top-20 sm:top-24 left-3 right-3 sm:left-6 sm:right-6 flex items-center justify-between z-30 pointer-events-auto">
+        <div className="absolute top-16 sm:top-24 left-3 right-3 sm:left-6 sm:right-6 flex items-center justify-between z-30 pointer-events-auto">
           <div className="inline-flex p-1 rounded-2xl bg-black/85 backdrop-blur-xl border border-white/15 shadow-2xl">
             <button
               onClick={() => handleSetMode('scroll')}
@@ -311,7 +354,7 @@ function EngineeringChapter({
         <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-4 sm:p-12 z-20">
           
           {/* Mobile Compact HUD Bar */}
-          <div className="pt-36 sm:hidden flex justify-center w-full pointer-events-none">
+          <div className="pt-28 sm:hidden flex justify-center w-full pointer-events-none">
             <div className="bg-black/85 backdrop-blur-xl border border-white/15 rounded-2xl px-3.5 py-1.5 flex items-center gap-3 text-[11px] font-mono shadow-xl">
               <span className="flex items-center gap-1 text-blue-400 font-bold">
                 <Activity className="w-3 h-3 text-blue-400" />
@@ -360,13 +403,13 @@ function EngineeringChapter({
           </div>
 
           {/* Bottom Narrative Card */}
-          <div className="pb-6 sm:pb-16 max-w-2xl space-y-2 sm:space-y-3 pointer-events-none">
+          <div className="pb-6 sm:pb-16 max-w-2xl space-y-2 sm:space-y-3 pointer-events-none bg-gradient-to-t from-[#050508]/95 via-[#050508]/75 to-transparent p-4 -mx-4 rounded-3xl sm:bg-none sm:p-0 sm:mx-0">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-950/80 border border-blue-500/50 text-blue-300 text-[11px] sm:text-xs font-mono uppercase tracking-wider shadow-lg shadow-blue-950/50">
               {badgeIcon}
               <span>{badge}</span>
             </div>
 
-            <h2 className="text-2xl sm:text-5xl font-black text-white tracking-tight leading-snug sm:leading-tight drop-shadow-lg">
+            <h2 className="text-xl sm:text-5xl font-black text-white tracking-tight leading-snug sm:leading-tight drop-shadow-lg">
               {title}
             </h2>
 
@@ -377,7 +420,7 @@ function EngineeringChapter({
             {playbackMode === 'scroll' && (
               <div className="pt-1 flex items-center gap-1.5 text-[11px] sm:text-xs font-mono text-blue-400 animate-pulse">
                 <ArrowDown className="w-3.5 h-3.5" />
-                <span>{language === 'es' ? 'Desliza con tu dedo para controlar el vuelo' : 'Swipe up/down to scrub drone trajectory'}</span>
+                <span>{language === 'es' ? 'Desliza con tu dedo para rotar el modelo en 3D' : 'Swipe up/down to rotate 3D view'}</span>
               </div>
             )}
           </div>

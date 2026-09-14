@@ -455,9 +455,25 @@ export default function InteractiveSection() {
                       {selectedModel === 'beam' && <BeamFailureAnimation />}
                       {selectedModel === 'truss' && <TrussBridgeModel />}
                     </Stage>
-                    <OrbitControls makeDefault autoRotate={false} enableZoom={true} minDistance={1.2} maxDistance={25} maxPolarAngle={Math.PI / 2 + 0.05} />
+                    <OrbitControls 
+                      makeDefault 
+                      autoRotate={false} 
+                      enableZoom={true} 
+                      enableDamping={true}
+                      dampingFactor={0.06}
+                      rotateSpeed={0.8}
+                      minDistance={1.2} 
+                      maxDistance={25} 
+                      maxPolarAngle={Math.PI / 2 + 0.05} 
+                    />
                   </Suspense>
                 </Canvas>
+
+                {/* Mobile & Desktop 360 Interaction Badge */}
+                <div className="absolute bottom-3 left-3 pointer-events-none z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/70 backdrop-blur-md border border-white/10 text-[11px] font-mono text-zinc-300 shadow-lg">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>{language === 'es' ? 'Arrastra para rotar en 3D' : 'Drag to rotate 3D model'}</span>
+                </div>
               </div>
             </div>
 
