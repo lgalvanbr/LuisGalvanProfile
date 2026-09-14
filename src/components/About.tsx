@@ -61,6 +61,8 @@ export default function About() {
                   src={profileImg} 
                   alt="Luis Carlos Galvan" 
                   className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-700"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d11] via-[#0d0d11]/30 to-transparent opacity-85 group-hover:opacity-25 transition-opacity duration-700"></div>
                 

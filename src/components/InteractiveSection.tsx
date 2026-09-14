@@ -161,8 +161,6 @@ function CasaVibratoriaModel() {
   );
 }
 
-useGLTF.preload('/casavibratoria.glb');
-
 function TrussBridgeModel() {
   const steelMat = <meshStandardMaterial color="#334155" metalness={0.8} roughness={0.2} />;
   const connectionMat = <meshStandardMaterial color="#ea580c" metalness={0.8} roughness={0.15} />;
