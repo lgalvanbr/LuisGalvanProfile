@@ -4,70 +4,170 @@ export const translations = {
   es: {
     nav: {
       about: 'Sobre Mí',
-      projects: 'Proyectos',
-      skills: 'Habilidades',
+      projects: 'Soluciones',
+      skills: 'Stack',
+      ecosystem: 'Ecosistema LGI',
+      aiLanding: 'LGI AI & Automatización',
+      study: 'Estudio',
       contact: 'Contacto'
+    },
+    study: {
+      title: 'Estudio Técnico',
+      subtitle: 'Material interactivo de consulta sobre Infraestructura de Comunicaciones, Redes y Sistemas Distribuidos. 45 preguntas organizadas por tema con respuestas expandibles.'
     },
     hero: {
       greeting: 'Hola, soy',
-      role: 'Ingeniero Civil & Estudiante de Ing. de Sistemas',
-      subtitle: 'Uniendo la lógica de datos con la física de la infraestructura.',
-      viewProjects: 'Ver Proyectos',
-      viewCv: 'Hoja de Vida',
-      contactMe: 'Contactar',
-      doubleDegree: 'Universidad de los Andes'
+      name: 'Luis Carlos Galvan',
+      tagline: 'LCG — Consultor Principal & Arquitecto de Sistemas Físico-Digitales',
+      role: 'Ingeniero Civil & de Sistemas — UniAndes',
+      roleSubtitle: 'Especialista en IA Aplicada, Gemelos Digitales & Telemetría IoT',
+      subtitle: 'Cerramos la brecha entre la física estructural y la inteligencia computacional. Diseño y pongo en producción gemelos digitales en 3D, redes de telemetría IoT de alta disponibilidad y agentes de IA autónomos para empresas que exigen cero tolerancia al fallo.',
+      viewProjects: 'Ver Casos de Éxito',
+      viewCv: 'Ficha Ejecutiva (CV)',
+      contactMe: 'Iniciar Conversación',
+      doubleDegree: 'Doble Titulación - Universidad de los Andes'
     },
     about: {
-      title: 'Sobre Mí',
-      p1_1: 'Soy un profesional con un perfil híbrido único: ',
-      p1_2: 'Ingeniero Civil y Estudiante de Ingeniería de Sistemas',
-      p1_3: ' de la Universidad de los Andes. Mi pasión radica en unir la lógica abstracta del software y el análisis de datos con el mundo físico de la infraestructura.',
-      p2_1: 'Actualmente curso la ',
-      p2_2: 'Maestría en Ingeniería Civil con profundización en IA & Analítica de Datos aplicados a sistemas de infraestructura',
-      p2_3: ', y me desempeño como ',
-      p2_4: 'Asistente Graduado de Investigación',
-      p2_5: ' trabajando en visión artificial para proyectos del Metro de Bogotá y la Universidad de los Andes. Fundador de LGI Ingeniería.',
-      p3: 'Me especializo en diseñar arquitecturas de software, aplicar Inteligencia Artificial para resolver problemas en obras, y desarrollar soluciones IoT de telemetría de alta confiabilidad.',
-      stack: 'Stack Principal',
-      status: 'Asistente de Investigación & Desarrollador'
+      title: 'La Ventaja Híbrida',
+      badge: 'Perfil & Trayectoria',
+      p1_1: 'La mayoría de empresas se ven obligadas a elegir entre ingenieros civiles tradicionales o desarrolladores de software que desconocen el mundo físico. Mi propuesta de valor radica en operar con maestría ',
+      p1_2: 'en la intersección exacta de ambos mundos.',
+      p1_3: ' Integro desde el análisis estático y dinámico en ETABS hasta el diseño de firmwares embebidos en C++ para telemetría en tiempo real sobre hardware industrial.',
+      p2_1: 'Como ',
+      p2_2: 'Fundador y Director de LGI',
+      p2_3: ', lidero un ecosistema enfocado en generar valor medible: construyendo Gemelos Digitales, automatizando operaciones empresariales con agentes de IA y diseñando plantas fotovoltaicas de alto rendimiento. Además, soy ',
+      p2_4: 'Investigador de Posgrado',
+      p2_5: ' en IA y Visión Artificial aplicada a infraestructuras críticas (incluyendo investigación vinculada al Metro de Bogotá y grupos INGECO / CIIA en la Universidad de los Andes).',
+      p3: 'El resultado para su organización: una contraparte técnica unificada capaz de auditar un problema complejo, diseñar su arquitectura digital completa y ponerla en producción sin capas intermedias.',
+      stack: 'Capacidades Operativas',
+      status: 'Consultor Independiente & Fundador'
+    },
+    ecosystem: {
+      title: 'Ecosistema LGI',
+      subtitle: 'Tres divisiones especializadas unidas por una misma visión de rigor técnico, datos en tiempo real y retorno de inversión.',
+      units: {
+        engineering: {
+          tag: 'Infraestructura & Físico',
+          title: 'LGI Ingeniería',
+          desc: 'Gemelos digitales en Unity, monitoreo de salud estructural (SHM), telemetría IoT industrial y automatización BIM para proyectos que exigen cero tolerancia al fallo.',
+          metrics: '99.9% Uptime Telemetría · Reducción de sobrecostos en obra'
+        },
+        aiLabs: {
+          tag: 'Digitalización & IA',
+          title: 'LGI AI & Automatización',
+          desc: 'Agentes autónomos de IA, flujos de automatización con n8n/Make, asistentes inteligentes omnicanal para WhatsApp y modelos de visión artificial orientados a la rentabilidad.',
+          metrics: '+60% de eficiencia operativa · Procesamiento 24/7 sin latencia'
+        },
+        solar: {
+          tag: 'Energía & Sostenibilidad',
+          title: 'LGI Solar',
+          desc: 'Ingeniería, montaje y monitoreo en tiempo real de sistemas solares fotovoltaicos comerciales e industriales. Soberanía energética con retorno de inversión garantizado.',
+          metrics: 'Hasta 70% de ahorro en tarifa eléctrica · Monitoreo continuo'
+        },
+        iot: {
+          tag: 'Sensores & Telemetría',
+          title: 'LGI IoT & Hardware',
+          desc: 'Redes de sensores inalámbricos (acelerómetros triaxiales, inclinómetros, galgas extensométricas) para monitoreo de salud estructural (SHM), alerta sísmica y telemetría industrial en tiempo real.',
+          metrics: 'Latencia <50ms · Detección temprana de fallas críticas'
+        }
+      }
     },
     projects: {
-      title: 'Proyectos Destacados',
+      title: 'Proyectos & Casos de Éxito',
       viewCode: 'Ver Código',
       liveDemo: 'Demo en Vivo',
       p1: {
-        title: 'Gemelo Digital para Procesos de Construcción',
-        desc: 'Desarrollo de un gemelo digital basado en actividades y flujos utilizando Unity y simulación basada en agentes para optimizar tiempo y recursos.',
-        type: 'Investigación / INGECO'
+        title: 'Gemelo Digital para Coordinación Constructiva',
+        desc: 'Réplica virtual interactiva desarrollada en Unity e integrada con modelos BIM. Detección temprana de interferencias en espacio inmersivo y simulación multiagente para optimizar tiempos y costos de ejecución.',
+        type: 'AEC Tech / Investigación INGECO'
       },
       p2: {
-        title: 'Análisis de Calidad de Agua con Machine Learning',
-        desc: 'Análisis exploratorio y modelado ML para identificar patrones no lineales en datos de calidad del agua del Río Bogotá usando 57 estaciones de monitoreo.',
-        type: 'Data Science / CIIA'
+        title: 'Inteligencia Predictiva de Calidad Hídrica (ML)',
+        desc: 'Pipeline completo de Machine Learning sobre 57 estaciones de monitoreo del Río Bogotá. Modelado de patrones no lineales para la emisión de alertas hidrológicas y toma de decisiones en infraestructura urbana.',
+        type: 'Data Science / Investigación CIIA'
       },
       p3: {
-        title: 'Sistema IoT de Monitoreo de Combustible',
-        desc: 'Diseño e implementación de un sistema IoT end-to-end para tanques de almacenamiento usando sensores de presión industriales y controladores ESP32.',
-        type: 'Ingeniería / LGI'
+        title: 'Telemetría IoT para Almacenamiento de Combustible',
+        desc: 'Arquitectura industrial completa con microcontroladores ESP32 y sensores de presión. Transmisión continua de niveles de inventario por MQTT, eliminando inspecciones manuales y riesgos operativos.',
+        type: 'Sistemas Embebidos / LGI Ingeniería'
       }
     },
     skills: {
-      title: 'Habilidades Técnicas',
-      s1: 'Software Dev (Python, Java, C#)',
-      s2: 'Data Analysis & Machine Learning',
-      s3: 'Frontend & Backend (React, Angular, Node)',
-      s4: 'Simulación & Digital Twins (Unity)',
-      s5: 'IoT & Embedded Systems (ESP32)',
-      s6: 'Ingeniería Civil (AutoCAD, Revit)'
+      title: 'Stack Tecnológico & Dominios',
+      s1: 'Análisis Estructural & Modelación BIM (ETABS, SAP2000, Revit)',
+      s2: 'Telemetría IoT Industrial & Firmware C++ (ESP32, MQTT, FreeRTOS)',
+      s3: 'Arquitectura de Software Full-Stack (React, TypeScript, Node, Python)',
+      s4: 'Gemelos Digitales & Sistemas Inmersivos 3D (Unity, Three.js, WebGL)',
+      s5: 'Inteligencia Artificial & Visión Computacional (PyTorch, YOLO, LLMs)',
+      s6: 'Automatización de Procesos & Flujos Autónomos (n8n, Make, APIs REST)',
+      cat1: 'Análisis Estructural & BIM (ETABS, SAP2000, Revit)',
+      cat2: 'Telemetría & Sistemas IoT en Tiempo Real (ESP32, C++, MQTT)',
+      cat3: 'Arquitectura de Software Full-Stack (React, TypeScript, Node, Python)',
+      cat4: 'Sistemas Inmersivos & Gemelos Digitales (Unity, C#, Simulación)',
+      cat5: 'Inteligencia Artificial & Automatización (PyTorch, LLMs, n8n, OpenCV)'
+    },
+    aiLanding: {
+      badge: 'Soluciones Autónomas B2B',
+      heroTitle: 'Multiplique la Capacidad Operativa de su Empresa sin Aumentar su Nómina',
+      heroSubtitle: 'Diseñamos e implementamos agentes de Inteligencia Artificial a medida, automatizaciones de procesos n8n/Make y asistentes conversacionales que ejecutan tareas críticas 24/7 con precisión milimétrica.',
+      ctaAudit: 'Agendar Auditoría de Procesos',
+      ctaCases: 'Explorar Soluciones de IA',
+      stats: {
+        timeSaved: 'Hasta 40 hrs/semana',
+        timeSavedDesc: 'Ahorradas en tareas repetitivas por colaborador',
+        availability: '24/7/365',
+        availabilityDesc: 'Atención y procesamiento continuo sin demoras',
+        roi: '< 60 Días',
+        roiDesc: 'Retorno de inversión promedio en automatización'
+      },
+      services: {
+        title: 'Capacidades de IA Diseñadas para su Negocio',
+        subtitle: 'Cero hype tecnológico. Solo sistemas probados que aumentan sus ventas y reducen costos operativos.',
+        s1Title: 'Agentes Autónomos de Venta & WhatsApp',
+        s1Desc: 'Chatbots con IA conectados a su CRM. Califican prospectos, responden dudas complejas de su catálogo, cotizan en tiempo real y agendan citas automáticamente.',
+        s2Title: 'Automatización de Flujos (n8n & Make)',
+        s2Desc: 'Integración fluida entre ERPs, hojas de cálculo, sistemas de facturación y correos. Erradicamos la duplicidad manual de datos en su organización.',
+        s3Title: 'Visión Artificial & Extracción Documental',
+        s3Desc: 'Extracción inteligente de información en planos, contratos y facturas mediante OCR avanzado y modelos visuales entrenados para la industria.',
+        s4Title: 'Asistentes de Conocimiento Corporativo (RAG)',
+        s4Desc: 'El cerebro de su empresa al alcance de todo su equipo. Preguntas y respuestas inmediatas basadas en sus manuales, normativas y políticas internas con total privacidad.'
+      },
+      process: {
+        title: 'De Diagnóstico a Producción en 14 Días',
+        subtitle: 'Un método estructurado que minimiza la fricción y asegura un impacto inmediato.',
+        step1: '1. Diagnóstico de Fricción Operativa',
+        step1Desc: 'Mapeamos sus flujos de trabajo actuales y cuantificamos el impacto económico de cada automatización antes de comenzar.',
+        step2: '2. Arquitectura de Agentes & Guardrails',
+        step2Desc: 'Diseño de la lógica, conexión de APIs e implementación de reglas de seguridad para evitar cualquier respuesta fuera de lugar.',
+        step3: '3. Pruebas de Carga & Calibración',
+        step3Desc: 'Validamos el comportamiento con datos reales y retroalimentación de su equipo en un entorno de pruebas seguro.',
+        step4: '4. Lanzamiento & Supervisión en Vivo',
+        step4Desc: 'Despliegue en canales de producción con monitoreo de rendimiento, analítica en vivo y soporte técnico garantizado.'
+      },
+      faq: {
+        title: 'Preguntas Frecuentes',
+        q1: '¿Cómo garantizan que la IA no entregue datos incorrectos a mis clientes?',
+        a1: 'Utilizamos técnicas de generación aumentada por recuperación (RAG) con límites estrictos: el modelo solo responde basándose en los documentos y bases de datos que usted autorice. Si una consulta supera sus atribuciones, se transfiere de inmediato a un asesor humano.',
+        q2: '¿Cuánto tiempo toma ver resultados en la operación?',
+        a2: 'Nuestros primeros flujos automatizados entran en funcionamiento entre el día 10 y el día 14. Desde la primera semana de despliegue notará una reducción drástica en tiempos de respuesta y carga de trabajo manual.',
+        q3: '¿Mis datos confidenciales estarán protegidos?',
+        a3: 'Absolutamente. Empleamos arquitecturas empresariales con cifrado de grado bancario y modelos cerrados que no utilizan la información de su negocio para fines de entrenamiento público.'
+      }
     },
     contact: {
-      title: 'Trabajemos Juntos',
-      subtitle: '¿Tienes un proyecto en mente que combine software e infraestructura? Me encantaría escucharlo.',
-      location: 'Bogotá, Colombia',
-      name: 'Nombre',
-      email: 'Correo Electrónico',
-      message: 'Mensaje',
-      send: 'Enviar Mensaje'
+      title: 'Iniciemos una Conversación Técnica',
+      subtitle: '¿Tiene un desafío de infraestructura, desarrollo de gemelos digitales o automatización con IA? Conversemos sobre viabilidad, arquitectura y plazos.',
+      location: 'Bogotá, Colombia (Alcance Global)',
+      name: 'Nombre y Cargo',
+      email: 'Correo Electrónico Corporativo',
+      serviceInterest: 'Área de Interés',
+      message: 'Detalles del Proyecto o Desafío',
+      send: 'Enviar Consulta Técnica',
+      sending: 'Enviando consulta...',
+      successTitle: 'Consulta Enviada con Éxito',
+      successMessage: 'Gracias por ponerte en contacto. Recibimos tus requerimientos y te responderemos en menos de 24 horas hábiles.',
+      resetForm: 'Enviar otra consulta',
+      directChat: 'Escribir directamente por WhatsApp'
     },
     lgi: {
       nav: {
@@ -75,129 +175,229 @@ export const translations = {
         services: 'Servicios',
         about: 'Nosotros',
         contact: 'Contacto',
-        backToPortfolio: 'Volver al Portafolio'
+        backToPortfolio: 'Volver a LuisGalvan.me'
       },
       hero: {
         title: 'LGI Ingeniería',
-        subtitle: 'Soluciones Integrales en Tecnología e Infraestructura',
-        description: 'Potenciamos el sector de la construcción y la ingeniería civil mediante la integración de tecnologías de vanguardia. Desde Gemelos Digitales hasta sistemas IoT de alta precisión.',
-        cta: 'Explorar Servicios'
+        subtitle: 'Tecnología de Alta Precisión para la Infraestructura Física',
+        description: 'Cerramos la brecha entre la ingeniería civil tradicional y los sistemas de software modernos. Desplegamos Gemelos Digitales, telemetría IoT industrial y analítica predictiva para organizaciones que exigen rigor operativo.',
+        cta: 'Explorar Servicios de Ingeniería'
       },
       services: {
-        title: 'Nuestros Servicios Especializados',
+        title: 'Líneas de Servicio Especializado',
         s1: {
           title: 'Gemelos Digitales (Digital Twins)',
-          desc: 'Desarrollamos réplicas virtuales precisas de infraestructuras físicas. Optimizamos la planificación, ejecución y mantenimiento de proyectos mediante simulaciones avanzadas en tiempo real. Ideal para monitoreo de obras y predicción de escenarios de riesgo.'
+          desc: 'Réplicas virtuales precisas de infraestructura física construidas sobre motores 3D interactivos. Simulaciones en tiempo real para optimizar cronogramas de obra, detectar interferencias y gestionar activos durante su ciclo de vida.'
         },
         s2: {
-          title: 'Sistemas IoT & Telemetría Industrial',
-          desc: 'Diseño e implementación de redes de sensores para el monitoreo continuo de variables críticas (presión, deformación, temperatura). Datos en vivo para decisiones estratégicas y alertas tempranas en estructuras.'
+          title: 'Telemetría IoT & Monitoreo Estructural (SHM)',
+          desc: 'Diseño e instalación de redes de sensores industriales para monitoreo continuo de deformaciones, presiones, temperaturas y vibraciones con pipelines de datos seguros por MQTT.'
         },
         s3: {
-          title: 'Data Science & Machine Learning',
-          desc: 'Transformamos datos crudos en inteligencia de negocio. Modelos predictivos para mantenimiento estructural, análisis de riesgos hidrológicos y optimización de recursos en obra.'
+          title: 'Analítica Predictiva & Machine Learning',
+          desc: 'Transformamos lecturas de sensores y registros operativos en modelos predictivos de mantenimiento, evaluación de riesgo hidrológico y optimización de recursos en campo.'
         },
         s4: {
-          title: 'Arquitectura de Software a Medida',
-          desc: 'Creamos plataformas web y móviles robustas, escalables y seguras, diseñadas específicamente para resolver los retos operativos del sector de la ingeniería y construcción.'
+          title: 'Arquitectura de Software Especializada en AEC',
+          desc: 'Plataformas web, móviles y APIs robustas concebidas para las condiciones reales de obra: tolerancia a pérdida de conectividad, interfaces limpias y alta velocidad.'
         },
         s5: {
-          title: 'Automatización BIM & Scripts',
-          desc: 'Desarrollo de plugins y scripts personalizados para plataformas como Revit y AutoCAD. Automatizamos tareas repetitivas de diseño, extracción de cantidades y validación de modelos.'
+          title: 'Automatización BIM & Diseño Computacional',
+          desc: 'Desarrollo de scripts y plugins a medida para Revit, AutoCAD y Dynamo. Automatización de cubicaciones, validación de normativas y generación automatizada de entregables.'
         },
         s6: {
-          title: 'Infraestructura Inteligente (Smart Cities)',
-          desc: 'Consultoría e integración de tecnologías para modernizar la infraestructura urbana. Conectamos obras civiles con sistemas de gestión centralizada para ciudades más eficientes.'
+          title: 'Infraestructura Inteligente & Ciudades Conectadas',
+          desc: 'Asesoría técnica para integrar capas de sensórica, control y analítica en proyectos urbanos y de servicios públicos.'
         }
       },
       quote: {
-        title: 'Cotiza tu Proyecto',
-        desc: 'Cuéntanos sobre tus necesidades. Ya sea un sistema IoT, un gemelo digital o software a medida, te enviaremos una propuesta técnica y comercial detallada.',
+        title: 'Cotice su Proyecto',
+        desc: 'Describa las especificaciones y necesidades de su organización. Le remitiremos una propuesta técnica y comercial detallada con cronograma de ejecución.',
         form: {
           name: 'Nombre / Empresa',
-          service: 'Servicio de Interés',
-          details: 'Detalles del Proyecto',
-          submit: 'Solicitar Cotización por WhatsApp'
+          service: 'Línea de Interés',
+          details: 'Alcance y Requerimientos Técnicos',
+          submit: 'Solicitar Propuesta vía WhatsApp'
         }
       },
       about: {
-        title: 'El Valor de LGI Ingeniería',
-        desc: 'En LGI Ingeniería no solo escribimos código; entendemos la física, los materiales y los procesos constructivos. Nuestra ventaja competitiva radica en la fusión del rigor de la ingeniería civil tradicional con la agilidad y escalabilidad del desarrollo de software moderno. Construimos las herramientas digitales que el sector necesita para evolucionar.'
+        title: 'La Ventaja LGI',
+        desc: 'En LGI no improvisamos con código desconectado de la realidad. Nuestros líderes poseen formación dual en ingeniería estructural y sistemas computacionales. Cada plataforma, sensor y algoritmo que entregamos está cimentado en las leyes físicas, la normativa técnica y las exigencias financieras de la industria.'
       },
       contact: {
-        title: 'Impulsa tu próximo proyecto',
-        desc: '¿Listo para integrar tecnología de punta en tu infraestructura? Contáctanos y diseñemos la solución ideal.',
-        cta: 'Contactar a LGI'
+        title: 'Hablemos de su Próxima Obra o Despliegue',
+        desc: '¿Listo para incorporar telemetría, gemelos digitales o energía solar en sus operaciones? Coordinemos una reunión técnica inicial.',
+        cta: 'Solicitar Reunión Técnica'
       }
     }
   },
   en: {
     nav: {
       about: 'About',
-      projects: 'Projects',
-      skills: 'Skills',
+      projects: 'Solutions',
+      skills: 'Stack',
+      ecosystem: 'LGI Ecosystem',
+      aiLanding: 'LGI AI & Automation',
+      study: 'Study Notes',
       contact: 'Contact'
     },
+    study: {
+      title: 'Technical Study Notes',
+      subtitle: 'Interactive reference material on Network Infrastructure, Telecommunications, and Distributed Systems. 45 questions organized by topic with expandable answers.'
+    },
     hero: {
-      greeting: "Hi, I'm",
-      role: 'Civil Engineer & Systems Engineering Student',
-      subtitle: 'Unifying data-driven logic with infrastructure physical assets.',
-      viewProjects: 'View Projects',
-      viewCv: 'Resume',
-      contactMe: 'Contact Me',
-      doubleDegree: 'Universidad de los Andes'
+      greeting: 'Hello, I am',
+      name: 'Luis Carlos Galvan',
+      tagline: 'LCG — Principal Consultant & Physical-Digital Systems Architect',
+      role: 'Civil & Systems Engineer — UniAndes',
+      roleSubtitle: 'Applied AI, Digital Twins & Industrial IoT Telemetry Specialist',
+      subtitle: 'Bridging structural physics with computational intelligence. Designing and deploying real-time 3D digital twins, industrial IoT telemetry, and autonomous AI agents for operations requiring zero margin for error.',
+      viewProjects: 'View Case Studies',
+      viewCv: 'Executive Resume (CV)',
+      contactMe: 'Technical Consultation',
+      doubleDegree: 'Double Degree - Universidad de los Andes'
     },
     about: {
-      title: 'About Me',
-      p1_1: 'I am a highly specialized professional with a hybrid profile: ',
-      p1_2: 'Civil Engineer & Systems Engineering Student',
-      p1_3: ' from Universidad de los Andes. I integrate advanced software architecture and telemetry with structural assets.',
-      p2_1: 'I am currently pursuing a ',
-      p2_2: 'Master\'s in Civil Engineering specializing in AI & Data Analytics applied to Infrastructure Systems',
-      p2_3: ', and work as a ',
-      p2_4: 'Graduate Research Assistant',
-      p2_5: ' developing advanced computer vision applications for major Bogotá Metro projects and Universidad de los Andes. Founder of LGI Engineering.',
-      p3: 'My expertise resides in developing robust data pipelines, applying Machine Learning to critical works, and deploying industrial IoT sensing solutions.',
-      stack: 'Main Stack',
-      status: 'Research Assistant & Developer'
+      title: 'The Hybrid Advantage',
+      badge: 'Background & Mission',
+      p1_1: 'Most organizations are forced to choose between traditional civil engineers or software developers who know nothing of the physical world. My value proposition is operating with fluency ',
+      p1_2: 'at the exact intersection of both domains.',
+      p1_3: ' I design structural systems and write real-time embedded firmware — from structural load analysis in ETABS to C++ telemetry pipelines on industrial microcontrollers.',
+      p2_1: 'As ',
+      p2_2: 'Founder and Principal at LGI',
+      p2_3: ', I lead an engineering ecosystem dedicated to tangible operational ROI: deploying Digital Twins, automating business operations through AI agents, and engineering commercial solar systems. Additionally, I serve as ',
+      p2_4: 'Graduate Researcher',
+      p2_5: ' in AI & Computer Vision applied to critical civil infrastructure (including research linked to the Bogotá Metro Project and INGECO / CIIA labs at Universidad de los Andes).',
+      p3: 'The outcome for your business: a single technical counterpart capable of scoping complex physical challenges, engineering their complete software architecture, and deploying them to production with zero translation loss.',
+      stack: 'Core Capabilities',
+      status: 'Independent Consultant & Founder'
+    },
+    ecosystem: {
+      title: 'LGI Ecosystem',
+      subtitle: 'Three specialized operating divisions driven by engineering rigor, live telemetry, and direct business ROI.',
+      units: {
+        engineering: {
+          tag: 'Physical Infrastructure & IoT',
+          title: 'LGI Engineering',
+          desc: 'Interactive Digital Twins in Unity, Structural Health Monitoring (SHM), industrial telemetry networks, and BIM automation for mission-critical assets.',
+          metrics: '99.9% Telemetry Uptime · Direct project overhead reduction'
+        },
+        aiLabs: {
+          tag: 'Autonomous Systems & AI',
+          title: 'LGI AI & Automation',
+          desc: 'Autonomous AI agents, enterprise workflow automation (n8n/Make), high-converting WhatsApp assistants, and production computer vision pipelines.',
+          metrics: '+60% Operational Efficiency · 24/7 Zero-latency execution'
+        },
+        solar: {
+          tag: 'Clean Energy & Resilience',
+          title: 'LGI Solar',
+          desc: 'Turnkey engineering, installation, and real-time IoT monitoring for commercial and industrial solar photovoltaic plants. Guaranteed energy sovereignty.',
+          metrics: 'Up to 70% electricity bill savings · Continuous telemetry'
+        },
+        iot: {
+          tag: 'Sensors & Telemetry',
+          title: 'LGI IoT & Hardware',
+          desc: 'Wireless mesh sensor networks (triaxial accelerometers, inclinometers, strain gauges) for structural health monitoring (SHM), early seismic alert, and real-time industrial telemetry.',
+          metrics: '<50ms Latency · Early critical failure detection'
+        }
+      }
     },
     projects: {
-      title: 'Featured Projects',
-      viewCode: 'View Code',
+      title: 'Selected Case Studies & Solutions',
+      viewCode: 'View Source',
       liveDemo: 'Live Demo',
       p1: {
-        title: 'Digital Twin for Construction Processes',
-        desc: 'Development of an activity and flow-based digital twin using Unity and agent-based simulation to optimize time and resources.',
-        type: 'Research / INGECO'
+        title: 'Immersive Digital Twin for Construction Coordination',
+        desc: 'Interactive virtual replica engineered in Unity and connected to BIM pipelines. Enables immersive multidisciplinary clash detection and agent-based simulation to prevent field rework and schedule overruns.',
+        type: 'AEC Tech / INGECO Research'
       },
       p2: {
-        title: 'Water Quality Analysis with Machine Learning',
-        desc: 'Exploratory analysis and ML modeling to identify non-linear patterns in Bogotá River water quality data using 57 monitoring stations.',
-        type: 'Data Science / CIIA'
+        title: 'Hydrological Risk Analytics Pipeline (ML)',
+        desc: 'Supervised and unsupervised ML pipeline analyzing sensor data across 57 monitoring stations along the Bogotá River. Detects non-linear water quality anomalies for municipal early-warning decisions.',
+        type: 'Data Engineering / CIIA Research'
       },
       p3: {
-        title: 'IoT Fuel Monitoring System',
-        desc: 'Design and implementation of an end-to-end IoT system for storage tanks using industrial pressure sensors and ESP32 controllers.',
-        type: 'Engineering / LGI'
+        title: 'Industrial Fuel Telemetry & Monitoring (IoT)',
+        desc: 'End-to-end industrial IoT telemetry deployed on fuel storage tanks using ESP32 controllers and pressure transducers. Continuous MQTT telemetry streaming eliminates manual gauge reading and operational hazards.',
+        type: 'Embedded Systems / LGI Engineering'
       }
     },
     skills: {
-      title: 'Technical Skills',
-      s1: 'Software Dev (Python, Java, C#)',
-      s2: 'Data Analysis & Machine Learning',
-      s3: 'Frontend & Backend (React, Angular, Node)',
-      s4: 'Simulation & Digital Twins (Unity)',
-      s5: 'IoT & Embedded Systems (ESP32)',
-      s6: 'Civil Engineering (AutoCAD, Revit)'
+      title: 'Technical Stack & Expertise',
+      s1: 'Structural Analysis & BIM Modeling (ETABS, SAP2000, Revit)',
+      s2: 'Industrial IoT Telemetry & C++ Firmware (ESP32, MQTT, FreeRTOS)',
+      s3: 'Full-Stack Software Architecture (React, TypeScript, Node, Python)',
+      s4: 'Digital Twins & 3D Immersive Systems (Unity, Three.js, WebGL)',
+      s5: 'Applied AI & Computer Vision (PyTorch, YOLO, LLMs)',
+      s6: 'Process Automation & Autonomous Workflows (n8n, Make, REST APIs)',
+      cat1: 'Structural Analysis & BIM (ETABS, SAP2000, Revit)',
+      cat2: 'Real-Time Telemetry & Industrial IoT (ESP32, C++, MQTT)',
+      cat3: 'Full-Stack Software Architecture (React, TypeScript, Node, Python)',
+      cat4: 'Immersive Systems & Digital Twins (Unity, C#, Agent Simulation)',
+      cat5: 'Applied AI & Automation (PyTorch, LLMs, n8n, Computer Vision)'
+    },
+    aiLanding: {
+      badge: 'B2B Autonomous Systems',
+      heroTitle: "Multiply Your Company's Operating Capacity Without Inflating Headcount",
+      heroSubtitle: 'We architect and deploy custom AI agents, end-to-end workflow automations (n8n/Make), and conversational assistants that execute mission-critical operations 24/7 with zero human latency.',
+      ctaAudit: 'Book a Free Process Audit',
+      ctaCases: 'Explore AI Capabilities',
+      stats: {
+        timeSaved: 'Up to 40 hrs/wk',
+        timeSavedDesc: 'Saved per employee on repetitive workflows',
+        availability: '24/7/365',
+        availabilityDesc: 'Continuous lead response and task execution',
+        roi: '< 60 Days',
+        roiDesc: 'Average time to full automation ROI'
+      },
+      services: {
+        title: 'Engineered AI Capabilities for Real Business Needs',
+        subtitle: 'Zero hype. Pure operational systems built to drive revenue and eliminate bottlenecks.',
+        s1Title: 'Autonomous Sales & WhatsApp Agents',
+        s1Desc: 'LLM-powered assistants integrated directly with your CRM. They qualify leads, answer technical catalog inquiries, quote projects, and book calendar appointments instantly.',
+        s2Title: 'Enterprise Workflow Automation (n8n & Make)',
+        s2Desc: 'Frictionless orchestration between ERPs, databases, spreadsheets, and messaging platforms. Eliminate manual data entry and spreadsheet errors across your organization.',
+        s3Title: 'Computer Vision & Intelligent Document Extraction',
+        s3Desc: 'Automated data extraction from architectural blueprints, legal contracts, and field invoices via fine-tuned OCR and visual inspection models.',
+        s4Title: 'Enterprise Knowledge Brains (Private RAG)',
+        s4Desc: 'Centralize technical manuals, standard operating procedures (SOPs), and compliance codes into an ultra-fast, private internal knowledge agent with strict data isolation.'
+      },
+      process: {
+        title: 'From Diagnosis to Production in 14 Days',
+        subtitle: 'A structured engineering methodology delivering immediate operational impact.',
+        step1: '1. Friction & Workflow Audit',
+        step1Desc: 'We inspect your current workflows, identify recurring manual bottlenecks, and calculate your projected ROI before writing any code.',
+        step2: '2. Agent Architecture & Guardrails',
+        step2Desc: 'Logic design, API orchestration, and implementation of strict deterministic boundaries to ensure 100% reliable responses.',
+        step3: '3. Stress Testing & Validation',
+        step3Desc: 'Sandbox testing with synthetic and historical company data, fine-tuning accuracy alongside your operational team.',
+        step4: '4. Live Deployment & Telemetry',
+        step4Desc: 'Launch across official channels (WhatsApp, Web, ERP) backed by automated failure alerts, real-time analytics, and ongoing support.',
+      },
+      faq: {
+        title: 'Frequently Asked Questions',
+        q1: 'How do you prevent the AI from hallucinating or sharing incorrect data?',
+        a1: 'We implement Retrieval-Augmented Generation (RAG) bounded by deterministic logic: the model is strictly limited to verified knowledge bases provided by your team. If an inquiry falls outside scope, it gracefully escalates to a designated human.',
+        q2: 'How fast will our team see measurable impact?',
+        a2: 'Our initial automation pipelines go live between Day 10 and Day 14. From the first week in production, your team will notice dramatic reductions in backlog, response times, and manual friction.',
+        q3: 'Is our proprietary and customer data kept secure?',
+        a3: 'Yes. All deployments utilize enterprise-grade encrypted connections and private API endpoints where your business data is never stored or used to train public foundation models.'
+      }
     },
     contact: {
-      title: "Let's Work Together",
-      subtitle: "Have a project in mind that combines software and infrastructure? I'd love to hear about it.",
-      location: 'Bogota, Colombia',
-      name: 'Name',
-      email: 'Email',
-      message: 'Message',
-      send: 'Send Message'
+      title: 'Start a Technical Consultation',
+      subtitle: 'Have a project involving structural telemetry, digital twin simulations, or operational AI? Let us examine feasibility, architecture, and deployment schedules.',
+      location: 'Bogota, Colombia (Serving Global Clients)',
+      name: 'Full Name & Title',
+      email: 'Corporate Email',
+      serviceInterest: 'Primary Area of Interest',
+      message: 'Project Scope or Technical Challenge',
+      send: 'Submit Inquiry',
+      sending: 'Submitting inquiry...',
+      successTitle: 'Inquiry Sent Successfully',
+      successMessage: 'Thank you for reaching out. We received your project requirements and will reply within 24 business hours.',
+      resetForm: 'Send another inquiry',
+      directChat: 'Direct WhatsApp Chat'
     },
     lgi: {
       nav: {
@@ -205,59 +405,59 @@ export const translations = {
         services: 'Services',
         about: 'About Us',
         contact: 'Contact',
-        backToPortfolio: 'Back to Portfolio'
+        backToPortfolio: 'Back to LuisGalvan.me'
       },
       hero: {
         title: 'LGI Engineering',
-        subtitle: 'Comprehensive Technology and Infrastructure Solutions',
-        description: 'We empower the construction and civil engineering sector by integrating cutting-edge technologies. From Digital Twins to high-precision IoT systems.',
-        cta: 'Explore Services'
+        subtitle: 'Precision Technology for Physical Infrastructure',
+        description: 'We bridge the divide between physical civil engineering and modern digital systems. Deploying Digital Twins, industrial IoT telemetry networks, and predictive analytics for enterprises that require measurable operational excellence.',
+        cta: 'Explore Engineering Capabilities'
       },
       services: {
-        title: 'Our Specialized Services',
+        title: 'Specialized Service Lines',
         s1: {
-          title: 'Digital Twins',
-          desc: 'We develop precise virtual replicas of physical infrastructures. We optimize project planning, execution, and maintenance through advanced real-time simulations. Ideal for site monitoring and risk scenario prediction.'
+          title: 'Digital Twins & Construction Simulation',
+          desc: 'Precise virtual replicas of physical infrastructure built on real-time 3D simulation engines. Built for construction sequencing, clash elimination, and lifecycle asset tracking against BIM baselines.'
         },
         s2: {
-          title: 'IoT & Industrial Telemetry',
-          desc: 'Design and implementation of sensor networks for continuous monitoring of critical variables (pressure, deformation, temperature). Live data for strategic decisions and early warnings in structures.'
+          title: 'Industrial IoT & Structural Telemetry (SHM)',
+          desc: 'End-to-end industrial sensor network design for continuous measurement of strain, pressure, temperature, and vibration over secure MQTT data pipelines.'
         },
         s3: {
-          title: 'Data Science & Machine Learning',
-          desc: 'We transform raw data into business intelligence. Predictive models for structural maintenance, hydrological risk analysis, and resource optimization on site.'
+          title: 'Predictive Analytics & ML for Civil Systems',
+          desc: 'Transforming sensor readings and operational logs into predictive maintenance schedules, flood/hydrological risk warnings, and site resource forecasting.'
         },
         s4: {
-          title: 'Custom Software Architecture',
-          desc: 'We create robust, scalable, and secure web and mobile platforms, specifically designed to solve the operational challenges of the engineering and construction sector.'
+          title: 'Custom AEC Software Architecture',
+          desc: 'Web, mobile, and API platforms purpose-built for jobsite realities: resilient against intermittent connectivity, intuitive for field crews, and enterprise-grade.'
         },
         s5: {
-          title: 'BIM Automation & Scripts',
-          desc: 'Development of custom plugins and scripts for platforms like Revit and AutoCAD. We automate repetitive design tasks, quantity extraction, and model validation.'
+          title: 'BIM Automation & Parametric Scripting',
+          desc: 'Bespoke plugins and automated scripts for Revit, AutoCAD, and Dynamo. Eliminating manual repetition across drafting, quantity takeoffs, and design review.'
         },
         s6: {
-          title: 'Smart Infrastructure (Smart Cities)',
-          desc: 'Consulting and technology integration to modernize urban infrastructure. We connect civil works with centralized management systems for more efficient cities.'
+          title: 'Smart Infrastructure Advisory',
+          desc: 'Consulting on sensor integration, communication topologies, and centralized monitoring dashboards for utilities and municipal projects.'
         }
       },
       quote: {
-        title: 'Quote Your Project',
-        desc: 'Tell us about your needs. Whether it\'s an IoT system, a digital twin, or custom software, we will send you a detailed technical and commercial proposal.',
+        title: 'Request a Project Proposal',
+        desc: 'Provide your technical parameters and operational goals. We will prepare a detailed technical and commercial roadmap with execution timelines.',
         form: {
-          name: 'Name / Company',
-          service: 'Service of Interest',
-          details: 'Project Details',
-          submit: 'Request Quote via WhatsApp'
+          name: 'Name / Organization',
+          service: 'Service Line',
+          details: 'Scope & Technical Requirements',
+          submit: 'Request Proposal via WhatsApp'
         }
       },
       about: {
-        title: 'The Value of LGI Engineering',
-        desc: 'At LGI Engineering, we don\'t just write code; we understand physics, materials, and construction processes. Our competitive advantage lies in merging the rigor of traditional civil engineering with the agility and scalability of modern software development. We build the digital tools the sector needs to evolve.'
+        title: 'The LGI Advantage',
+        desc: 'LGI never isolates software from reality. Our leadership holds dual expertise across structural engineering and modern computer systems. Every digital twin, telemetry device, and algorithmic model we deploy is anchored in the physical laws, technical codes, and financial metrics of real-world infrastructure.'
       },
       contact: {
-        title: 'Boost your next project',
-        desc: 'Ready to integrate cutting-edge technology into your infrastructure? Contact us and let\'s design the ideal solution.',
-        cta: 'Contact LGI'
+        title: 'Discuss Your Next Project or Deployment',
+        desc: 'Ready to introduce real-time telemetry, digital twins, or solar generation into your business? Let us connect for an initial technical review.',
+        cta: 'Book a Technical Consultation'
       }
     }
   }

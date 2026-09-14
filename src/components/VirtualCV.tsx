@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   X, Mail, Phone, Globe, Briefcase, Award, GraduationCap,
@@ -14,6 +14,25 @@ type VirtualCVProps = {
 
 export default function VirtualCV({ isOpen, onClose }: VirtualCVProps) {
   const { language } = useLanguage();
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]);
 
   const handlePrint = () => {
     window.print();
@@ -99,7 +118,7 @@ export default function VirtualCV({ isOpen, onClose }: VirtualCVProps) {
           desc: "Coordinación técnica de investigación en visión artificial aplicada a sistemas de infraestructura y soporte conceptual de software en el curso de herramientas de IA.",
           achievements: [
             "Desarrollé scripts de visión por computadora empleando YOLO y segmentación semántica para monitorear el avance de frentes de obra.",
-            "Impartí demostraciones prácticas en Python enfocadas en regresiones lineales, librerías de analística de datos y modelos predictivos."
+            "Impartí demostraciones prácticas en Python enfocadas en regresiones lineales, librerías de analítica de datos y modelos predictivos."
           ]
         },
         {
@@ -277,8 +296,8 @@ export default function VirtualCV({ isOpen, onClose }: VirtualCVProps) {
                   <span className="w-3 h-3 rounded-full bg-green-500/80"></span>
                 </div>
                 <div className="h-4 w-px bg-white/10"></div>
-                <div className="flex items-center gap-2 text-xs font-mono text-tech-blue">
-                  <FileText size={14} className="animate-pulse" />
+                <div className="flex items-center gap-2 text-xs font-mono text-zinc-300">
+                  <FileText size={14} className="text-emerald-400" />
                   <span>{language === 'es' ? 'luis_galvan_hoja_de_vida.pdf' : 'luis_galvan_resume.pdf'}</span>
                 </div>
               </div>
@@ -286,7 +305,7 @@ export default function VirtualCV({ isOpen, onClose }: VirtualCVProps) {
               <div className="flex items-center gap-2.5">
                 <button
                   onClick={handlePrint}
-                  className="flex items-center gap-1.5 px-4 py-2 bg-tech-blue hover:bg-blue-600 font-mono text-xs font-semibold text-white rounded-lg transition-all duration-300 shadow-[0_0_15px_rgba(0,123,255,0.3)] cursor-pointer"
+                  className="flex items-center gap-1.5 px-4 py-2 bg-white hover:bg-zinc-200 font-mono text-xs font-bold text-zinc-950 rounded-lg transition-all duration-200 shadow-md cursor-pointer"
                 >
                   <Download size={14} />
                   <span>{data.printCV}</span>
@@ -296,7 +315,7 @@ export default function VirtualCV({ isOpen, onClose }: VirtualCVProps) {
                     e.stopPropagation();
                     onClose();
                   }}
-                  className="flex items-center gap-1.5 px-3 py-2 bg-white/5 hover:bg-red-500/20 text-white hover:text-red-400 font-mono text-xs font-semibold rounded-lg border border-white/10 hover:border-red-500/30 transition-all duration-300 cursor-pointer z-50 relative"
+                  className="flex items-center gap-1.5 px-3 py-2 bg-white/5 hover:bg-red-500/20 text-white hover:text-red-400 font-mono text-xs font-semibold rounded-lg border border-white/10 hover:border-red-500/30 transition-all duration-200 cursor-pointer z-50 relative"
                   aria-label={data.close}
                 >
                   <X size={14} />
@@ -311,15 +330,15 @@ export default function VirtualCV({ isOpen, onClose }: VirtualCVProps) {
               {/* PRINT ONLY HEADER */}
               <div className="hidden print:block border-b-2 border-slate-900 pb-5 mb-5 text-black">
                 <h1 className="text-3xl font-extrabold tracking-tight">{data.subtitle}</h1>
-                <p className="text-sm font-bold text-blue-900 mt-1 uppercase tracking-wide">{data.tagline}</p>
+                <p className="text-sm font-bold text-slate-800 mt-1 uppercase tracking-wide">{data.tagline}</p>
               </div>
 
               {/* SECTION: HERO CONTAINER (Photo + Contacts) */}
               <div className="flex flex-col md:flex-row items-center md:items-start gap-8 pb-8 border-b border-white/10 print:border-slate-300 print:flex-row print:pb-6 print:gap-6">
                 
-                {/* Profile Photo Element (Using the precise profileImg asset from About) */}
+                {/* Profile Photo Element */}
                 <div className="relative group shrink-0">
-                  <div className="absolute -inset-1.5 bg-gradient-to-r from-tech-blue to-neon-blue rounded-full blur opacity-40 group-hover:opacity-100 transition duration-500 print:hidden" />
+                  <div className="absolute -inset-1.5 bg-gradient-to-r from-white/20 to-zinc-500/20 rounded-full blur opacity-40 group-hover:opacity-80 transition duration-500 print:hidden" />
                   <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-2 border-white/15 relative z-10 bg-slate-800 print:border-black/30">
                     <img 
                       src={profileImg} 
@@ -335,34 +354,40 @@ export default function VirtualCV({ isOpen, onClose }: VirtualCVProps) {
                     <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-white bg-gradient-to-r from-white via-white to-text-light bg-clip-text">
                       {data.subtitle}
                     </h2>
-                    <p className="text-xs sm:text-sm font-mono text-tech-blue font-bold tracking-wide uppercase">
+                    <p className="text-xs sm:text-sm font-mono text-zinc-300 font-bold tracking-wide uppercase">
                       {data.tagline}
                     </p>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono text-text-muted mt-2 print:text-slate-800 print:grid-cols-2">
                     <div className="flex items-center justify-center md:justify-start gap-2.5">
-                      <span className="p-1 px-1.5 rounded bg-white/5 text-tech-blue text-[10px] print:bg-slate-100 print:text-blue-900">TEL</span>
+                      <span className="p-1 px-1.5 rounded bg-white/10 text-zinc-200 text-[10px] print:bg-slate-100 print:text-slate-800">TEL</span>
                       <a href="tel:+573022687981" className="hover:text-white transition-colors">+57 3022687981</a>
                     </div>
                     <div className="flex items-center justify-center md:justify-start gap-2.5">
-                      <span className="p-1 px-1.5 rounded bg-white/5 text-tech-blue text-[10px] print:bg-slate-100 print:text-blue-900">MAIL</span>
-                      <a href="mailto:Luisgalvanv30@gmail.com" className="hover:text-white transition-colors">Luisgalvanv30@gmail.com</a>
+                      <span className="p-1 px-1.5 rounded bg-white/10 text-zinc-200 text-[10px] print:bg-slate-100 print:text-slate-800">MAIL</span>
+                      <a href="mailto:cotizaciones@luisgalvan.me" className="hover:text-white transition-colors">cotizaciones@luisgalvan.me</a>
                     </div>
                     <div className="flex items-center justify-center md:justify-start gap-2.5">
-                      <span className="p-1 px-1.5 rounded bg-white/5 text-tech-blue text-[10px] print:bg-slate-100 print:text-blue-900">WEB</span>
+                      <span className="p-1 px-1.5 rounded bg-white/10 text-zinc-200 text-[10px] print:bg-slate-100 print:text-slate-800">GH</span>
+                      <a href="https://github.com/lgalvanbr" target="_blank" rel="noreferrer" className="hover:text-white transition-colors flex items-center gap-1">
+                        github.com/lgalvanbr <ExternalLink size={10} className="print:hidden" />
+                      </a>
+                    </div>
+                    <div className="flex items-center justify-center md:justify-start gap-2.5">
+                      <span className="p-1 px-1.5 rounded bg-white/10 text-zinc-200 text-[10px] print:bg-slate-100 print:text-slate-800">WEB</span>
                       <a href="https://www.luisgalvan.me" target="_blank" rel="noreferrer" className="hover:text-white transition-colors flex items-center gap-1">
                         www.luisgalvan.me <ExternalLink size={10} className="print:hidden" />
                       </a>
                     </div>
                     <div className="flex items-center justify-center md:justify-start gap-2.5">
-                      <span className="p-1 px-1.5 rounded bg-white/5 text-tech-blue text-[10px] print:bg-slate-100 print:text-blue-900">LNK</span>
+                      <span className="p-1 px-1.5 rounded bg-white/10 text-zinc-200 text-[10px] print:bg-slate-100 print:text-slate-800">LNK</span>
                       <a href="https://www.linkedin.com/in/luis-carlos-galvan-vergel-15696230a/" target="_blank" rel="noreferrer" className="hover:text-white transition-colors flex items-center gap-1">
                         LinkedIn Profile <ExternalLink size={10} className="print:hidden" />
                       </a>
                     </div>
                     <div className="flex items-center justify-center md:justify-start gap-2.5">
-                      <span className="p-1 px-1.5 rounded bg-white/5 text-tech-blue text-[10px] print:bg-slate-100 print:text-blue-900">LOC</span>
+                      <span className="p-1 px-1.5 rounded bg-white/10 text-zinc-200 text-[10px] print:bg-slate-100 print:text-slate-800">LOC</span>
                       <span>Bogotá, Colombia</span>
                     </div>
                   </div>

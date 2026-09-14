@@ -1,8 +1,8 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Stage, Box, Cylinder, Text, Edges } from '@react-three/drei';
+import { OrbitControls, Stage, Box, Cylinder, Text, Edges, useGLTF, Center } from '@react-three/drei';
 import { useState, useRef, Suspense } from 'react';
-import { Upload, ScanLine, CheckCircle, Box as BoxIcon, Activity, Smartphone, QrCode, X, Sparkles } from 'lucide-react';
+import { Upload, ScanLine, CheckCircle, Box as BoxIcon, Activity, Smartphone, QrCode, X, Sparkles, ExternalLink } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import * as THREE from 'three';
 
@@ -142,124 +142,26 @@ function BeamFailureAnimation() {
   );
 }
 
-function EiffelTowerModel() {
-  const beaconRef = useRef<THREE.Group>(null);
+function CasaVibratoriaModel() {
+  const { scene } = useGLTF('/casavibratoria.glb');
+  const groupRef = useRef<THREE.Group>(null);
 
-  useFrame(({ clock }) => {
-    if (beaconRef.current) {
-      beaconRef.current.rotation.y = clock.getElapsedTime() * 1.5;
+  useFrame((_, delta) => {
+    if (groupRef.current) {
+      groupRef.current.rotation.y += delta * 0.15;
     }
   });
 
   return (
-    <group position={[0, -2, 0]}>
-      {/* Base Arches */}
-      <mesh position={[0, 0.45, 0]}>
-        <torusGeometry args={[1.2, 0.1, 12, 32, Math.PI]} />
-        <meshStandardMaterial color="#475569" metalness={0.7} roughness={0.3} />
-      </mesh>
-
-      {/* 4 Leg Pillars (Level 1) */}
-      <group>
-        {/* Footings */}
-        <Box args={[0.6, 0.15, 0.6]} position={[-1.2, 0.075, -1.2]}>
-          <meshStandardMaterial color="#334155" roughness={0.9} />
-          <Edges scale={1.01} color="#1e293b" />
-        </Box>
-        <Box args={[0.6, 0.15, 0.6]} position={[1.2, 0.075, -1.2]}>
-          <meshStandardMaterial color="#334155" roughness={0.9} />
-          <Edges scale={1.01} color="#1e293b" />
-        </Box>
-        <Box args={[0.6, 0.15, 0.6]} position={[-1.2, 0.075, 1.2]}>
-          <meshStandardMaterial color="#334155" roughness={0.9} />
-          <Edges scale={1.01} color="#1e293b" />
-        </Box>
-        <Box args={[0.6, 0.15, 0.6]} position={[1.2, 0.075, 1.2]}>
-          <meshStandardMaterial color="#334155" roughness={0.9} />
-          <Edges scale={1.01} color="#1e293b" />
-        </Box>
-
-        {/* Pillars tilting inwards */}
-        <Cylinder args={[0.15, 0.22, 2.2, 8]} position={[-0.9, 1.1, -0.9]} rotation={[0.2, 0, -0.2]}>
-          <meshStandardMaterial color="#475569" metalness={0.7} roughness={0.3} />
-        </Cylinder>
-        <Cylinder args={[0.15, 0.22, 2.2, 8]} position={[0.9, 1.1, -0.9]} rotation={[0.2, 0, 0.2]}>
-          <meshStandardMaterial color="#475569" metalness={0.7} roughness={0.3} />
-        </Cylinder>
-        <Cylinder args={[0.15, 0.22, 2.2, 8]} position={[-0.9, 1.1, 0.9]} rotation={[-0.2, 0, -0.2]}>
-          <meshStandardMaterial color="#475569" metalness={0.7} roughness={0.3} />
-        </Cylinder>
-        <Cylinder args={[0.15, 0.22, 2.2, 8]} position={[0.9, 1.1, 0.9]} rotation={[-0.2, 0, 0.2]}>
-          <meshStandardMaterial color="#475569" metalness={0.7} roughness={0.3} />
-        </Cylinder>
-      </group>
-
-      {/* First Platform */}
-      <Box args={[2.0, 0.15, 2.0]} position={[0, 2.1, 0]}>
-        <meshStandardMaterial color="#334155" metalness={0.7} roughness={0.3} />
-        <Edges color="#1e293b" />
-      </Box>
-
-      {/* Level 2 Pillars */}
-      <group>
-        <Cylinder args={[0.1, 0.15, 1.8, 8]} position={[-0.6, 2.9, -0.6]} rotation={[0.1, 0, -0.1]}>
-          <meshStandardMaterial color="#475569" metalness={0.7} roughness={0.3} />
-        </Cylinder>
-        <Cylinder args={[0.1, 0.15, 1.8, 8]} position={[0.6, 2.9, -0.6]} rotation={[0.1, 0, 0.1]}>
-          <meshStandardMaterial color="#475569" metalness={0.7} roughness={0.3} />
-        </Cylinder>
-        <Cylinder args={[0.1, 0.15, 1.8, 8]} position={[-0.6, 2.9, 0.6]} rotation={[-0.1, 0, -0.1]}>
-          <meshStandardMaterial color="#475569" metalness={0.7} roughness={0.3} />
-        </Cylinder>
-        <Cylinder args={[0.1, 0.15, 1.8, 8]} position={[0.6, 2.9, 0.6]} rotation={[-0.1, 0, 0.1]}>
-          <meshStandardMaterial color="#475569" metalness={0.7} roughness={0.3} />
-        </Cylinder>
-      </group>
-
-      {/* Second Platform */}
-      <Box args={[1.3, 0.12, 1.3]} position={[0, 3.8, 0]}>
-        <meshStandardMaterial color="#334155" metalness={0.7} roughness={0.3} />
-        <Edges color="#1e293b" />
-      </Box>
-
-      {/* Dome and Spire */}
-      <group>
-        <Cylinder args={[0.04, 0.1, 2.2, 8]} position={[0, 4.9, 0]}>
-          <meshStandardMaterial color="#475569" metalness={0.7} roughness={0.3} />
-        </Cylinder>
-        
-        {/* Decorative Ring */}
-        <Cylinder args={[0.18, 0.18, 0.12, 12]} position={[0, 4.2, 0]}>
-          <meshStandardMaterial color="#ef4444" metalness={0.7} roughness={0.3} />
-        </Cylinder>
-
-        {/* Tip Spire */}
-        <Cylinder args={[0.005, 0.02, 1.2, 8]} position={[0, 6.4, 0]}>
-          <meshStandardMaterial color="#94a3b8" metalness={0.8} roughness={0.2} />
-        </Cylinder>
-      </group>
-
-      {/* Glowing lighthouse beacon */}
-      <group ref={beaconRef} position={[0, 7.0, 0]}>
-        <mesh>
-          <sphereGeometry args={[0.08, 16, 16]} />
-          <meshBasicMaterial color="#ffffff" />
-        </mesh>
-        
-        {/* Visual helper scanner lines */}
-        <Cylinder args={[0.01, 0.15, 6, 12]} position={[0, 0, 3]} rotation={[Math.PI / 2, 0, 0]}>
-          <meshBasicMaterial color="#3b82f6" transparent opacity={0.3} />
-        </Cylinder>
-      </group>
-
-      {/* Floor base */}
-      <Box args={[6, 0.05, 6]} position={[0, -0.05, 0]}>
-        <meshStandardMaterial color="#18181b" />
-        <gridHelper args={[6, 12, "#3f3f46", "#18181b"]} position={[0, 0.03, 0]} />
-      </Box>
+    <group ref={groupRef}>
+      <Center top>
+        <primitive object={scene} />
+      </Center>
     </group>
   );
 }
+
+useGLTF.preload('/casavibratoria.glb');
 
 function TrussBridgeModel() {
   const steelMat = <meshStandardMaterial color="#334155" metalness={0.8} roughness={0.2} />;
@@ -383,7 +285,7 @@ function TrussBridgeModel() {
 
 export default function InteractiveSection() {
   const { language } = useLanguage();
-  const [selectedModel, setSelectedModel] = useState<'beam' | 'eiffel' | 'truss'>('beam');
+  const [selectedModel, setSelectedModel] = useState<'casa' | 'beam' | 'truss'>('casa');
   const [showAR, setShowAR] = useState(false);
   const [isScanning, setIsScanning] = useState(false);
   const [scanComplete, setScanComplete] = useState(false);
@@ -407,48 +309,52 @@ export default function InteractiveSection() {
           transition={{ duration: 0.6 }}
         >
           <div className="flex items-center gap-4 mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold text-white">Útiles dentro de la Web</h2>
+            <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight">
+              {language === 'es' ? 'Laboratorio Interactivo & Visores 3D' : 'Interactive Lab & 3D Visualizers'}
+            </h2>
             <div className="h-px bg-white/20 flex-1"></div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* 3D Viewer */}
-            <div className="bg-dark-surface rounded-2xl border border-white/10 overflow-hidden flex flex-col h-[520px] relative">
-              <div className="p-4 border-b border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-black/20 shrink-0">
+            <div className="bg-[#121217] rounded-2xl border border-white/10 overflow-hidden flex flex-col h-[520px] relative">
+              <div className="p-4 border-b border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-black/40 shrink-0">
                 <div className="flex items-center gap-2">
-                  <BoxIcon size={18} className="text-tech-blue" />
-                  <span className="font-mono font-bold text-white text-sm">Visor de Modelos 3D</span>
+                  <BoxIcon size={18} className="text-zinc-200" />
+                  <span className="font-mono font-semibold text-white text-sm">
+                    {language === 'es' ? 'Visor de Modelos 3D (CIMOC UniAndes)' : '3D Model Viewer (CIMOC UniAndes)'}
+                  </span>
                 </div>
                 
                 {/* Switch toggles */}
                 <div className="flex gap-1 bg-white/5 p-1 rounded-lg border border-white/10 text-xs font-mono">
                   <button
+                    onClick={() => setSelectedModel('casa')}
+                    className={`px-3 py-1 rounded-md transition-all flex items-center gap-1.5 cursor-pointer ${
+                      selectedModel === 'casa'
+                        ? 'bg-white text-zinc-950 font-bold shadow'
+                        : 'text-zinc-400 hover:text-white'
+                    }`}
+                  >
+                    <Sparkles size={11} className="text-amber-400" />
+                    <span>{language === 'es' ? 'Casa Vibratoria' : 'Shake-Table House'}</span>
+                  </button>
+                  <button
                     onClick={() => setSelectedModel('beam')}
                     className={`px-2.5 py-1 rounded-md transition-all cursor-pointer ${
                       selectedModel === 'beam'
-                        ? 'bg-tech-blue text-white shadow font-semibold'
-                        : 'text-text-muted hover:text-white'
+                        ? 'bg-white text-zinc-950 font-bold shadow'
+                        : 'text-zinc-400 hover:text-white'
                     }`}
                   >
                     {language === 'es' ? 'Viga' : 'Beam'}
                   </button>
                   <button
-                    onClick={() => setSelectedModel('eiffel')}
-                    className={`px-2.5 py-1 rounded-md transition-all flex items-center gap-1 cursor-pointer ${
-                      selectedModel === 'eiffel'
-                        ? 'bg-tech-blue text-white shadow font-semibold'
-                        : 'text-text-muted hover:text-white'
-                    }`}
-                  >
-                    <Sparkles size={11} className="text-amber-400" />
-                    {language === 'es' ? 'Torre Eiffel' : 'Eiffel Tower'}
-                  </button>
-                  <button
                     onClick={() => setSelectedModel('truss')}
                     className={`px-2.5 py-1 rounded-md transition-all flex items-center gap-1 cursor-pointer ${
                       selectedModel === 'truss'
-                        ? 'bg-tech-blue text-white shadow font-semibold'
-                        : 'text-text-muted hover:text-white'
+                        ? 'bg-white text-zinc-950 font-bold shadow'
+                        : 'text-zinc-400 hover:text-white'
                     }`}
                   >
                     {language === 'es' ? 'Puente' : 'Bridge'}
@@ -458,7 +364,7 @@ export default function InteractiveSection() {
                 {/* Smartphone Trigger */}
                 <button
                   onClick={() => setShowAR(!showAR)}
-                  className="flex items-center gap-1 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/20 hover:border-amber-500/30 px-3 py-1.5 rounded-lg font-mono text-xs transition-all cursor-pointer"
+                  className="flex items-center gap-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 hover:border-amber-500/50 px-3 py-1.5 rounded-lg font-mono text-xs transition-all cursor-pointer"
                 >
                   <Smartphone size={13} />
                   <span>{language === 'es' ? 'Ver en AR' : 'AR View'}</span>
@@ -490,8 +396,8 @@ export default function InteractiveSection() {
 
                       <p className="text-white font-bold text-sm max-w-sm">
                         {language === 'es' 
-                          ? 'Escanea este plano desde tu teléfono para proyectar estructuras famosas en Realidad Aumentada'
-                          : 'Scan this blueprint from your phone to project famous civil models in Augmented Reality'}
+                          ? 'Escanea este plano desde tu teléfono para proyectar la Casa Vibratoria o estructuras en Realidad Aumentada'
+                          : 'Scan this blueprint from your phone to project the Shake-Table House in Augmented Reality'}
                       </p>
 
                       {/* Dynamic QR Code Generator */}
@@ -517,8 +423,8 @@ export default function InteractiveSection() {
                         </p>
                         <p>
                           {language === 'es'
-                            ? '2. Elige la "Torre Eiffel" o el "Puente" en el visor y utiliza gestos multitouch.'
-                            : '2. Select "Torre Eiffel" or "Bridge" in the viewer and use multi-touch gestures.'}
+                            ? '2. Elige la "Casa Vibratoria" o el "Puente" en el visor y utiliza gestos multitouch.'
+                            : '2. Select "Shake-Table House" or "Bridge" in the viewer and use multi-touch gestures.'}
                         </p>
                         <p>
                           {language === 'es'
@@ -526,41 +432,55 @@ export default function InteractiveSection() {
                             : '3. Project the model on real environments using your compatible mobile camera.'}
                         </p>
                       </div>
+
+                      <a
+                        href="https://ciam-ar.vercel.app"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-400 text-zinc-950 font-mono text-xs font-bold hover:bg-amber-300 transition-all shadow-lg cursor-pointer"
+                      >
+                        <ExternalLink size={13} />
+                        <span>{language === 'es' ? 'Abrir ciamAR en vivo (Vercel)' : 'Open ciamAR Live (Vercel)'}</span>
+                      </a>
                     </motion.div>
                   )}
                 </AnimatePresence>
 
-                <Canvas shadows camera={{ position: [0, 0, 8], fov: 50 }}>
+                <Canvas shadows camera={{ position: [0, 2, 6], fov: 45 }}>
                   <Suspense fallback={null}>
-                    <color attach="background" args={['#1a1a1a']} />
-                    <ambientLight intensity={0.8} />
-                    <directionalLight position={[10, 10, 10]} intensity={1.5} castShadow />
-                    <Stage environment={null} intensity={0.5}>
+                    <color attach="background" args={['#0f1015']} />
+                    <ambientLight intensity={1.2} />
+                    <directionalLight position={[10, 15, 10]} intensity={1.8} castShadow />
+                    <directionalLight position={[-10, 10, -10]} intensity={0.9} />
+                    <Stage environment={null} intensity={0.7} adjustCamera>
+                      {selectedModel === 'casa' && <CasaVibratoriaModel />}
                       {selectedModel === 'beam' && <BeamFailureAnimation />}
-                      {selectedModel === 'eiffel' && <EiffelTowerModel />}
                       {selectedModel === 'truss' && <TrussBridgeModel />}
                     </Stage>
-                    <OrbitControls autoRotate autoRotateSpeed={1} enableZoom={false} maxPolarAngle={Math.PI / 2} />
+                    <OrbitControls makeDefault autoRotate={false} enableZoom={true} minDistance={1.2} maxDistance={25} maxPolarAngle={Math.PI / 2 + 0.05} />
                   </Suspense>
                 </Canvas>
               </div>
             </div>
 
             {/* AI Demo */}
-            <div className="bg-dark-surface rounded-2xl border border-white/10 overflow-hidden flex flex-col h-[520px]">
-              <div className="p-4 border-b border-white/10 flex items-center justify-between bg-black/20 shrink-0">
-                <h3 className="font-mono text-neon-blue flex items-center gap-2">
-                  <ScanLine size={18} /> Demo de IA (Mockup)
+            <div className="bg-[#121217] rounded-2xl border border-white/10 overflow-hidden flex flex-col h-[520px]">
+              <div className="p-4 border-b border-white/10 flex items-center justify-between bg-black/40 shrink-0">
+                <h3 className="font-mono text-zinc-100 flex items-center gap-2 text-sm font-semibold">
+                  <ScanLine size={18} className="text-emerald-400" />
+                  <span>{language === 'es' ? 'Detección de Fisuras con IA' : 'AI Structural Crack Detection'}</span>
                 </h3>
-                <span className="text-xs text-text-muted bg-white/5 px-2 py-1 rounded">Detección de Grietas</span>
+                <span className="text-xs text-zinc-400 bg-white/5 px-2.5 py-1 rounded-full font-mono">
+                  {language === 'es' ? 'Visión Computacional' : 'Computer Vision'}
+                </span>
               </div>
               
               <div className="flex-1 p-8 flex flex-col items-center justify-center relative">
-                <div className="w-full max-w-sm aspect-video bg-dark-bg border-2 border-dashed border-white/20 rounded-xl flex flex-col items-center justify-center relative overflow-hidden mb-8 group hover:border-tech-blue transition-colors">
+                <div className="w-full max-w-sm aspect-video bg-black/50 border-2 border-dashed border-white/20 rounded-xl flex flex-col items-center justify-center relative overflow-hidden mb-8 group hover:border-white/40 transition-colors">
                   
                   {isScanning && (
                     <motion.div 
-                      className="absolute inset-0 bg-tech-blue/20 z-20"
+                      className="absolute inset-0 bg-emerald-400/20 z-20"
                       initial={{ top: 0, height: "2px" }}
                       animate={{ top: "100%" }}
                       transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
@@ -572,26 +492,28 @@ export default function InteractiveSection() {
                       <img 
                         src="https://images.unsplash.com/photo-1518640467707-6811f4a6ab73?q=80&w=800&auto=format&fit=crop" 
                         alt="Pared con grietas" 
-                        className="w-full h-full object-cover opacity-50"
+                        className="w-full h-full object-cover opacity-60"
                         referrerPolicy="no-referrer"
                       />
-                      {/* Mockup crack detection boxes */}
+                      {/* Crack detection bounding boxes */}
                       <motion.div 
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="absolute top-1/4 left-1/3 w-16 h-24 border-2 border-red-500 bg-red-500/20"
+                        className="absolute top-1/4 left-1/3 w-16 h-24 border-2 border-emerald-400 bg-emerald-500/20 rounded"
                       />
                       <motion.div 
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.2 }}
-                        className="absolute bottom-1/3 right-1/4 w-20 h-12 border-2 border-red-500 bg-red-500/20"
+                        className="absolute bottom-1/3 right-1/4 w-20 h-12 border-2 border-emerald-400 bg-emerald-500/20 rounded"
                       />
                     </div>
                   ) : (
-                    <div className="text-center z-10 text-text-muted group-hover:text-tech-blue transition-colors">
-                      <Upload size={48} className="mx-auto mb-4 opacity-50" />
-                      <p className="font-mono text-sm">Sube una foto de una pared</p>
+                    <div className="text-center z-10 text-zinc-400 group-hover:text-zinc-200 transition-colors">
+                      <Upload size={40} className="mx-auto mb-3 opacity-60" />
+                      <p className="font-mono text-xs sm:text-sm">
+                        {language === 'es' ? 'Muestra de Concreto para Peritaje' : 'Concrete Sample for Structural Audit'}
+                      </p>
                     </div>
                   )}
                 </div>
@@ -599,20 +521,20 @@ export default function InteractiveSection() {
                 <button 
                   onClick={handleScan}
                   disabled={isScanning}
-                  className={`w-full max-w-sm py-3 rounded-lg font-mono font-medium flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                  className={`w-full max-w-sm py-3.5 px-4 rounded-xl font-mono text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg ${
                     isScanning 
-                      ? 'bg-dark-bg text-tech-blue border border-tech-blue' 
+                      ? 'bg-black/60 text-emerald-300 border border-emerald-500/40' 
                       : scanComplete 
-                        ? 'bg-green-500/20 text-green-400 border border-green-500/50'
-                        : 'bg-tech-blue text-white hover:bg-blue-600'
+                        ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 hover:bg-emerald-500/30' 
+                        : 'bg-white text-zinc-950 hover:bg-zinc-200'
                   }`}
                 >
                   {isScanning ? (
-                    <><ScanLine size={18} className="animate-spin" /> Analizando...</>
+                    <><ScanLine size={18} className="animate-spin text-emerald-400" /> {language === 'es' ? 'Analizando superficie...' : 'Analyzing surface...'}</>
                   ) : scanComplete ? (
-                    <><CheckCircle size={18} /> Grietas Detectadas</>
+                    <><CheckCircle size={18} className="text-emerald-400" /> {language === 'es' ? 'Fisuras Identificadas (Precisión 96.4%)' : 'Cracks Identified (96.4% Accuracy)'}</>
                   ) : (
-                    <><ScanLine size={18} /> Iniciar Detección</>
+                    <><ScanLine size={18} /> {language === 'es' ? 'Simular Detección de Fisuras' : 'Simulate Crack Detection'}</>
                   )}
                 </button>
               </div>

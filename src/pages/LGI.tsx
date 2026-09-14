@@ -1,30 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'motion/react';
-import { Link } from 'react-router-dom';
-import { Menu, X, Globe, ArrowLeft, Building2, Cpu, Activity, Code2, ChevronDown, Layers, Map } from 'lucide-react';
+import { Building2, Cpu, Activity, Code2, Layers, Map, ChevronDown } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import WhatsAppButton from '../components/WhatsAppButton';
+import HubNavbar from '../components/HubNavbar';
+import EngineeringCinematicShowcase from '../components/engineering/EngineeringCinematicShowcase';
 import logoImg from '../assets/logo.jpeg';
 
 export default function LGI() {
-  const { t, language, toggleLanguage } = useLanguage();
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const navLinks = [
-    { name: t('lgi.nav.home'), href: '#lgi-hero' },
-    { name: t('lgi.nav.services'), href: '#lgi-services' },
-    { name: t('lgi.nav.about'), href: '#lgi-about' },
-    { name: t('lgi.nav.contact'), href: '#lgi-contact' },
-  ];
+  const { t, language } = useLanguage();
 
   const services = [
     {
@@ -73,119 +57,23 @@ export default function LGI() {
 
   const handleQuoteSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const text = `Hola LGI Ingeniería, soy ${quoteForm.name}. Me interesa el servicio de: ${quoteForm.service}. Detalles: ${quoteForm.details}`;
+    const text = language === 'es'
+      ? `Hola LGI Ingeniería, soy ${quoteForm.name}. Me interesa el servicio de: ${quoteForm.service}. Detalles: ${quoteForm.details}`
+      : `Hello LGI Engineering, I am ${quoteForm.name}. I am interested in: ${quoteForm.service}. Details: ${quoteForm.details}`;
     const encodedText = encodeURIComponent(text);
-    window.open(`https://wa.me/573022687981?text=${encodedText}`, '_blank');
+    window.open(`https://wa.me/573022687981?text=${encodedText}`, '_blank', 'noopener,noreferrer');
   };
 
   return (
-    <div className="bg-slate-900 min-h-screen text-slate-300 font-sans selection:bg-tech-blue/30 selection:text-white">
-      {/* LGI Navbar */}
-      <motion.nav
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5 }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled ? 'bg-slate-900/90 backdrop-blur-md border-b border-white/10 py-4' : 'bg-transparent py-6'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <a href="#lgi-hero" className="text-2xl font-bold font-sans text-white tracking-tight flex items-center gap-3">
-              <img src={logoImg} alt="LGI Ingeniería Logo" className="h-10 w-auto rounded-md" />
-              <span className="hidden sm:inline-block">LGI <span className="text-tech-blue font-light">Ingeniería</span></span>
-            </a>
-          </div>
-
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link, index) => (
-              <a
-                key={index}
-                href={link.href}
-                className="text-sm font-medium text-slate-400 hover:text-white transition-colors relative group"
-              >
-                {link.name}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-tech-blue transition-all group-hover:w-full"></span>
-              </a>
-            ))}
-            
-            <div className="h-6 w-px bg-white/20 mx-2"></div>
-            
-            <Link 
-              to="/"
-              className="flex items-center gap-2 text-sm font-medium text-slate-400 hover:text-white transition-colors"
-            >
-              <ArrowLeft size={16} />
-              {t('lgi.nav.backToPortfolio')}
-            </Link>
-
-            <button 
-              onClick={toggleLanguage}
-              className="flex items-center gap-2 text-sm font-mono text-slate-400 hover:text-white transition-colors border border-white/10 px-3 py-1.5 rounded-full hover:border-tech-blue/50"
-            >
-              <Globe size={14} />
-              {language === 'es' ? 'EN' : 'ES'}
-            </button>
-          </div>
-
-          {/* Mobile Menu Toggle */}
-          <button
-            className="md:hidden text-white"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
-
-        {/* Mobile Nav */}
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-slate-800 border-b border-white/10"
-          >
-            <div className="flex flex-col px-6 py-4 gap-4">
-              {navLinks.map((link, index) => (
-                <a
-                  key={index}
-                  href={link.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-sm font-medium text-slate-400 hover:text-white transition-colors"
-                >
-                  {link.name}
-                </a>
-              ))}
-              
-              <Link 
-                to="/"
-                className="flex items-center gap-2 text-sm font-medium text-tech-blue hover:text-blue-400 transition-colors mt-4"
-              >
-                <ArrowLeft size={16} />
-                {t('lgi.nav.backToPortfolio')}
-              </Link>
-
-              <button 
-                onClick={() => {
-                  toggleLanguage();
-                  setIsMobileMenuOpen(false);
-                }}
-                className="flex items-center gap-2 text-sm font-mono text-slate-400 hover:text-white transition-colors mt-2"
-              >
-                <Globe size={16} />
-                {language === 'es' ? 'Switch to English' : 'Cambiar a Español'}
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </motion.nav>
+    <div className="bg-[#0a0a0e] min-h-screen text-slate-300 font-sans selection:bg-white/20 selection:text-white overflow-x-hidden">
+      {/* Universal LGI Hub Navbar */}
+      <HubNavbar />
 
       <main>
         {/* Hero Section */}
         <section id="lgi-hero" className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
           <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-10"></div>
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-900/80 to-slate-900"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0e] via-[#0a0a0e]/80 to-[#0a0a0e]"></div>
           
           <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
             <motion.div
@@ -193,11 +81,11 @@ export default function LGI() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
-              <img src={logoImg} alt="LGI Ingeniería Logo" className="h-32 md:h-40 w-auto mx-auto rounded-2xl mb-8 shadow-[0_0_40px_rgba(0,123,255,0.2)] object-contain" />
-              <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6 text-white">
+              <img src={logoImg} alt="LGI Ingeniería Logo" className="h-28 md:h-36 w-auto mx-auto rounded-2xl mb-8 border border-white/10 shadow-2xl object-contain filter grayscale hover:grayscale-0 transition-all duration-300" />
+              <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight mb-6 text-white">
                 {t('lgi.hero.title')}
               </h1>
-              <h2 className="text-2xl md:text-3xl font-light text-tech-blue mb-8">
+              <h2 className="text-xl sm:text-2xl font-mono text-zinc-300 mb-8 font-normal">
                 {t('lgi.hero.subtitle')}
               </h2>
               <p className="text-xl text-slate-400 mb-12 max-w-3xl mx-auto leading-relaxed">
@@ -221,6 +109,9 @@ export default function LGI() {
             <ChevronDown size={32} />
           </motion.div>
         </section>
+
+        {/* Dual Chapter Ultra-HD Drone & IoT Cinematic Keynote Showcase */}
+        <EngineeringCinematicShowcase />
 
         {/* Services Section */}
         <section id="lgi-services" className="py-24 px-6 md:px-12 lg:px-24 bg-slate-800/50 relative">
@@ -307,46 +198,46 @@ export default function LGI() {
               >
                 <form onSubmit={handleQuoteSubmit} className="space-y-6">
                   <div>
-                    <label className="block text-sm font-medium text-slate-400 mb-2">{t('lgi.quote.form.name')}</label>
+                    <label className="block text-xs font-mono text-zinc-300 uppercase tracking-wider mb-2">{t('lgi.quote.form.name')}</label>
                     <input 
                       type="text" 
                       required
                       value={quoteForm.name}
                       onChange={(e) => setQuoteForm({...quoteForm, name: e.target.value})}
-                      className="w-full bg-slate-800 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-tech-blue transition-colors"
-                      placeholder="Ej. Juan Pérez / Constructora XYZ"
+                      className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/30 transition-colors"
+                      placeholder={language === 'es' ? 'Ej. Roberto Gómez / Constructora XYZ' : 'e.g. Robert Smith / XYZ Construction'}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-400 mb-2">{t('lgi.quote.form.service')}</label>
+                    <label className="block text-xs font-mono text-zinc-300 uppercase tracking-wider mb-2">{t('lgi.quote.form.service')}</label>
                     <select 
                       value={quoteForm.service}
                       onChange={(e) => setQuoteForm({...quoteForm, service: e.target.value})}
-                      className="w-full bg-slate-800 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-tech-blue transition-colors appearance-none"
+                      className="w-full bg-[#121217] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/30 transition-colors"
                     >
-                      <option value="Gemelos Digitales">Gemelos Digitales</option>
-                      <option value="Sistemas IoT & Telemetría">Sistemas IoT & Telemetría</option>
+                      <option value="Gemelos Digitales">{language === 'es' ? 'Gemelos Digitales (Digital Twins)' : 'Digital Twins'}</option>
+                      <option value="Sistemas IoT & Telemetría">{language === 'es' ? 'Sistemas IoT & Telemetría Industrial' : 'Industrial IoT & Telemetry'}</option>
                       <option value="Data Science & Machine Learning">Data Science & Machine Learning</option>
-                      <option value="Arquitectura de Software">Arquitectura de Software a Medida</option>
-                      <option value="Automatización BIM">Automatización BIM & Scripts</option>
-                      <option value="Smart Cities">Infraestructura Inteligente (Smart Cities)</option>
-                      <option value="Otro">Otro</option>
+                      <option value="Arquitectura de Software">{language === 'es' ? 'Arquitectura de Software a Medida (AEC)' : 'Custom AEC Software'}</option>
+                      <option value="Automatización BIM">{language === 'es' ? 'Automatización BIM & Scripts Revit' : 'BIM Automation & Scripts'}</option>
+                      <option value="Smart Cities">{language === 'es' ? 'Infraestructura Inteligente (Smart Cities)' : 'Smart Infrastructure'}</option>
+                      <option value="Otro">{language === 'es' ? 'Otro' : 'Other'}</option>
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-400 mb-2">{t('lgi.quote.form.details')}</label>
+                    <label className="block text-xs font-mono text-zinc-300 uppercase tracking-wider mb-2">{t('lgi.quote.form.details')}</label>
                     <textarea 
                       required
                       value={quoteForm.details}
                       onChange={(e) => setQuoteForm({...quoteForm, details: e.target.value})}
                       rows={4}
-                      className="w-full bg-slate-800 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-tech-blue transition-colors resize-none"
-                      placeholder="Describe brevemente tu proyecto o necesidad..."
+                      className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/30 transition-colors resize-none"
+                      placeholder={language === 'es' ? 'Describe brevemente tu proyecto o necesidad técnica...' : 'Briefly describe your project scope or technical requirements...'}
                     ></textarea>
                   </div>
                   <button 
                     type="submit"
-                    className="w-full bg-tech-blue hover:bg-blue-600 text-white font-bold py-4 rounded-lg transition-all hover:shadow-[0_0_20px_rgba(0,123,255,0.4)]"
+                    className="w-full bg-white hover:bg-zinc-200 text-zinc-950 font-bold font-mono text-sm py-4 rounded-xl transition-all shadow-lg cursor-pointer"
                   >
                     {t('lgi.quote.form.submit')}
                   </button>
