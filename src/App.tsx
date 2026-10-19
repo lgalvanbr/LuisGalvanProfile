@@ -4,7 +4,7 @@ import { LanguageProvider } from './context/LanguageContext';
 import { lazyWithRetry } from './utils/lazyWithRetry';
 
 // Dynamic route-level code-splitting with stale-chunk auto-recovery
-const Portfolio = lazyWithRetry(() => import('./pages/Portfolio'));
+const Story = lazyWithRetry(() => import('./story/Story'));
 const LGI = lazyWithRetry(() => import('./pages/LGI'));
 const LgiAI = lazyWithRetry(() => import('./pages/LgiAI'));
 const LgiSolar = lazyWithRetry(() => import('./pages/LgiSolar'));
@@ -24,7 +24,7 @@ export default function App() {
       <Router>
         <Suspense fallback={<RouteFallback />}>
           <Routes>
-            <Route path="/" element={<Portfolio />} />
+            <Route path="/" element={<Story />} />
             <Route path="/lgi" element={<LGI />} />
             <Route path="/ia" element={<LgiAI />} />
             <Route path="/ai" element={<LgiAI />} />
