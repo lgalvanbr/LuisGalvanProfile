@@ -329,26 +329,53 @@ body.story-body {
   padding: 0 4px;
 }
 
-/* drawing text */
-.dw-ink {
+/* drawing text: drafting lettering */
+.plate svg text,
+.hero-plate svg text {
   font-family: var(--f-mono);
-  font-size: 11px;
+}
+.tb text {
+  font-size: 9.5px;
+  letter-spacing: 0.04em;
+  fill: var(--ink);
+}
+.dim {
+  font-size: 9px;
+  fill: var(--ink);
+}
+.axis {
+  font-size: 9px;
+  font-weight: 500;
+  fill: var(--ink);
+}
+.note {
+  font-size: 8.5px;
+  letter-spacing: 0.08em;
   fill: var(--muted);
 }
-.dw-tag {
-  font-family: var(--f-display);
-  font-size: 12px;
-  font-weight: 600;
-  fill: var(--marker);
-}
-.dw-chip {
-  font-family: var(--f-mono);
-  font-size: 11px;
+.tag {
+  font-size: 10px;
   font-weight: 500;
   fill: var(--marker);
 }
-.dw-chip-inv {
+.tag-inv {
   fill: #fff;
+}
+.ro-h {
+  font-size: 8.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  fill: #fff;
+}
+.ro-k {
+  font-size: 9.5px;
+  fill: var(--muted);
+}
+.ro-v {
+  font-size: 10px;
+  font-weight: 500;
+  fill: var(--ink);
+  font-variant-numeric: tabular-nums;
 }
 
 @media (max-width: 900px) {
@@ -500,8 +527,8 @@ body.story-body {
   padding: 12px 14px 14px;
   box-shadow: 0 1px 2px rgba(23, 32, 27, 0.05), 0 18px 40px -26px rgba(23, 32, 27, 0.35);
   /* engineering grid paper */
-  background-image: linear-gradient(rgba(23, 32, 27, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(23, 32, 27, 0.045) 1px, transparent 1px);
+  background-image: linear-gradient(rgba(23, 32, 27, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(23, 32, 27, 0.03) 1px, transparent 1px);
   background-size: 20px 20px;
 }
 .plate-meta {

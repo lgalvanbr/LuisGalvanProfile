@@ -15,7 +15,7 @@ import {
 } from 'motion/react';
 import profileImg from '../assets/profile.jpeg';
 import { LINKS, chapters, more, path, tools, ui, type Case, type Lang, type Media, type Stat } from './content';
-import { drawings, CityDrawing } from './drawings';
+import { drawings, CityDrawing, PlateDefs } from './drawings';
 import './story.css';
 
 const ease = [0.16, 1, 0.3, 1] as const;
@@ -55,6 +55,7 @@ export default function Story() {
         <a className="skip" href="#casos">
           {t.nav.cases}
         </a>
+        <PlateDefs />
         <ScrollBar />
         <Header lang={lang} setLang={setLang} />
         <main>
@@ -305,15 +306,19 @@ function ChapterHead({ index, title, intro }: { index: number; title: string; in
 function CaseBlock({ c, lang, n, flip }: { c: Case; lang: Lang; n: number; flip: boolean }) {
   const t = ui[lang];
   const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 0.75', 'end 0.85'] });
-  const raw = useTransform(scrollYProgress, [0, 0.55], [0, 1]);
+  const plateRef = useRef<HTMLDivElement>(null);
+  const narrow = useNarrow();
+  // Desktop: the plate is sticky, so the whole case drives it. Phone: the plate scrolls by, so it drives itself.
+  const { scrollYProgress: wide } = useScroll({ target: ref, offset: ['start 0.75', 'end 0.85'] });
+  const { scrollYProgress: small } = useScroll({ target: plateRef, offset: ['start 0.95', 'end 0.35'] });
+  const raw = useTransform(narrow ? small : wide, narrow ? [0, 1] : [0, 0.55], [0, 1]);
   const p = useSpring(raw, { stiffness: 90, damping: 22, mass: 0.6 });
   const Drawing = drawings[c.drawing];
 
   return (
     <article id={`caso-${c.id}`} ref={ref} className={`case${flip ? ' case-flip' : ''}`} aria-labelledby={`h-${c.id}`}>
       <div className="case-plate">
-        <div className="plate sticky-plate">
+        <div className="plate sticky-plate" ref={plateRef}>
           <div className="plate-meta">
             <span className="tnum">
               {t.caseOf} {String(n).padStart(2, '0')}
@@ -398,6 +403,18 @@ function CaseBlock({ c, lang, n, flip }: { c: Case; lang: Lang; n: number; flip:
   );
 }
 
+function useNarrow() {
+  const q = '(max-width: 900px)';
+  const [narrow, setNarrow] = useState(() => typeof window !== 'undefined' && window.matchMedia(q).matches);
+  useEffect(() => {
+    const m = window.matchMedia(q);
+    const on = () => setNarrow(m.matches);
+    m.addEventListener('change', on);
+    return () => m.removeEventListener('change', on);
+  }, []);
+  return narrow;
+}
+
 function PlateLegend({ p, lang }: { p: MotionValue<number>; lang: Lang }) {
   const t = ui[lang];
   const op = useTransform(p, [0, 0.15], [0.35, 1]);
@@ -422,7 +439,7 @@ function Counter({ s, lang }: { s: Stat; lang: Lang }) {
   const [text, setText] = useState(fmt(s.value));
   useEffect(() => {
     if (!inView) return;
-    const c = animate(0, s.value, { duration: 1.6, ease, onUpdate: (v) => setText(fmt(v)) });
+    const c = animate(0, s.value, { duration: 1.6, ease, onUpdate: (v) => setText(fmt(v)), onComplete: () => setText(fmt(s.value)) });
     return () => c.stop();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView, lang]);

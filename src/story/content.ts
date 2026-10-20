@@ -4,7 +4,7 @@
 export type Lang = 'es' | 'en';
 type T = Record<Lang, string>;
 
-export type DrawingId = 'tank' | 'quake' | 'site' | 'vision' | 'twin' | 'solar' | 'city' | 'transit' | 'robot' | 'river';
+export type DrawingId = 'tank' | 'quake' | 'vision' | 'twin' | 'solar' | 'city' | 'transit' | 'robot' | 'river';
 
 export interface Stat {
   value: number;
@@ -214,38 +214,6 @@ export const chapters: Chapter[] = [
       en: 'On site the information exists, but it lives on paper, in loose photos and in the site engineer’s memory.',
     },
     cases: [
-      {
-        id: 'interventoria',
-        drawing: 'site',
-        place: { es: 'Interventoría en Usaquén, Bogotá', en: 'Site supervision in Usaquén, Bogotá' },
-        problem: { es: '43 frentes de obra. ¿Cuál va atrasado hoy?', en: '43 work fronts. Which one is behind today?' },
-        context: {
-          es: 'La interventoría de un consorcio vigila malla vial y espacio público en decenas de frentes a la vez. Cada semana llegan actas, fotos y reportes por correo, y armar el panorama tomaba días.',
-          en: 'A consortium’s supervision firm watches road and public-space works on dozens of fronts at once. Every week reports, photos and minutes arrive by email, and putting the picture together took days.',
-        },
-        built: {
-          es: 'InterventorIA: una consola de control de frentes. Cada frente tiene su ubicación, su perfil de estructura de suelo y su estado; las actas del mes se generan desde los datos.',
-          en: 'InterventorIA: a control console for work fronts. Each front has its location, soil structure profile and status; the monthly reports are generated from the data.',
-        },
-        how: [
-          { es: 'Frentes georreferenciados en un solo mapa.', en: 'All fronts georeferenced on one map.' },
-          { es: 'Estado al día, pendientes y emergencias a la vista.', en: 'Up to date, pending and emergency status at a glance.' },
-          { es: 'Actas mensuales exportadas a Word con un clic.', en: 'Monthly reports exported to Word in one click.' },
-        ],
-        stats: [
-          { value: 43, label: { es: 'frentes activos', en: 'active fronts' } },
-          { value: 22, label: { es: 'de malla vial', en: 'road works' } },
-          { value: 21, label: { es: 'de espacio público', en: 'public space' } },
-        ],
-        media: {
-          kind: 'image',
-          src: '/media/interventor.webp',
-          alt: { es: 'Consola de control de frentes de InterventorIA', en: 'InterventorIA work-front console' },
-          caption: { es: 'Consola de frentes: totales, estado y perfil de suelo por frente.', en: 'Front console: totals, status and soil profile per front.' },
-        },
-        stack: 'React, Vite, mapas',
-        link: { href: 'https://interventor-ia.vercel.app', label: { es: 'Abrir InterventorIA', en: 'Open InterventorIA' } },
-      },
       {
         id: 'vision',
         drawing: 'vision',

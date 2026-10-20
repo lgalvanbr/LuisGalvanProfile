@@ -190,12 +190,6 @@ export default function HubNavbar() {
       tag: 'WebXR'
     },
     {
-      name: 'InterventorIA',
-      desc: language === 'es' ? 'Supervisión Obras & Consorcio Usaquén' : 'Site Oversight & Inspection',
-      url: 'https://interventor-ia.vercel.app',
-      tag: 'Oversight'
-    },
-    {
       name: 'RobleCaribe Analytics',
       desc: language === 'es' ? 'Telemetría & Analítica de Combustible' : 'Fuel Telemetry & Sales AI',
       url: 'https://eds-roble-caribe-jij7.vercel.app',
