@@ -123,7 +123,7 @@ function Header({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void }) {
           <i />
           <i />
         </span>
-        Luis Carlos Galván
+        Luis Carlos Galvan
       </a>
       <nav className="bar-nav" aria-label="Secciones" onMouseLeave={() => setHover(null)}>
         {items.map(([href, label]) => (
@@ -194,7 +194,7 @@ function Hero({ lang }: { lang: Lang }) {
     <section className="hero" id="top" ref={ref}>
       <motion.div className="hero-text" style={{ opacity: fade }}>
         <h1 className="hero-name">
-          {['Luis Carlos', 'Galván'].map((line, i) => (
+          {['Luis Carlos', 'Galvan'].map((line, i) => (
             <span className="line-mask" key={line}>
               <motion.span
                 className="line"
@@ -599,7 +599,7 @@ function Path({ lang }: { lang: Lang }) {
           {t.pathIntro}
         </motion.p>
         <motion.figure className="path-photo" style={{ y: photoY }}>
-          <img src={profileImg} alt={lang === 'es' ? 'Luis Carlos Galván con bata de laboratorio sosteniendo una caja de muestra de suelo' : 'Luis Carlos Galván in a lab coat holding a soil sample box'} loading="lazy" width={960} height={1280} />
+          <img src={profileImg} alt={lang === 'es' ? 'Luis Carlos Galvan con bata de laboratorio sosteniendo una caja de muestra de suelo' : 'Luis Carlos Galvan in a lab coat holding a soil sample box'} loading="lazy" width={960} height={1280} />
           <motion.figcaption
             className="tape"
             initial={{ opacity: 0, rotate: -9, scale: 1.1 }}
