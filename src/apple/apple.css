@@ -52,10 +52,10 @@ html:has(body.apple-body) {
   position: sticky;
   top: 0;
   z-index: 40;
-  background: rgba(251, 251, 253, 0.8);
+  background: rgba(22, 22, 23, 0.8);
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  color: #f5f5f7;
 }
 .ap-nav-in {
   max-width: 1024px;
@@ -80,16 +80,16 @@ html:has(body.apple-body) {
 }
 .ap-nav nav a {
   text-decoration: none;
-  color: rgba(0, 0, 0, 0.8);
+  color: rgba(245, 245, 247, 0.8);
 }
 .ap-nav nav a:hover {
-  color: var(--blue);
+  color: #fff;
 }
 .ap-nav button {
   font: inherit;
   background: none;
   border: 0;
-  color: var(--fg);
+  color: #f5f5f7;
   min-height: 32px;
   padding: 0 4px;
 }
@@ -102,32 +102,211 @@ html:has(body.apple-body) {
   }
 }
 
-/* hero */
+/* hero: full-bleed background video */
 .ap-hero {
+  position: relative;
+  min-height: calc(100svh - 48px);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  color: #fff;
   text-align: center;
-  padding: clamp(64px, 12vw, 140px) 22px clamp(40px, 6vw, 72px);
+  background: #000;
+}
+.ap-scrim {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.35) 70%), linear-gradient(to bottom, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.2) 45%, rgba(0, 0, 0, 0.75));
+}
+.ap-hero-in {
+  position: relative;
+  z-index: 1;
   max-width: 980px;
-  margin: 0 auto;
+  padding: 80px 22px;
 }
 .ap-eyebrow {
-  font-size: clamp(19px, 2vw, 24px);
+  font-size: clamp(15px, 1.6vw, 19px);
   font-weight: 600;
-  color: var(--mut);
-  margin: 0 0 8px;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0 0 10px;
 }
 .ap-hero h1 {
-  font-size: clamp(44px, 8vw, 96px);
-  line-height: 1.04;
+  font-size: clamp(48px, 9vw, 112px);
+  line-height: 1;
   font-weight: 700;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.04em;
   margin-bottom: 20px;
 }
-.ap-grad {
-  background: linear-gradient(90deg, #0071e3, #5e5ce6 55%, #1d1d1f);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+.ap-hero .ap-sub {
+  color: rgba(255, 255, 255, 0.82);
+  max-width: 40ch;
 }
+.ap-pill.ap-pill-w {
+  background: #fff !important;
+  color: #000 !important;
+}
+.ap-pill.ap-pill-w:hover {
+  background: rgba(255, 255, 255, 0.88) !important;
+}
+.ap-link.ap-link-w {
+  color: #fff !important;
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.4);
+  text-underline-offset: 4px;
+}
+.ap-link.ap-link-w::after {
+  content: '';
+}
+.ap-pp {
+  position: absolute;
+  right: 22px;
+  bottom: 22px;
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  font-size: 11px;
+}
+.ap-pp:hover {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+/* pinned film chapters */
+.ap-film {
+  position: relative;
+  height: 200vh;
+  background: #000;
+}
+.ap-film-pin {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  color: #fff;
+}
+.ap-film-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0.1) 55%, rgba(0, 0, 0, 0.35));
+}
+.ap-film-top {
+  position: absolute;
+  top: 72px;
+  left: clamp(22px, 5vw, 64px);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.02em;
+}
+.ap-film-top i {
+  width: 32px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.35);
+}
+.ap-film-copy {
+  position: absolute;
+  left: clamp(22px, 5vw, 64px);
+  right: 22px;
+  bottom: clamp(40px, 8vh, 80px);
+  max-width: 720px;
+}
+.ap-film-copy h2 {
+  font-size: clamp(32px, 5.4vw, 64px);
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  margin-bottom: 14px;
+  text-wrap: balance;
+}
+.ap-film-copy p {
+  font-size: clamp(17px, 1.8vw, 21px);
+  color: rgba(255, 255, 255, 0.78);
+  margin: 0 0 10px;
+  max-width: 56ch;
+}
+.ap-between {
+  background: #fff;
+  padding: clamp(80px, 12vw, 140px) 22px;
+  text-align: center;
+}
+.ap-between h3 {
+  font-size: clamp(30px, 4.6vw, 52px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  max-width: 18ch;
+  margin: 0 auto;
+}
+
+/* robotics lab */
+.ap-lab {
+  background: #000;
+  color: #f5f5f7;
+  padding: clamp(72px, 10vw, 120px) 0;
+}
+.ap-head-dark p {
+  color: #a1a1a6 !important;
+}
+.ap-lab-grid {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 0 22px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.ap-lab-cell {
+  margin: 0;
+  background: #1d1d1f;
+  border-radius: 24px;
+  overflow: hidden;
+}
+.ap-lab-media {
+  position: relative;
+  aspect-ratio: 4 / 5;
+}
+.ap-lab-wide {
+  grid-column: 1 / -1;
+}
+.ap-lab-media-wide {
+  aspect-ratio: 1320 / 360;
+}
+.ap-lab-media-wide .bgv-video,
+.ap-lab-media-wide .bgv-poster {
+  object-fit: contain;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.ap-lab-cell figcaption {
+  padding: 18px 22px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ap-lab-cell figcaption b {
+  font-size: 21px;
+  letter-spacing: -0.02em;
+}
+.ap-lab-cell figcaption span {
+  color: #a1a1a6;
+  font-size: 15px;
+}
+@media (max-width: 760px) {
+  .ap-lab-grid {
+    grid-template-columns: 1fr;
+  }
+  .ap-lab-media {
+    aspect-ratio: 16 / 10;
+  }
+}
+
 .ap-sub {
   font-size: clamp(19px, 2.2vw, 24px);
   line-height: 1.35;

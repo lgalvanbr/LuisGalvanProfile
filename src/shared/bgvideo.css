@@ -1,0 +1,25 @@
+.bgv {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #0b0c10;
+}
+.bgv-poster,
+.bgv-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.bgv-poster {
+  background-size: cover;
+  background-position: center;
+}
+.bgv-video {
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+.bgv-video.on {
+  opacity: 1;
+}

@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { AnimatePresence, MotionConfig, motion, useMotionValue, useScroll, useTransform, type Variants } from 'motion/react';
+import { AnimatePresence, MotionConfig, motion, useMotionValue, type Variants } from 'motion/react';
 import { LINKS, path, type Lang } from '../story/content';
 import { drawings, PlateDefs } from '../story/drawings';
 import { caps, missions, type Mission } from '../space/data';
 import { Count, DetailBody, labels, useOverlay } from '../shared/Detail';
+import { BgVideo } from '../shared/BgVideo';
 import './apple.css';
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
@@ -11,61 +12,89 @@ const up: Variants = { hidden: { opacity: 0, y: 28 }, show: { opacity: 1, y: 0, 
 
 const copy = {
   es: {
-    nav: ['Proyectos', 'Capacidades', 'Trayectoria', 'Contacto'],
-    eyebrow: 'Ingeniero civil y de sistemas',
-    h1a: 'Infraestructura.',
-    h1b: 'Ahora con software.',
-    sub: 'Diseño sistemas que miden, modelan y vigilan obras, ciudades y territorio. Desde el sensor enterrado hasta el satélite.',
+    nav: ['Proyectos', 'Robótica', 'Capacidades', 'Contacto'],
+    eyebrow: 'Ingeniero civil y de sistemas · Universidad de los Andes',
+    h1: 'Luis Carlos Galvan',
+    sub: 'Software, datos e inteligencia artificial para infraestructura: monitoreo estructural, ciudades y robótica de inspección.',
     cta: 'Ver proyectos',
-    cta2: 'Escribirme',
-    showTitle: 'Bogotá 3D.',
-    showSub: 'La ciudad entera en el navegador, construida desde datos abiertos.',
+    cta2: 'Contacto',
+    pause: 'Pausar video',
+    play: 'Reproducir video',
+    films: [
+      { i: '01', eyebrow: 'Robótica de inspección', title: 'Robots humanoides entrenados para inspeccionar edificaciones', desc: 'Unitree G1 entrenado con aprendizaje por refuerzo en Isaac Lab: marcha, recuperación tras caídas y ensayos en una oficina fotorrealista.', id: 'robot' },
+      { i: '02', eyebrow: 'Ciudad', title: 'Bogotá completa en 3D a partir de datos abiertos', desc: '1,77 millones de edificaciones, red de acueducto, arbolado y transporte integrados en un visor web con WebGL y WebGPU.', id: 'bogota3d' },
+      { i: '03', eyebrow: 'Patrimonio y exposición sísmica', title: 'Fachadas caracterizadas desde fotografías de calle', desc: 'Segmentación y estimación de profundidad sobre imágenes de Mapillary para modelar fachadas edificio por edificio. Piloto en La Candelaria.', id: 'bogota3d' },
+    ],
+    between: ['De la robótica al modelo de ciudad', 'Del modelo de ciudad al edificio'],
+    labTitle: 'Laboratorio de robótica.',
+    labSub: 'Ensayos en simulación con el humanoide Unitree G1.',
+    lab: [
+      { k: 'escaleras', t: 'Escaleras', d: 'Ascenso y descenso de escalones de hasta 15 cm.' },
+      { k: 'empujones', t: 'Robustez', d: 'Recuperación ante empujones laterales de 0,6 m/s.' },
+      { k: 'levantarse', t: 'Recuperación', d: 'Incorporación autónoma después de una caída.' },
+    ],
+    sensors: 'Percepción: cámara RGB, profundidad de 0 a 6 m y LiDAR MID-360, sincronizados durante el recorrido.',
     projTitle: 'Proyectos.',
-    projSub: 'Toca cualquiera para ver cómo funciona.',
+    projSub: 'Seleccione un proyecto para ver el detalle técnico.',
     numsTitle: 'En cifras.',
     capsTitle: 'Capacidades.',
-    capsSub: 'Dos carreras, una forma de trabajar.',
-    pathTitle: 'Del sensor al satélite.',
-    endTitle: 'Hablemos.',
-    endSub: '¿Una estructura que vigilar, una obra que medir, datos que nadie ha cruzado?',
-    mail: 'Escribir un correo',
-    more: 'Ver más',
+    capsSub: 'Ingeniería civil e ingeniería de sistemas aplicadas a un mismo problema.',
+    pathTitle: 'Trayectoria.',
+    endTitle: 'Contacto.',
+    endSub: 'Disponible para proyectos de consultoría, investigación y desarrollo.',
+    mail: 'Enviar correo',
+    more: 'Ver proyecto',
     lang: 'EN',
     langLabel: 'Ver en inglés',
-    foot: 'Diseñado y construido por Luis Carlos Galvan en Bogotá.',
+    foot: 'Diseño y desarrollo: Luis Carlos Galvan. Bogotá, Colombia.',
   },
   en: {
-    nav: ['Projects', 'Capabilities', 'Path', 'Contact'],
-    eyebrow: 'Civil and systems engineer',
-    h1a: 'Infrastructure.',
-    h1b: 'Now with software.',
-    sub: 'I design systems that measure, model and watch over construction sites, cities and land. From the buried sensor to the satellite.',
-    cta: 'See projects',
-    cta2: 'Write to me',
-    showTitle: 'Bogotá 3D.',
-    showSub: 'The whole city in the browser, built from open data.',
+    nav: ['Projects', 'Robotics', 'Capabilities', 'Contact'],
+    eyebrow: 'Civil and systems engineer · Universidad de los Andes',
+    h1: 'Luis Carlos Galvan',
+    sub: 'Software, data and artificial intelligence for infrastructure: structural monitoring, cities and inspection robotics.',
+    cta: 'View projects',
+    cta2: 'Contact',
+    pause: 'Pause video',
+    play: 'Play video',
+    films: [
+      { i: '01', eyebrow: 'Inspection robotics', title: 'Humanoid robots trained to inspect buildings', desc: 'Unitree G1 trained with reinforcement learning in Isaac Lab: walking, fall recovery and tests in a photorealistic office.', id: 'robot' },
+      { i: '02', eyebrow: 'City', title: 'All of Bogotá in 3D from open data', desc: '1.77 million buildings, water network, trees and transit integrated in a web viewer built on WebGL and WebGPU.', id: 'bogota3d' },
+      { i: '03', eyebrow: 'Heritage and seismic exposure', title: 'Facades characterised from street-level photos', desc: 'Segmentation and depth estimation on Mapillary imagery to model facades building by building. Pilot in La Candelaria.', id: 'bogota3d' },
+    ],
+    between: ['From robotics to the city model', 'From the city model to the building'],
+    labTitle: 'Robotics lab.',
+    labSub: 'Simulation tests with the Unitree G1 humanoid.',
+    lab: [
+      { k: 'escaleras', t: 'Stairs', d: 'Climbing and descending steps up to 15 cm.' },
+      { k: 'empujones', t: 'Robustness', d: 'Recovery from 0.6 m/s lateral pushes.' },
+      { k: 'levantarse', t: 'Recovery', d: 'Autonomous stand-up after a fall.' },
+    ],
+    sensors: 'Perception: RGB camera, 0–6 m depth and MID-360 LiDAR, synchronised along the route.',
     projTitle: 'Projects.',
-    projSub: 'Tap any of them to see how it works.',
+    projSub: 'Select a project to see the technical details.',
     numsTitle: 'By the numbers.',
     capsTitle: 'Capabilities.',
-    capsSub: 'Two degrees, one way of working.',
-    pathTitle: 'From sensor to satellite.',
-    endTitle: 'Let’s talk.',
-    endSub: 'A structure to watch, a site to measure, data nobody has crossed yet?',
-    mail: 'Send an email',
-    more: 'Learn more',
+    capsSub: 'Civil and systems engineering applied to the same problem.',
+    pathTitle: 'Path.',
+    endTitle: 'Contact.',
+    endSub: 'Available for consulting, research and development projects.',
+    mail: 'Send email',
+    more: 'View project',
     lang: 'ES',
     langLabel: 'Ver en español',
-    foot: 'Designed and built by Luis Carlos Galvan in Bogotá.',
+    foot: 'Design and development: Luis Carlos Galvan. Bogotá, Colombia.',
   },
 };
+
+const filmMedia = ['/media/bg/g1-levantarse', '/media/bg/bogota-vuelo', '/media/bg/bogota-fachadas'];
 
 const nums = [
   { s: { value: 1.77, decimals: 2, suffix: ' M', label: { es: 'edificaciones en Bogotá 3D', en: 'buildings in Bogotá 3D' } }, span: 2, dark: true },
   { s: { value: 31343, label: { es: 'contratos ambientales cruzados con satélite', en: 'environmental contracts crossed with satellite data' } }, span: 1 },
   { s: { value: 389, label: { es: 'rutas SITP afectadas por el Metro L1', en: 'SITP routes affected by Metro L1' } }, span: 1 },
-  { s: { value: 2.5, decimals: 1, suffix: ' m/s', label: { es: 'corriendo, robot G1 en simulación', en: 'running, G1 robot in simulation' } }, span: 1, dark: true },
-  { s: { value: 30, suffix: '+ kWp', label: { es: 'solares en Pailitas, Cesar', en: 'of solar in Pailitas, Cesar' } }, span: 1 },
+  { s: { value: 2.5, decimals: 1, suffix: ' m/s', label: { es: 'velocidad de carrera del G1 en simulación', en: 'G1 running speed in simulation' } }, span: 1, dark: true },
+  { s: { value: 30, suffix: '+ kWp', label: { es: 'fotovoltaicos en Pailitas, Cesar', en: 'of photovoltaics in Pailitas, Cesar' } }, span: 1 },
 ];
 
 export default function Apple() {
@@ -87,7 +116,9 @@ export default function Apple() {
     return () => document.body.classList.remove('apple-body');
   }, [lang]);
 
-  const ids = ['proyectos', 'capacidades', 'trayectoria', 'contacto'];
+  const ids = ['proyectos', 'robotica', 'capacidades', 'contacto'];
+  const [heroPlay, setHeroPlay] = useState(true);
+  const openId = (id: string) => setOpen(missions.findIndex((m) => m.c.id === id));
 
   return (
     <MotionConfig reducedMotion="user">
@@ -113,29 +144,40 @@ export default function Apple() {
 
         <main>
           <section className="ap-hero" id="top">
-            <motion.p className="ap-eyebrow" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease }}>
-              {t.eyebrow}
-            </motion.p>
-            <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease, delay: 0.1 }}>
-              {t.h1a}
-              <br />
-              <span className="ap-grad">{t.h1b}</span>
-            </motion.h1>
-            <motion.p className="ap-sub" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, ease, delay: 0.25 }}>
-              {t.sub}
-            </motion.p>
-            <motion.div className="ap-ctas" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.45 }}>
-              <a className="ap-pill" href="#proyectos">
-                {t.cta}
-              </a>
-              <a className="ap-link" href="#contacto">
-                {t.cta2}
-              </a>
-            </motion.div>
+            <BgVideo src="/media/bg/g1-lobby.mp4" poster="/media/bg/g1-lobby.jpg" eager playing={heroPlay} />
+            <div className="ap-scrim" />
+            <div className="ap-hero-in">
+              <motion.p className="ap-eyebrow" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease }}>
+                {t.eyebrow}
+              </motion.p>
+              <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease, delay: 0.1 }}>
+                {t.h1}
+              </motion.h1>
+              <motion.p className="ap-sub" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, ease, delay: 0.25 }}>
+                {t.sub}
+              </motion.p>
+              <motion.div className="ap-ctas" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.45 }}>
+                <a className="ap-pill ap-pill-w" href="#proyectos">
+                  {t.cta}
+                </a>
+                <a className="ap-link ap-link-w" href="#contacto">
+                  {t.cta2}
+                </a>
+              </motion.div>
+            </div>
+            <button className="ap-pp" onClick={() => setHeroPlay((v) => !v)} aria-label={heroPlay ? t.pause : t.play}>
+              {heroPlay ? '❚❚' : '▶'}
+            </button>
           </section>
 
-          <Showcase lang={lang} onOpen={() => setOpen(missions.findIndex((m) => m.c.id === 'bogota3d'))} />
-
+          <div id="robotica">
+            <Film lang={lang} n={0} onOpen={openId} />
+            <RoboLab lang={lang} onOpen={() => openId('robot')} />
+            <Between text={t.between[0]} />
+            <Film lang={lang} n={1} onOpen={openId} />
+            <Between text={t.between[1]} />
+            <Film lang={lang} n={2} onOpen={openId} />
+          </div>
           <section className="ap-sec" id="proyectos">
             <Head title={t.projTitle} sub={t.projSub} />
             <Carousel lang={lang} onOpen={setOpen} />
@@ -216,9 +258,9 @@ export default function Apple() {
   );
 }
 
-function Head({ title, sub }: { title: string; sub?: string }) {
+function Head({ title, sub, dark }: { title: string; sub?: string; dark?: boolean }) {
   return (
-    <motion.div className="ap-head" initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.6 }} variants={{ show: { transition: { staggerChildren: 0.1 } } }}>
+    <motion.div className={`ap-head${dark ? ' ap-head-dark' : ''}`} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.6 }} variants={{ show: { transition: { staggerChildren: 0.1 } } }}>
       <motion.h2 variants={up}>{title}</motion.h2>
       {sub && <motion.p variants={up}>{sub}</motion.p>}
     </motion.div>
@@ -236,33 +278,71 @@ function InViewCount({ s, lang }: { s: Parameters<typeof Count>[0]['s']; lang: L
   return <div ref={ref} className="ap-big">{go ? <Count s={s} lang={lang} delay={0} /> : ' '}</div>;
 }
 
-/* Video that grows into the viewport as you scroll, Apple product-page style. */
-function Showcase({ lang, onOpen }: { lang: Lang; onOpen: () => void }) {
-  const t = copy[lang];
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'center center'] });
-  const scale = useTransform(scrollYProgress, [0, 1], [0.82, 1]);
-  const radius = useTransform(scrollYProgress, [0, 1], [48, 22]);
-  const vid = useRef<HTMLVideoElement>(null);
-  useEffect(() => {
-    const v = vid.current;
-    if (!v) return;
-    const io = new IntersectionObserver(([e]) => (e.isIntersecting ? v.play().catch(() => {}) : v.pause()), { threshold: 0.3 });
-    io.observe(v);
-    return () => io.disconnect();
-  }, []);
+/* Pinned full-screen film chapter (SinergIA pattern): the video stays fixed while the copy scrolls over it. */
+function Film({ lang, n, onOpen }: { lang: Lang; n: number; onOpen: (id: string) => void }) {
+  const f = copy[lang].films[n];
+  const base = filmMedia[n];
   return (
-    <section className="ap-show" ref={ref}>
-      <motion.div className="ap-show-frame" style={{ scale, borderRadius: radius }}>
-        <video ref={vid} src="/media/bogota-3d.mp4" poster="/media/bogota-3d.jpg" muted loop playsInline preload="metadata" aria-label="Bogotá 3D" />
-      </motion.div>
-      <motion.div className="ap-show-cap" initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.8 }} variants={up}>
-        <h2>{t.showTitle}</h2>
-        <p>{t.showSub}</p>
-        <button className="ap-link" onClick={onOpen}>
-          {t.more} ›
-        </button>
-      </motion.div>
+    <div className="ap-film">
+      <div className="ap-film-pin">
+        <BgVideo src={`${base}.mp4`} poster={`${base}.jpg`} />
+        <div className="ap-film-scrim" />
+        <div className="ap-film-top">
+          <span>{f.i}</span>
+          <i />
+          <span>{f.eyebrow}</span>
+        </div>
+        <motion.div className="ap-film-copy" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ amount: 0.6 }} transition={{ duration: 0.9, ease }}>
+          <h2>{f.title}</h2>
+          <p>{f.desc}</p>
+          <button className="ap-link ap-link-w" onClick={() => onOpen(f.id)}>
+            {copy[lang].more} ›
+          </button>
+        </motion.div>
+      </div>
+    </div>
+  );
+}
+
+function Between({ text }: { text: string }) {
+  return (
+    <div className="ap-between">
+      <motion.h3 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.8 }} transition={{ duration: 0.8, ease }}>
+        {text}
+      </motion.h3>
+    </div>
+  );
+}
+
+function RoboLab({ lang, onOpen }: { lang: Lang; onOpen: () => void }) {
+  const t = copy[lang];
+  return (
+    <section className="ap-lab">
+      <Head title={t.labTitle} sub={t.labSub} dark />
+      <div className="ap-lab-grid">
+        {t.lab.map((c, i) => (
+          <motion.figure key={c.k} className="ap-lab-cell" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.8, ease, delay: i * 0.08 }}>
+            <div className="ap-lab-media">
+              <BgVideo src={`/media/bg/g1-${c.k}.mp4`} poster={`/media/bg/g1-${c.k}.jpg`} />
+            </div>
+            <figcaption>
+              <b>{c.t}</b>
+              <span>{c.d}</span>
+            </figcaption>
+          </motion.figure>
+        ))}
+        <motion.figure className="ap-lab-cell ap-lab-wide" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.8, ease }}>
+          <div className="ap-lab-media ap-lab-media-wide">
+            <BgVideo src="/media/bg/g1-sensores.mp4" poster="/media/bg/g1-sensores.jpg" />
+          </div>
+          <figcaption>
+            <span>{t.sensors}</span>
+            <button className="ap-link ap-link-w" onClick={onOpen}>
+              {t.more} ›
+            </button>
+          </figcaption>
+        </motion.figure>
+      </div>
     </section>
   );
 }
