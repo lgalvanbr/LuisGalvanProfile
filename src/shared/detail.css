@@ -1,0 +1,56 @@
+/* Structural styles for the shared project detail. Colors come from each design via these tokens:
+   --pd-fg, --pd-mut, --pd-acc, --pd-line, --pd-bg2 and the drawing tokens --ink, --plate, --marker, --muted. */
+.pd-sheet {
+  position: relative;
+  background: var(--plate);
+  margin: 0 0 28px;
+}
+.pd-sheet svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.pd-sheet svg text {
+  font-family: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
+}
+.pd-sheet .tb text { font-size: 9.5px; letter-spacing: 0.04em; fill: var(--ink); }
+.pd-sheet .dim, .pd-sheet .axis { font-size: 9px; fill: var(--ink); }
+.pd-sheet .note { font-size: 8.5px; letter-spacing: 0.08em; fill: var(--muted); }
+.pd-sheet .tag { font-size: 10px; font-weight: 500; fill: var(--marker); }
+.pd-sheet .tag-inv { fill: var(--plate); }
+.pd-sheet .ro-h { font-size: 8.5px; font-weight: 600; letter-spacing: 0.08em; fill: var(--plate); }
+.pd-sheet .ro-k { font-size: 9.5px; fill: var(--muted); }
+.pd-sheet .ro-v { font-size: 10px; font-weight: 500; fill: var(--ink); }
+.pd-sheet-key {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  display: flex;
+  gap: 12px;
+  font-size: 11px;
+  color: var(--pd-mut);
+}
+.pd-sheet-key .pd-mk { color: var(--pd-acc); }
+.pd-label { margin: 0 0 6px; }
+.pd-label.pd-mk { color: var(--pd-acc); }
+.pd-problem { margin: 0 0 12px; }
+.pd-text { margin: 0 0 22px; max-width: 64ch; }
+.pd-how { list-style: none; padding: 0; margin: 0 0 24px; display: grid; gap: 8px; }
+.pd-how li { display: flex; gap: 12px; align-items: baseline; }
+.pd-how li span { flex: none; }
+.pd-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 0 0 24px; }
+.pd-stats dd { margin: 0; }
+.pd-stats dt { margin: 0; }
+.pd-media { margin: 0 0 22px; }
+.pd-media img, .pd-media video { display: block; width: 100%; height: auto; }
+.pd-media figcaption { margin-top: 8px; color: var(--pd-mut); font-size: 0.85rem; }
+.pd-stack { margin: 0 0 14px; color: var(--pd-mut); }
+.pd-note { margin: 0 0 20px; color: var(--pd-mut); }
+.pd-cmp { position: relative; overflow: hidden; touch-action: pan-y; user-select: none; }
+.pd-cmp img { display: block; width: 100%; height: auto; pointer-events: none; }
+.pd-cmp img + img { position: absolute; inset: 0; height: 100%; object-fit: cover; }
+.pd-cmp-t { position: absolute; top: 10px; font-size: 12px; padding: 3px 8px; background: rgba(0,0,0,0.6); color: #fff; border-radius: 4px; }
+.pd-cmp-t.l { left: 10px; }
+.pd-cmp-t.r { right: 10px; }
+.pd-cmp-h { position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: #fff; box-shadow: 0 0 0 1px rgba(0,0,0,0.25); }
+.pd-cmp input { position: absolute; inset: auto 0 0 0; width: 100%; opacity: 0; }
