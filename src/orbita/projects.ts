@@ -141,5 +141,8 @@ const portfolio: Card[] = [
 
 export const CARDS: Card[] = [
   ...portfolio,
-  ...(HUB as Omit<Card, 'scale'>[]).map((p) => ({ ...p, scale: hubScale[p.name] ?? 'ciudad', caseId: hubCase[p.name] })),
+  // Solo los proyectos propios del hub, publicados en su dominio *.cuadreb.com
+  ...(HUB as Omit<Card, 'scale'>[])
+    .filter((p) => /^https:\/\/[^/]+\.cuadreb\.com\//.test(p.url))
+    .map((p) => ({ ...p, scale: hubScale[p.name] ?? 'ciudad', caseId: hubCase[p.name] })),
 ];
