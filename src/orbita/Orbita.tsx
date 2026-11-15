@@ -73,7 +73,7 @@ export default function Orbita() {
 
         <main>
           <section className="ob-hero" id="top">
-            <BgVideo src="/media/bg/g1-lobby.mp4" poster="/media/bg/g1-lobby.jpg" eager />
+            <BgVideo src="/media/bg/g1-estudio.mp4" poster="/media/bg/g1-estudio.jpg" eager />
             <div className="ob-scrim" />
             <div className="ob-hero-in">
               <motion.p className="ob-telemetry" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8 }}>

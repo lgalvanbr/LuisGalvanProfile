@@ -170,7 +170,32 @@ html:has(body.ob-page) {
 .ob-scrim {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(10, 13, 20, 0.95), rgba(10, 13, 20, 0.55) 45%, rgba(10, 13, 20, 0.35));
+  background: linear-gradient(to top, rgba(10, 13, 20, 0.92), rgba(10, 13, 20, 0) 38%);
+}
+/* Escritorio: el video ocupa la mitad derecha y se funde hacia el texto; el robot siempre queda a la derecha. */
+@media (min-width: 761px) {
+  .ob-hero .bgv {
+    left: 34%;
+    background: transparent;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 32%);
+    mask-image: linear-gradient(90deg, transparent 0%, #000 32%);
+  }
+  .ob-hero .bgv-video,
+  .ob-hero .bgv-poster {
+    object-position: 50% 30%;
+    background-position: 50% 30%;
+  }
+}
+/* Celular: video a sangre con el robot arriba y el texto sobre la parte oscura */
+@media (max-width: 760px) {
+  .ob-scrim {
+    background: linear-gradient(to top, rgba(10, 13, 20, 0.97) 0%, rgba(10, 13, 20, 0.85) 45%, rgba(10, 13, 20, 0.2) 80%);
+  }
+  .ob-hero .bgv-video,
+  .ob-hero .bgv-poster {
+    object-position: 45% 20%;
+    background-position: 45% 20%;
+  }
 }
 .ob-hero-in {
   position: relative;

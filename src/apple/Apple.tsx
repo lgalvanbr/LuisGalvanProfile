@@ -144,7 +144,7 @@ export default function Apple() {
 
         <main>
           <section className="ap-hero" id="top">
-            <BgVideo src="/media/bg/g1-lobby.mp4" poster="/media/bg/g1-lobby.jpg" eager playing={heroPlay} />
+            <BgVideo src="/media/bg/g1-estudio.mp4" poster="/media/bg/g1-estudio.jpg" eager playing={heroPlay} />
             <div className="ap-scrim" />
             <div className="ap-hero-in">
               <motion.p className="ap-eyebrow" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease }}>
