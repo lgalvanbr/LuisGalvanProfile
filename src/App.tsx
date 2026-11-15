@@ -9,6 +9,7 @@ const Apple = lazyWithRetry(() => import('./apple/Apple'));
 const Comic = lazyWithRetry(() => import('./comic/Comic'));
 const Space = lazyWithRetry(() => import('./space/Space'));
 const Story = lazyWithRetry(() => import('./story/Story'));
+const Orbita = lazyWithRetry(() => import('./orbita/Orbita'));
 const LGI = lazyWithRetry(() => import('./pages/LGI'));
 const LgiAI = lazyWithRetry(() => import('./pages/LgiAI'));
 const LgiSolar = lazyWithRetry(() => import('./pages/LgiSolar'));
@@ -32,6 +33,7 @@ export default function App() {
             <Route path="/comic" element={<Comic />} />
             <Route path="/espacial" element={<Space />} />
             <Route path="/laminas" element={<Story />} />
+            <Route path="/orbita" element={<Orbita />} />
             <Route path="/lgi" element={<LGI />} />
             <Route path="/ia" element={<LgiAI />} />
             <Route path="/ai" element={<LgiAI />} />

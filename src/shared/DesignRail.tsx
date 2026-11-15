@@ -6,6 +6,7 @@ import './rail.css';
 
 export const designs = [
   { path: '/', key: 'A', name: 'Apple', note: 'Principal' },
+  { path: '/orbita', key: 'O', name: 'Órbita', note: 'Todos los proyectos' },
   { path: '/comic', key: 'C', name: 'Cómic', note: 'Viñetas' },
   { path: '/espacial', key: 'E', name: 'Espacial', note: 'Órbita' },
   { path: '/laminas', key: 'L', name: 'Láminas', note: 'Planos técnicos' },
