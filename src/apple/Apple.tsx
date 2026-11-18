@@ -285,7 +285,7 @@ function Film({ lang, n, onOpen }: { lang: Lang; n: number; onOpen: (id: string)
   return (
     <div className="ap-film">
       <div className="ap-film-pin">
-        <BgVideo src={`${base}.mp4`} poster={`${base}.jpg`} />
+        <BgVideo src={`${base}.mp4`} poster={`${base}.jpg`} loop={!base.endsWith('levantarse')} />
         <div className="ap-film-scrim" />
         <div className="ap-film-top">
           <span>{f.i}</span>
@@ -323,7 +323,7 @@ function RoboLab({ lang, onOpen }: { lang: Lang; onOpen: () => void }) {
         {t.lab.map((c, i) => (
           <motion.figure key={c.k} className="ap-lab-cell" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.8, ease, delay: i * 0.08 }}>
             <div className="ap-lab-media">
-              <BgVideo src={`/media/bg/g1-${c.k}.mp4`} poster={`/media/bg/g1-${c.k}.jpg`} />
+              <BgVideo src={`/media/bg/g1-${c.k}.mp4`} poster={`/media/bg/g1-${c.k}.jpg`} loop={c.k !== 'levantarse'} />
             </div>
             <figcaption>
               <b>{c.t}</b>

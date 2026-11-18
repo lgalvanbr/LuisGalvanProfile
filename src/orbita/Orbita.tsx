@@ -152,7 +152,7 @@ export default function Orbita() {
             {FEATURED.map((f, i) => (
               <div className="ob-film" id={f.id} key={f.id}>
                 <div className="ob-film-pin">
-                  {f.video ? <BgVideo src={`${f.video}.mp4`} poster={`${f.video}.jpg`} /> : <div className="ob-film-img" style={{ backgroundImage: `url(${f.image})` }} />}
+                  {f.video ? <BgVideo src={`${f.video}.mp4`} poster={`${f.video}.jpg`} loop={!f.video.endsWith('levantarse')} /> : <div className="ob-film-img" style={{ backgroundImage: `url(${f.image})` }} />}
                   <div className="ob-film-scrim" />
                   <p className="ob-meta ob-film-top">0{i + 1} · {f.eyebrow.toUpperCase()}</p>
                   <motion.div className="ob-film-copy" initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ amount: 0.5 }} transition={{ duration: 0.8, ease }}>
