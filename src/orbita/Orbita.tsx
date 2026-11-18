@@ -25,8 +25,8 @@ const FIGURES = [
 
 const FEATURED = [
   { id: 'destacado-robot', eyebrow: 'Robótica de inspección', title: 'Un humanoide entrenado en simulación para inspeccionar edificaciones', body: 'Unitree G1 en Isaac Lab: marcha, escaleras de 15 cm, empujones de 0,6 m/s y recuperación tras caídas, en una oficina fotorrealista con RGB, profundidad y LiDAR.', video: '/media/bg/g1-levantarse', card: 'Unitree G1 en Isaac Lab' },
-  { id: 'destacado-bogota', eyebrow: 'Ciudad', title: 'Bogotá completa en 3D a partir de datos abiertos', body: '1,77 millones de construcciones del Catastro con su número de pisos, terreno, vías, árboles, red de acueducto y tráfico, en el navegador.', video: '/media/bg/bogota-vuelo', card: 'Bogotá 3D' },
-  { id: 'destacado-territorio', eyebrow: 'Territorio', title: 'Inversión ambiental frente al daño medido desde el espacio', body: 'Contratos públicos de 25 corporaciones cruzados con pérdida de bosque, minería clasificada con Sentinel-2 y zonas inundables. Valledupar y el río Guatapurí, 2018–2025.', image: '/media/valledupar-2025.webp', card: 'Contratos y satélite' },
+  { id: 'destacado-bogota', eyebrow: 'Ciudad', title: 'Bogotá completa en 3D a partir de datos abiertos', body: '1,77 millones de construcciones del Catastro con su número de pisos, terreno, vías, árboles, red de acueducto y tráfico, en el navegador.', video: '/media/bg/bogota-vuelo', card: 'Bogotá 3D', url: 'https://sinergiabogota3d.cuadreb.com/', cta: 'Abrir Bogotá 3D' },
+  { id: 'destacado-territorio', eyebrow: 'Territorio', title: 'Inversión ambiental frente al daño medido desde el espacio', body: 'Contratos públicos de 25 corporaciones cruzados con pérdida de bosque, minería clasificada con Sentinel-2 y zonas inundables. Valledupar y el río Guatapurí, 2018–2025.', image: '/media/valledupar-2025.webp', card: 'Contratos y satélite', url: 'https://corpocesar.vercel.app', cta: 'Abrir el estudio' },
 ];
 
 function toMission(card: Card): Mission | null {
@@ -158,7 +158,11 @@ export default function Orbita() {
                   <motion.div className="ob-film-copy" initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ amount: 0.5 }} transition={{ duration: 0.8, ease }}>
                     <h2>{f.title}</h2>
                     <p>{f.body}</p>
-                    <button className="ob-btn" onClick={() => openByName(f.card)}>Ver ficha técnica</button>
+                    {'url' in f && f.url ? (
+                      <a className="ob-btn" href={f.url} target="_blank" rel="noreferrer">{f.cta} ↗</a>
+                    ) : (
+                      <button className="ob-btn" onClick={() => openByName(f.card)}>Ver ficha técnica</button>
+                    )}
                   </motion.div>
                 </div>
               </div>

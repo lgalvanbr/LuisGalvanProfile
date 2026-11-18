@@ -21,11 +21,11 @@ const copy = {
     pause: 'Pausar video',
     play: 'Reproducir video',
     films: [
-      { i: '01', eyebrow: 'Robótica de inspección', title: 'Robots humanoides entrenados para inspeccionar edificaciones', desc: 'Unitree G1 entrenado con aprendizaje por refuerzo en Isaac Lab: marcha, recuperación tras caídas y ensayos en una oficina fotorrealista.', id: 'robot' },
-      { i: '02', eyebrow: 'Ciudad', title: 'Bogotá completa en 3D a partir de datos abiertos', desc: '1,77 millones de edificaciones, red de acueducto, arbolado y transporte integrados en un visor web con WebGL y WebGPU.', id: 'bogota3d' },
-      { i: '03', eyebrow: 'Patrimonio y exposición sísmica', title: 'Fachadas caracterizadas desde fotografías de calle', desc: 'Segmentación y estimación de profundidad sobre imágenes de Mapillary para modelar fachadas edificio por edificio. Piloto en La Candelaria.', id: 'bogota3d' },
+      { i: '01', eyebrow: 'Robótica de inspección', title: 'Robots humanoides entrenados para inspeccionar edificaciones', desc: 'Unitree G1 entrenado con aprendizaje por refuerzo en Isaac Lab: marcha, recuperación tras caídas y ensayos en una oficina fotorrealista.', id: 'robot', url: '#laboratorio', cta: 'Ver los ensayos' },
+      { i: '02', eyebrow: 'Ciudad', title: 'Bogotá completa en 3D a partir de datos abiertos', desc: '1,77 millones de edificaciones, red de acueducto, arbolado y transporte integrados en un visor web con WebGL y WebGPU.', id: 'bogota3d', url: 'https://sinergiabogota3d.cuadreb.com/', cta: 'Abrir Bogotá 3D' },
+      { i: '03', eyebrow: 'Planeación urbana', title: 'Un simulador 3D para planear la renovación de un barrio', desc: 'Plan Parcial Wanchaq, Cusco: intervenciones lote a lote, simulación de tránsito, misiones y finanzas del plan, con indicadores de calidad de vida antes y después.', id: 'wanchaq', url: 'https://sinergiawanchaq.cuadreb.com/', cta: 'Abrir el simulador' },
     ],
-    between: ['De la robótica al modelo de ciudad', 'Del modelo de ciudad al edificio'],
+    between: ['De la robótica al modelo de ciudad', 'Del modelo de ciudad al plan urbano'],
     labTitle: 'Laboratorio de robótica.',
     labSub: 'Ensayos en simulación con el humanoide Unitree G1.',
     lab: [
@@ -58,11 +58,11 @@ const copy = {
     pause: 'Pause video',
     play: 'Play video',
     films: [
-      { i: '01', eyebrow: 'Inspection robotics', title: 'Humanoid robots trained to inspect buildings', desc: 'Unitree G1 trained with reinforcement learning in Isaac Lab: walking, fall recovery and tests in a photorealistic office.', id: 'robot' },
-      { i: '02', eyebrow: 'City', title: 'All of Bogotá in 3D from open data', desc: '1.77 million buildings, water network, trees and transit integrated in a web viewer built on WebGL and WebGPU.', id: 'bogota3d' },
-      { i: '03', eyebrow: 'Heritage and seismic exposure', title: 'Facades characterised from street-level photos', desc: 'Segmentation and depth estimation on Mapillary imagery to model facades building by building. Pilot in La Candelaria.', id: 'bogota3d' },
+      { i: '01', eyebrow: 'Inspection robotics', title: 'Humanoid robots trained to inspect buildings', desc: 'Unitree G1 trained with reinforcement learning in Isaac Lab: walking, fall recovery and tests in a photorealistic office.', id: 'robot', url: '#laboratorio', cta: 'See the tests' },
+      { i: '02', eyebrow: 'City', title: 'All of Bogotá in 3D from open data', desc: '1.77 million buildings, water network, trees and transit integrated in a web viewer built on WebGL and WebGPU.', id: 'bogota3d', url: 'https://sinergiabogota3d.cuadreb.com/', cta: 'Open Bogotá 3D' },
+      { i: '03', eyebrow: 'Urban planning', title: 'A 3D simulator to plan the renewal of a neighbourhood', desc: 'Partial Plan Wanchaq, Cusco: lot-by-lot interventions, traffic simulation, planning missions and plan finances, with quality-of-life indicators before and after.', id: 'wanchaq', url: 'https://sinergiawanchaq.cuadreb.com/', cta: 'Open the simulator' },
     ],
-    between: ['From robotics to the city model', 'From the city model to the building'],
+    between: ['From robotics to the city model', 'From the city model to the urban plan'],
     labTitle: 'Robotics lab.',
     labSub: 'Simulation tests with the Unitree G1 humanoid.',
     lab: [
@@ -87,7 +87,7 @@ const copy = {
   },
 };
 
-const filmMedia = ['/media/bg/g1-levantarse', '/media/bg/bogota-vuelo', '/media/bg/bogota-fachadas'];
+const filmMedia = ['/media/bg/g1-levantarse', '/media/bg/bogota-vuelo', '/media/bg/wanchaq'];
 
 const nums = [
   { s: { value: 1.77, decimals: 2, suffix: ' M', label: { es: 'edificaciones en Bogotá 3D', en: 'buildings in Bogotá 3D' } }, span: 2, dark: true },
@@ -295,9 +295,9 @@ function Film({ lang, n, onOpen }: { lang: Lang; n: number; onOpen: (id: string)
         <motion.div className="ap-film-copy" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ amount: 0.6 }} transition={{ duration: 0.9, ease }}>
           <h2>{f.title}</h2>
           <p>{f.desc}</p>
-          <button className="ap-link ap-link-w" onClick={() => onOpen(f.id)}>
-            {copy[lang].more} ›
-          </button>
+          <a className="ap-link ap-link-w" href={f.url} target={f.url.startsWith('http') ? '_blank' : undefined} rel="noreferrer">
+            {f.cta} {f.url.startsWith('http') ? '↗' : '›'}
+          </a>
         </motion.div>
       </div>
     </div>
@@ -317,7 +317,7 @@ function Between({ text }: { text: string }) {
 function RoboLab({ lang, onOpen }: { lang: Lang; onOpen: () => void }) {
   const t = copy[lang];
   return (
-    <section className="ap-lab">
+    <section className="ap-lab" id="laboratorio">
       <Head title={t.labTitle} sub={t.labSub} dark />
       <div className="ap-lab-grid">
         {t.lab.map((c, i) => (
@@ -428,6 +428,11 @@ function Modal({ index, lang, onClose, onGo }: { index: number; lang: Lang; onCl
         transition={{ type: 'spring', stiffness: 260, damping: 30 }}
       >
         <div className="ap-modal-bar">
+          {m.c.link && (
+            <a className="ap-pill ap-modal-open" href={m.c.link.href} target={m.c.link.href.startsWith('http') ? '_blank' : undefined} rel="noreferrer">
+              {m.c.link.label[lang]} ↗
+            </a>
+          )}
           <button onClick={() => go(-1)} aria-label={t.prev}>
             ‹
           </button>

@@ -325,6 +325,7 @@ export const chapters: Chapter[] = [
           caption: { es: 'Vuelo sobre la ciudad con aviones en tiempo real.', en: 'Fly-through with real-time aircraft.' },
         },
         stack: 'Three.js, WebGPU, Python, SegFormer, Depth Anything',
+        link: { href: 'https://sinergiabogota3d.cuadreb.com/', label: { es: 'Abrir Bogotá 3D', en: 'Open Bogotá 3D' } },
       },
       {
         id: 'buses',
@@ -357,6 +358,7 @@ export const chapters: Chapter[] = [
           caption: { es: 'Buses en ruta, rutas en servicio y curva del día.', en: 'Buses running, routes in service and the daily curve.' },
         },
         stack: 'MapLibre, DuckDB, Python, GTFS',
+        link: { href: 'https://sinergiabogota.cuadreb.com/', label: { es: 'Abrir el mapa del sistema', en: 'Open the transit map' } },
       },
     ],
   },

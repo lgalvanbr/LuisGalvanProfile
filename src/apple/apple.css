@@ -876,3 +876,10 @@ button.ap-link::after {
   content: ' ↗';
   margin-left: 6px;
 }
+
+.ap-modal-open {
+  margin-right: auto;
+  min-height: 36px;
+  font-size: 15px;
+  padding: 0 16px;
+}
