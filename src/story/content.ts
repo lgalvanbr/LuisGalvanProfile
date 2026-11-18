@@ -46,7 +46,7 @@ export interface Chapter {
 }
 
 export const LINKS = {
-  email: 'cotizaciones@luisgalvan.me',
+  email: 'luisgalvanv30@gmail.com',
   linkedin: 'https://www.linkedin.com/in/luis-carlos-galvan-vergel-15696230a/',
   github: 'https://github.com/lgalvanbr',
   whatsapp: 'https://wa.me/573022687981',

@@ -40,8 +40,8 @@ export default function Contact() {
     {
       icon: <Mail size={22} />,
       label: "Email",
-      value: "cotizaciones@luisgalvan.me",
-      href: "mailto:cotizaciones@luisgalvan.me",
+      value: "luisgalvanv30@gmail.com",
+      href: "mailto:luisgalvanv30@gmail.com",
       action: language === 'es' ? 'Escribir' : 'Compose'
     },
     {

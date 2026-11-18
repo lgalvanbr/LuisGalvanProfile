@@ -141,6 +141,29 @@ html:has(body.apple-body) {
   color: rgba(255, 255, 255, 0.82);
   max-width: 40ch;
 }
+/* phones: a portrait crop of the 16:9 clip cuts off the waving arm, so the video becomes
+   a band at the top framed on the whole robot, fading into black above the copy */
+@media (max-width: 640px) {
+  .ap-hero {
+    place-items: end center;
+  }
+  .ap-hero > .bgv {
+    inset: 0 0 auto 0;
+    height: 82vw;
+  }
+  .ap-hero > .bgv .bgv-video {
+    object-position: 15% 50%;
+  }
+  .ap-hero > .bgv .bgv-poster {
+    background-position: 15% 50%;
+  }
+  .ap-hero .ap-scrim {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0) calc(82vw - 140px), #000 82vw);
+  }
+  .ap-hero-in {
+    padding: calc(82vw - 36px) 22px 72px;
+  }
+}
 .ap-pill.ap-pill-w {
   background: #fff !important;
   color: #000 !important;

@@ -366,7 +366,7 @@ export default function VirtualCV({ isOpen, onClose }: VirtualCVProps) {
                     </div>
                     <div className="flex items-center justify-center md:justify-start gap-2.5">
                       <span className="p-1 px-1.5 rounded bg-white/10 text-zinc-200 text-[10px] print:bg-slate-100 print:text-slate-800">MAIL</span>
-                      <a href="mailto:cotizaciones@luisgalvan.me" className="hover:text-white transition-colors">cotizaciones@luisgalvan.me</a>
+                      <a href="mailto:luisgalvanv30@gmail.com" className="hover:text-white transition-colors">luisgalvanv30@gmail.com</a>
                     </div>
                     <div className="flex items-center justify-center md:justify-start gap-2.5">
                       <span className="p-1 px-1.5 rounded bg-white/10 text-zinc-200 text-[10px] print:bg-slate-100 print:text-slate-800">GH</span>
