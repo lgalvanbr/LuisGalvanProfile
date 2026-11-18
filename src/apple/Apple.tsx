@@ -21,11 +21,12 @@ const copy = {
     pause: 'Pausar video',
     play: 'Reproducir video',
     films: [
-      { i: '01', eyebrow: 'Robótica de inspección', title: 'Robots humanoides entrenados para inspeccionar edificaciones', desc: 'Unitree G1 entrenado con aprendizaje por refuerzo en Isaac Lab: marcha, recuperación tras caídas y ensayos en una oficina fotorrealista.', id: 'robot', url: '#laboratorio', cta: 'Ver los ensayos' },
-      { i: '02', eyebrow: 'Ciudad', title: 'Bogotá completa en 3D a partir de datos abiertos', desc: '1,77 millones de edificaciones, red de acueducto, arbolado y transporte integrados en un visor web con WebGL y WebGPU.', id: 'bogota3d', url: 'https://sinergiabogota3d.cuadreb.com/', cta: 'Abrir Bogotá 3D' },
-      { i: '03', eyebrow: 'Planeación urbana', title: 'Un simulador 3D para planear la renovación de un barrio', desc: 'Plan Parcial Wanchaq, Cusco: intervenciones lote a lote, simulación de tránsito, misiones y finanzas del plan, con indicadores de calidad de vida antes y después.', id: 'wanchaq', url: 'https://sinergiawanchaq.cuadreb.com/', cta: 'Abrir el simulador' },
+      { i: '01', eyebrow: 'Gemelo digital', title: 'Un edificio de Los Andes reconstruido a partir de un escaneo LiDAR', desc: 'La nube de puntos LiDAR del edificio ML y su entorno, convertida en Gaussian splats: un modelo fotorrealista que se recorre en el navegador, incluso desde el celular, con niveles de detalle por streaming.', id: 'lidar', url: 'https://sinergialidar.cuadreb.com/movil/?e=edificio_ml_ia', cta: 'Abrir el modelo 3D' },
+      { i: '02', eyebrow: 'Robótica de inspección', title: 'Robots humanoides entrenados para inspeccionar edificaciones', desc: 'Unitree G1 entrenado con aprendizaje por refuerzo en Isaac Lab: marcha, recuperación tras caídas y ensayos en una oficina fotorrealista.', id: 'robot', url: '#laboratorio', cta: 'Ver los ensayos' },
+      { i: '03', eyebrow: 'Ciudad', title: 'Bogotá completa en 3D a partir de datos abiertos', desc: '1,77 millones de edificaciones, red de acueducto, arbolado y transporte integrados en un visor web con WebGL y WebGPU.', id: 'bogota3d', url: 'https://sinergiabogota3d.cuadreb.com/', cta: 'Abrir Bogotá 3D' },
+      { i: '04', eyebrow: 'Planeación urbana', title: 'Un simulador 3D para planear la renovación de un barrio', desc: 'Plan Parcial Wanchaq, Cusco: intervenciones lote a lote, simulación de tránsito, misiones y finanzas del plan, con indicadores de calidad de vida antes y después.', id: 'wanchaq', url: 'https://sinergiawanchaq.cuadreb.com/', cta: 'Abrir el simulador' },
     ],
-    between: ['De la robótica al modelo de ciudad', 'Del modelo de ciudad al plan urbano'],
+    between: ['Del edificio escaneado al robot que lo recorre', 'De la robótica al modelo de ciudad', 'Del modelo de ciudad al plan urbano'],
     labTitle: 'Laboratorio de robótica.',
     labSub: 'Ensayos en simulación con el humanoide Unitree G1.',
     lab: [
@@ -58,11 +59,12 @@ const copy = {
     pause: 'Pause video',
     play: 'Play video',
     films: [
-      { i: '01', eyebrow: 'Inspection robotics', title: 'Humanoid robots trained to inspect buildings', desc: 'Unitree G1 trained with reinforcement learning in Isaac Lab: walking, fall recovery and tests in a photorealistic office.', id: 'robot', url: '#laboratorio', cta: 'See the tests' },
-      { i: '02', eyebrow: 'City', title: 'All of Bogotá in 3D from open data', desc: '1.77 million buildings, water network, trees and transit integrated in a web viewer built on WebGL and WebGPU.', id: 'bogota3d', url: 'https://sinergiabogota3d.cuadreb.com/', cta: 'Open Bogotá 3D' },
-      { i: '03', eyebrow: 'Urban planning', title: 'A 3D simulator to plan the renewal of a neighbourhood', desc: 'Partial Plan Wanchaq, Cusco: lot-by-lot interventions, traffic simulation, planning missions and plan finances, with quality-of-life indicators before and after.', id: 'wanchaq', url: 'https://sinergiawanchaq.cuadreb.com/', cta: 'Open the simulator' },
+      { i: '01', eyebrow: 'Digital twin', title: 'A Los Andes building rebuilt from a LiDAR scan', desc: 'The LiDAR point cloud of the ML building and its surroundings, turned into Gaussian splats: a photorealistic model you can explore in the browser, phones included, streamed with levels of detail.', id: 'lidar', url: 'https://sinergialidar.cuadreb.com/movil/?e=edificio_ml_ia', cta: 'Open the 3D model' },
+      { i: '02', eyebrow: 'Inspection robotics', title: 'Humanoid robots trained to inspect buildings', desc: 'Unitree G1 trained with reinforcement learning in Isaac Lab: walking, fall recovery and tests in a photorealistic office.', id: 'robot', url: '#laboratorio', cta: 'See the tests' },
+      { i: '03', eyebrow: 'City', title: 'All of Bogotá in 3D from open data', desc: '1.77 million buildings, water network, trees and transit integrated in a web viewer built on WebGL and WebGPU.', id: 'bogota3d', url: 'https://sinergiabogota3d.cuadreb.com/', cta: 'Open Bogotá 3D' },
+      { i: '04', eyebrow: 'Urban planning', title: 'A 3D simulator to plan the renewal of a neighbourhood', desc: 'Partial Plan Wanchaq, Cusco: lot-by-lot interventions, traffic simulation, planning missions and plan finances, with quality-of-life indicators before and after.', id: 'wanchaq', url: 'https://sinergiawanchaq.cuadreb.com/', cta: 'Open the simulator' },
     ],
-    between: ['From robotics to the city model', 'From the city model to the urban plan'],
+    between: ['From the scanned building to the robot that walks it', 'From robotics to the city model', 'From the city model to the urban plan'],
     labTitle: 'Robotics lab.',
     labSub: 'Simulation tests with the Unitree G1 humanoid.',
     lab: [
@@ -87,7 +89,7 @@ const copy = {
   },
 };
 
-const filmMedia = ['/media/bg/g1-levantarse', '/media/bg/bogota-vuelo', '/media/bg/wanchaq'];
+const filmMedia = ['/media/bg/lidar-edificio', '/media/bg/g1-levantarse', '/media/bg/bogota-vuelo', '/media/bg/wanchaq'];
 
 const nums = [
   { s: { value: 1.77, decimals: 2, suffix: ' M', label: { es: 'edificaciones en Bogotá 3D', en: 'buildings in Bogotá 3D' } }, span: 2, dark: true },
@@ -170,13 +172,17 @@ export default function Apple() {
             </button>
           </section>
 
-          <div id="robotica">
+          <div id="capitulos">
             <Film lang={lang} n={0} onOpen={openId} />
-            <RoboLab lang={lang} onOpen={() => openId('robot')} />
             <Between text={t.between[0]} />
-            <Film lang={lang} n={1} onOpen={openId} />
+            <div id="robotica">
+              <Film lang={lang} n={1} onOpen={openId} />
+              <RoboLab lang={lang} onOpen={() => openId('robot')} />
+            </div>
             <Between text={t.between[1]} />
             <Film lang={lang} n={2} onOpen={openId} />
+            <Between text={t.between[2]} />
+            <Film lang={lang} n={3} onOpen={openId} />
           </div>
           <section className="ap-sec" id="proyectos">
             <Head title={t.projTitle} sub={t.projSub} />
